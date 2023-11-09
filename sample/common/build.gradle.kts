@@ -1,7 +1,10 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.ktlint)
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
 }
 
@@ -29,7 +32,7 @@ kotlin {
             baseName = "common"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -70,3 +73,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
         dependsOn("kspCommonMainKotlinMetadata")
     }
 }
+
+tasks.named("runKtlintCheckOverCommonMainSourceSet").dependsOn("kspCommonMainKotlinMetadata")
+tasks.named("runKtlintFormatOverCommonMainSourceSet").dependsOn("kspCommonMainKotlinMetadata")
