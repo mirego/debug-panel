@@ -26,9 +26,9 @@ compose-material3 = { module = "androidx.compose.material3:material3", version.r
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
 viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
 
