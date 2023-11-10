@@ -33,16 +33,16 @@ kotlin {
     sourceSets {
         val androidMain by getting {
             dependencies {
-                implementation("androidx.startup:startup-runtime:1.1.1")
-                implementation("androidx.preference:preference-ktx:1.2.1")
+                implementation(libs.androidx.startup.runtime)
+                implementation(libs.androidx.preference.ktx)
             }
         }
         val commonMain by getting {
             dependencies {
-                implementation("com.mirego.trikot:viewmodels-declarative-flow:4.5.0-dev2652")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-                implementation("com.russhwolf:multiplatform-settings:1.1.0")
-                implementation("com.russhwolf:multiplatform-settings-coroutines:1.1.0")
+                implementation(libs.viewmodels.declarative.flow)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.coroutines)
             }
         }
     }

@@ -48,5 +48,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation("com.mirego.trikot:viewmodels-declarative-compose-flow:4.5.0-dev2652")
+    implementation(libs.viewmodels.declarative.compose.flow)
+}
+
+ktlint {
+    android.set(true)
 }

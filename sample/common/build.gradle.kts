@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -38,8 +38,8 @@ kotlin {
             dependencies {
                 implementation(projects.debugPanel.common)
                 implementation(projects.annotations)
-                api("com.mirego.trikot:viewmodels-declarative-flow:4.5.0-dev2652")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+                api(libs.viewmodels.declarative.flow)
+                api(libs.kotlinx.coroutines.core)
             }
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
