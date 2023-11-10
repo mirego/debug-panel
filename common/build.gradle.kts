@@ -31,6 +31,11 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.optIn("com.russhwolf.settings.ExperimentalSettingsApi")
+            languageSettings.optIn("kotlinx.coroutines.FlowPreview")
+        }
+
         val androidMain by getting {
             dependencies {
                 implementation(libs.androidx.startup.runtime)
