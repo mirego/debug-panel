@@ -11,7 +11,7 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
         settings.getBoolean(identifier, defaultValue)
 
     protected fun getToggleValue(identifier: String) =
-        flowSettings.getBooleanFlow(identifier, false)
+        flowSettings.getBooleanOrNullFlow(identifier)
 
     override fun onToggleUpdated(viewData: DebugPanelItemViewData.Toggle, isOn: Boolean) {
         settings.putBoolean(viewData.identifier, isOn)
@@ -21,17 +21,17 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
         settings.getString(identifier, defaultValue)
 
     protected fun getTextFieldValue(identifier: String) =
-        flowSettings.getStringFlow(identifier, "")
+        flowSettings.getStringOrNullFlow(identifier)
 
     override fun onTextFieldUpdated(viewData: DebugPanelItemViewData.TextField, text: String) {
         settings.putString(viewData.identifier, text)
     }
 
     override fun getCurrentPickerValue(identifier: String) =
-        settings.getString(identifier, "")
+        settings.getStringOrNull(identifier)
 
     protected fun getPickerValue(identifier: String) =
-        flowSettings.getStringFlow(identifier, "")
+        flowSettings.getStringOrNullFlow(identifier)
 
     override fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String) {
         settings.putString(viewData.identifier, identifier)

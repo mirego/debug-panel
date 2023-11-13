@@ -9,6 +9,6 @@ interface DebugPanelRepository {
     fun getCurrentTextFieldValue(identifier: String, defaultValue: String): String
     fun onTextFieldUpdated(viewData: DebugPanelItemViewData.TextField, text: String)
 
-    fun getCurrentPickerValue(identifier: String): String
+    fun getCurrentPickerValue(identifier: String): String?
     fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String)
 }

@@ -18,7 +18,7 @@ class RootViewModelImpl(coroutineScope: CoroutineScope) : RootViewModel, VMDView
         coroutineScope,
         useCase,
         useCase.createViewData(
-            initialPreviewMode = false,
+            initialPreviewMode = true,
             firstName = flowOf("First name"),
             initialLastNameInput = "Default last name",
             environments = listOf(

@@ -40,7 +40,7 @@ internal object DebugPanelTypeSpecFactory {
 
             InterfaceImplementation.Function(
                 name = "get${attribute.name.capitalize()}",
-                returnType = FLOW_CLASS_NAME.plusParameter(returnType),
+                returnType = FLOW_CLASS_NAME.plusParameter(returnType.copy(nullable = true)),
                 code = "return $baseRepositoryFunctionName(\"${attribute.name}\")"
             )
         }.asIterable(),

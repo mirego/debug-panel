@@ -26,7 +26,7 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class Picker(
         override val identifier: String,
         val label: String,
-        val initialValue: String,
+        val initialValue: String?,
         val items: List<DebugPanelPickerItem>
     ) : DebugPanelItemViewData
 
