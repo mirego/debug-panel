@@ -15,6 +15,7 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.toggleWithText
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class DebugPanelViewModelImpl(
             coroutineScope.launch {
                 flowForProperty(::isOn)
                     .drop(1)
+                    .distinctUntilChanged()
                     .collect {
                         useCase.onToggleUpdated(viewData, it)
                     }
@@ -55,6 +57,7 @@ class DebugPanelViewModelImpl(
             coroutineScope.launch {
                 flowForProperty(::text)
                     .drop(1)
+                    .distinctUntilChanged()
                     .debounce(500.milliseconds)
                     .collect {
                         useCase.onTextFieldUpdated(viewData, it)
@@ -89,11 +92,14 @@ class DebugPanelViewModelImpl(
             initialSelectedId = viewData.initialValue
         ) {
             coroutineScope.launch {
-                flowForProperty(::selectedIndex).collect { index ->
-                    elements.getOrNull(index)?.identifier?.let {
-                        useCase.onPickerUpdated(viewData, it)
+                flowForProperty(::selectedIndex)
+                    .drop(1)
+                    .distinctUntilChanged()
+                    .collect { index ->
+                        elements.getOrNull(index)?.identifier?.let {
+                            useCase.onPickerUpdated(viewData, it)
+                        }
                     }
-                }
             }
         }
         return DebugPanelItemViewModel.Picker(

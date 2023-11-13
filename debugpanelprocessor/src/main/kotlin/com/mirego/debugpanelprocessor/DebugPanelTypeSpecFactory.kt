@@ -50,24 +50,33 @@ internal object DebugPanelTypeSpecFactory {
 
     private fun createUseCaseParams(attributes: Sequence<Attribute>) = attributes
         .mapNotNull { attribute ->
-            fun getInitialValueParamName(): String = "initial${attribute.name.capitalize()}"
-            fun getParamName(): String = attribute.name
-
-            fun getFlowParamType(): TypeName = FLOW_CLASS_NAME.plusParameter(attribute.type.toTypeName())
-            fun getParamType(): TypeName = attribute.type.toTypeName()
-
             val paramName: String = when (attribute) {
-                is Attribute.EnumPicker -> return@mapNotNull null
-                is Attribute.Function, is Attribute.Label, is Attribute.Picker -> getParamName()
-                is Attribute.TextField, is Attribute.Toggle -> getInitialValueParamName()
+                is Attribute.Function, is Attribute.Label -> return@mapNotNull null
+                is Attribute.TextField, is Attribute.Toggle, is Attribute.Picker, is Attribute.EnumPicker -> "initial${attribute.name.capitalize()}"
             }
 
             @Suppress("KotlinConstantConditions")
             val paramType: TypeName = when (attribute) {
-                is Attribute.EnumPicker -> return@mapNotNull null
+                is Attribute.Function, is Attribute.Label -> return@mapNotNull null
+                is Attribute.Picker -> String::class.asTypeName().copy(nullable = true)
+                is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
+                is Attribute.TextField, is Attribute.Toggle -> attribute.type.toTypeName()
+            }
+
+            ParameterSpec(paramName, paramType)
+        } + attributes
+        .mapNotNull { attribute ->
+            val paramName: String = when (attribute) {
+                is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
+                is Attribute.Function, is Attribute.Label, is Attribute.Picker -> attribute.name
+            }
+
+            @Suppress("KotlinConstantConditions")
+            val paramType: TypeName = when (attribute) {
+                is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
                 is Attribute.Function -> LambdaTypeName.get(null, emptyList(), Unit::class.asTypeName())
-                is Attribute.Label -> getFlowParamType()
-                is Attribute.Picker, is Attribute.TextField, is Attribute.Toggle -> getParamType()
+                is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(attribute.type.toTypeName())
+                is Attribute.Picker -> attribute.type.toTypeName()
             }
 
             ParameterSpec(paramName, paramType)

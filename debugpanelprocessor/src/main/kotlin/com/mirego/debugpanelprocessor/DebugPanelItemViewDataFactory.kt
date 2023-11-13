@@ -11,7 +11,7 @@ internal object DebugPanelItemViewDataFactory {
         "DebugPanelItemViewData.Label(\"${attribute.name}\", \"${attribute.name}\", ${attribute.name})"
 
     fun createPicker(attribute: Attribute.Picker): String =
-        "DebugPanelItemViewData.Picker(\"${attribute.name}\", \"${attribute.displayName ?: attribute.name}\", repository.getCurrentPickerValue(\"${attribute.name}\"), ${attribute.name})"
+        "DebugPanelItemViewData.Picker(\"${attribute.name}\", \"${attribute.displayName ?: attribute.name}\", repository.getCurrentPickerValue(\"${attribute.name}\") ?: initial${attribute.name.capitalize()}, ${attribute.name})"
 
     fun createPicker(attribute: Attribute.EnumPicker): String {
         val items = """
