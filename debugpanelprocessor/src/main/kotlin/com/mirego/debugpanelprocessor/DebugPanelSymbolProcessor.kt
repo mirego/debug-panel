@@ -7,7 +7,6 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanelprocessor.Attribute
-import com.mirego.debugpanelprocessor.Consts.FUNCTION_0_CLASS_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_PACKAGE_NAME
@@ -90,5 +89,9 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
 
         invoked = true
         return emptyList()
+    }
+
+    companion object {
+        private val FUNCTION_0_CLASS_NAME = ClassName("kotlin", "Function0")
     }
 }

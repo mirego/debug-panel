@@ -17,9 +17,6 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 
 internal object DebugPanelTypeSpecFactory {
     private val FLOW_CLASS_NAME = ClassName("kotlinx.coroutines.flow", "Flow")
-    private const val CREATE_VIEW_DATA_FUNCTION_NAME = "createViewData"
-    private const val DEBUG_PANEL_VIEW_DATA_NAME = "DebugPanelViewData"
-    private val DEBUG_PANEL_VIEW_DATA_CLASS_NAME = ClassName(Consts.USE_CASE_PACKAGE_NAME, DEBUG_PANEL_VIEW_DATA_NAME)
 
     fun createRepository(className: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
         interfaceClassName = className,
@@ -101,11 +98,13 @@ internal object DebugPanelTypeSpecFactory {
                     is Attribute.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
                 }
             }.let { itemViewDataList ->
+                val viewDataName = "DebugPanelViewData"
+
                 InterfaceImplementation.Function(
-                    name = CREATE_VIEW_DATA_FUNCTION_NAME,
-                    returnType = DEBUG_PANEL_VIEW_DATA_CLASS_NAME,
+                    name = "createViewData",
+                    returnType = ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName),
                     code = """
-                        |return $DEBUG_PANEL_VIEW_DATA_NAME(
+                        |return $viewDataName(
                         |   listOf(
                         |       ${itemViewDataList.joinToString(", ")}
                         |   )
