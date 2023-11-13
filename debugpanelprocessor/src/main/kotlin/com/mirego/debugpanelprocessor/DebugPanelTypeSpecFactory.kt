@@ -48,39 +48,45 @@ internal object DebugPanelTypeSpecFactory {
         configureImplementation = { superclass(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_IMPL_NAME)) }
     )
 
-    private fun createUseCaseParams(attributes: Sequence<Attribute>) = attributes
-        .mapNotNull { attribute ->
-            val paramName: String = when (attribute) {
-                is Attribute.Function, is Attribute.Label -> return@mapNotNull null
-                is Attribute.TextField, is Attribute.Toggle, is Attribute.Picker, is Attribute.EnumPicker -> "initial${attribute.name.capitalize()}"
+    private fun createUseCaseParams(attributes: Sequence<Attribute>): Sequence<ParameterSpec> {
+        val initialValueParams = attributes
+            .mapNotNull { attribute ->
+                val paramName: String = when (attribute) {
+                    is Attribute.Function, is Attribute.Label -> return@mapNotNull null
+                    is Attribute.TextField, is Attribute.Toggle, is Attribute.Picker, is Attribute.EnumPicker -> "initial${attribute.name.capitalize()}"
+                }
+
+                @Suppress("KotlinConstantConditions")
+                val paramType: TypeName = when (attribute) {
+                    is Attribute.Function, is Attribute.Label -> return@mapNotNull null
+                    is Attribute.Picker -> String::class.asTypeName().copy(nullable = true)
+                    is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
+                    is Attribute.TextField, is Attribute.Toggle -> attribute.type.toTypeName()
+                }
+
+                ParameterSpec(paramName, paramType)
             }
 
-            @Suppress("KotlinConstantConditions")
-            val paramType: TypeName = when (attribute) {
-                is Attribute.Function, is Attribute.Label -> return@mapNotNull null
-                is Attribute.Picker -> String::class.asTypeName().copy(nullable = true)
-                is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
-                is Attribute.TextField, is Attribute.Toggle -> attribute.type.toTypeName()
+        val valueParams = attributes
+            .mapNotNull { attribute ->
+                val paramName: String = when (attribute) {
+                    is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
+                    is Attribute.Function, is Attribute.Label, is Attribute.Picker -> attribute.name
+                }
+
+                @Suppress("KotlinConstantConditions")
+                val paramType: TypeName = when (attribute) {
+                    is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
+                    is Attribute.Function -> LambdaTypeName.get(null, emptyList(), Unit::class.asTypeName())
+                    is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(attribute.type.toTypeName())
+                    is Attribute.Picker -> attribute.type.toTypeName()
+                }
+
+                ParameterSpec(paramName, paramType)
             }
 
-            ParameterSpec(paramName, paramType)
-        } + attributes
-        .mapNotNull { attribute ->
-            val paramName: String = when (attribute) {
-                is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
-                is Attribute.Function, is Attribute.Label, is Attribute.Picker -> attribute.name
-            }
-
-            @Suppress("KotlinConstantConditions")
-            val paramType: TypeName = when (attribute) {
-                is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
-                is Attribute.Function -> LambdaTypeName.get(null, emptyList(), Unit::class.asTypeName())
-                is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(attribute.type.toTypeName())
-                is Attribute.Picker -> attribute.type.toTypeName()
-            }
-
-            ParameterSpec(paramName, paramType)
-        }
+        return initialValueParams + valueParams
+    }
 
     fun createUseCase(className: ClassName, specificRepositoryClassName: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
         interfaceClassName = className,
