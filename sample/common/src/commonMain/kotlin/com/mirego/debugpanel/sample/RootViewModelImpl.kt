@@ -19,9 +19,9 @@ class RootViewModelImpl(coroutineScope: CoroutineScope) : RootViewModel, VMDView
         useCase,
         useCase.createViewData(
             initialPreviewMode = true,
-            initialLastNameInput = "Default last name",
+            initialLastNameInput = "",
             initialEnvironments = "qa",
-            initialLanguage = null,
+            initialLanguage = Language.FRENCH,
             firstName = flowOf("First name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),
