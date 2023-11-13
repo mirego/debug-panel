@@ -43,11 +43,6 @@ kotlin {
             }
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
     }
 }
 
