@@ -5,26 +5,23 @@ import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.initializeSettingsForTesting
 import com.mirego.debugpanel.repository.TestDebugPanelRepositoryImpl
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
-import com.mirego.debugpanel.usecase.TestDebugPanelUseCaseImpl
-import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
-import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 
 @DebugPanel("Test")
 data class TestConfig(
-    @DisplayName("toggle") val toggleId: Boolean,
-    @DisplayName("action") val actionId: () -> Unit
+    val toggle: Boolean,
+    val action: () -> Unit,
+    var textField: String
 )
 
 @RunWith(AndroidJUnit4::class)
@@ -41,14 +38,20 @@ class SpecificDebugPanelRepositoryImplTest {
     }
 
     @Test
-    fun test() = runTestAllowUncompletedCoroutines {
-        assertNull(repository.getToggleId().first())
+    fun `test`() = runTest {
+        assertNull(repository.getToggle().first())
 
-        repository.onToggleUpdated(mockk<DebugPanelItemViewData.Toggle> { every { identifier } returns "toggleId" }, true)
+        assertEquals(null, repository.getTextField().first())
+
+        repository.onToggleUpdated(mockk<DebugPanelItemViewData.Toggle> { every { identifier } returns "toggle" }, true)
+        repository.onTextFieldUpdated(mockk<DebugPanelItemViewData.TextField> { every { identifier } returns "textField" }, "newText")
 
         advanceUntilIdle()
 
-        assertTrue(repository.getToggleId().first() == true)
-        assertTrue(repository.getCurrentToggleValue("toggleId", false))
+        assertTrue(repository.getToggle().first() == true)
+        assertEquals(false, repository.getCurrentToggleValue("toggle", false))
+
+        assertTrue(repository.getTextField().first() == "newText")
+        assertEquals("newText", repository.getCurrentTextFieldValue("textField", ""))
     }
 }

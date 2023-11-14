@@ -6,6 +6,7 @@ import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -15,6 +16,47 @@ import kotlinx.coroutines.test.advanceUntilIdle
 class DebugPanelViewModelImplTest {
     private val useCase: DebugPanelUseCase = mockk()
 
+    private fun createEveryItems(buttonAction: () -> Unit = {}): List<DebugPanelItemViewData> = listOf(
+        DebugPanelItemViewData.Toggle(
+            identifier = "toggleId",
+            label = "toggle",
+            initialValue = false
+        ),
+        DebugPanelItemViewData.TextField(
+            identifier = "textFieldId",
+            placeholder = "textField",
+            initialValue = "text"
+        ),
+        DebugPanelItemViewData.Button(
+            identifier = "actionId",
+            label = "action",
+            action = buttonAction
+        ),
+        DebugPanelItemViewData.Label(
+            identifier = "labelId",
+            label = "label",
+            value = flowOf("value")
+        ),
+        DebugPanelItemViewData.Picker(
+            identifier = "pickerId",
+            label = "picker",
+            initialValue = null,
+            items = listOf(
+                DebugPanelPickerItem("item0", "Item 0"),
+                DebugPanelPickerItem("item1", "Item 1")
+            )
+        ),
+        DebugPanelItemViewData.Picker(
+            identifier = "pickerId2",
+            label = "picker2",
+            initialValue = "item1",
+            items = listOf(
+                DebugPanelPickerItem("item0", "Item 0"),
+                DebugPanelPickerItem("item1", "Item 1")
+            )
+        )
+    )
+
     @Test
     fun `given debug panel items expect the view models to be configured properly`() = runTestAllowUncompletedCoroutines {
         var tapped = false
@@ -23,48 +65,9 @@ class DebugPanelViewModelImplTest {
             coroutineScope = this,
             useCase = useCase,
             viewData = DebugPanelViewData(
-                listOf(
-                    DebugPanelItemViewData.Toggle(
-                        identifier = "toggleId",
-                        label = "toggle",
-                        initialValue = false
-                    ),
-                    DebugPanelItemViewData.TextField(
-                        identifier = "textFieldId",
-                        placeholder = "textField",
-                        initialValue = "text"
-                    ),
-                    DebugPanelItemViewData.Button(
-                        identifier = "actionId",
-                        label = "action",
-                        action = {
-                            tapped = true
-                        }
-                    ),
-                    DebugPanelItemViewData.Label(
-                        identifier = "labelId",
-                        label = "label",
-                        value = flowOf("value")
-                    ),
-                    DebugPanelItemViewData.Picker(
-                        identifier = "pickerId",
-                        label = "picker",
-                        initialValue = null,
-                        items = listOf(
-                            DebugPanelPickerItem("item0", "Item 0"),
-                            DebugPanelPickerItem("item1", "Item 1")
-                        )
-                    ),
-                    DebugPanelItemViewData.Picker(
-                        identifier = "pickerId2",
-                        label = "picker2",
-                        initialValue = "item1",
-                        items = listOf(
-                            DebugPanelPickerItem("item0", "Item 0"),
-                            DebugPanelPickerItem("item1", "Item 1")
-                        )
-                    )
-                )
+                createEveryItems {
+                    tapped = true
+                }
             )
         )
 
@@ -106,6 +109,40 @@ class DebugPanelViewModelImplTest {
         assertEquals("Item 1", picker.viewModel.elements[1].content.text)
 
         assertEquals(1, pickerWithInitialValue.viewModel.selectedIndex)
+
+        confirmVerified(useCase)
+    }
+
+    @Test
+    fun `when updating the view model items expect the correct methods to be called on the use case`() = runTestAllowUncompletedCoroutines {
+        val viewData = DebugPanelViewData(createEveryItems())
+        val toggleItemViewData = viewData.items[0] as DebugPanelItemViewData.Toggle
+        val textFieldItemViewData = viewData.items[1] as DebugPanelItemViewData.TextField
+        val pickerItemViewData = viewData.items[4] as DebugPanelItemViewData.Picker
+
+        val viewModel = DebugPanelViewModelImpl(
+            coroutineScope = this,
+            useCase = useCase,
+            viewData = viewData
+        )
+
+        val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
+        val textField = viewModel.items.elements[1] as DebugPanelItemViewModel.TextField
+        val picker = viewModel.items.elements[4] as DebugPanelItemViewModel.Picker
+
+        advanceUntilIdle()
+
+        toggle.viewModel.onValueChange(true)
+        textField.viewModel.onValueChange("newValue")
+        picker.viewModel.selectedIndex = 1
+
+        advanceUntilIdle()
+
+        verify(exactly = 1) {
+            useCase.onToggleUpdated(toggleItemViewData, true)
+            useCase.onTextFieldUpdated(textFieldItemViewData, "newValue")
+            useCase.onPickerUpdated(pickerItemViewData, "item1")
+        }
 
         confirmVerified(useCase)
     }

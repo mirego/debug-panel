@@ -1,4 +1,4 @@
-import com.google.devtools.ksp.gradle.KspTask
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -64,6 +64,7 @@ kotlin {
                 implementation(projects.annotations)
                 implementation("io.mockk:mockk-android:1.13.8")
             }
+            kotlin.srcDir("build/generated/ksp/metadata/androidUnitTestDebug/kotlin")
         }
     }
 }
@@ -83,6 +84,7 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
+            isIncludeAndroidResources = true
         }
     }
 }

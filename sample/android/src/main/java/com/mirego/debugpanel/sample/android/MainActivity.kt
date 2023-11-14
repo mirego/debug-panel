@@ -101,7 +101,7 @@ fun RootView(viewModel: RootViewModel) {
                             .clickable { isExpanded = true },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        VMDText(viewModel = item.title)
+                        VMDText(viewModel = item.label)
                     }
 
                     VMDDropDownMenu(
