@@ -20,7 +20,7 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class Label(
         override val identifier: String,
         val label: String,
-        val value: Flow<String>?
+        val value: Flow<String>
     ) : DebugPanelItemViewData
 
     data class Picker(

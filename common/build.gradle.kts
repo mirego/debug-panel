@@ -1,8 +1,11 @@
+import com.google.devtools.ksp.gradle.KspTask
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -34,6 +37,7 @@ kotlin {
         all {
             languageSettings.optIn("com.russhwolf.settings.ExperimentalSettingsApi")
             languageSettings.optIn("kotlinx.coroutines.FlowPreview")
+            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
         }
 
         val androidMain by getting {
@@ -50,6 +54,17 @@ kotlin {
                 implementation(libs.multiplatform.settings.coroutines)
             }
         }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.androidx.monitor)
+                implementation("androidx.test.ext:junit:1.1.5")
+                implementation("org.robolectric:robolectric:4.11.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+                implementation(projects.annotations)
+                implementation("io.mockk:mockk-android:1.13.8")
+            }
+        }
     }
 }
 
@@ -64,4 +79,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+}
+
+dependencies {
+    add("kspAndroidTest", projects.debugpanelprocessor)
 }

@@ -75,8 +75,9 @@ class DebugPanelViewModelImpl(
 
     private fun createLabel(viewData: DebugPanelItemViewData.Label) = DebugPanelItemViewModel.Label(
         viewData.identifier,
+        text(viewData.label),
         text(viewData.identifier) {
-            viewData.value?.let { bindText(it) }
+            bindText(viewData.value)
         }
     )
 
