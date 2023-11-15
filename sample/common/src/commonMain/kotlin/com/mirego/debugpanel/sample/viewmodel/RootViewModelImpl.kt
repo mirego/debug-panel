@@ -12,6 +12,8 @@ class RootViewModelImpl(
     coroutineScope: CoroutineScope,
     useCase: SampleDebugPanelUseCase
 ) : RootViewModel, VMDViewModelImpl(coroutineScope) {
+    override val title = "Sample Debug Panel"
+
     override val debugPanel = DebugPanelViewModelImpl(
         coroutineScope,
         useCase,
