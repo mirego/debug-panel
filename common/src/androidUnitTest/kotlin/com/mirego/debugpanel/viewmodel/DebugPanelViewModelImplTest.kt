@@ -1,9 +1,9 @@
+package com.mirego.debugpanel.viewmodel
+
 import com.mirego.debugpanel.DebugPanelPickerItem
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.mirego.debugpanel.usecase.DebugPanelUseCase
 import com.mirego.debugpanel.usecase.DebugPanelViewData
-import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
-import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,6 +13,7 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import runTestWithPendingCoroutines
 
 class DebugPanelViewModelImplTest {
     private val useCase: DebugPanelUseCase = mockk()

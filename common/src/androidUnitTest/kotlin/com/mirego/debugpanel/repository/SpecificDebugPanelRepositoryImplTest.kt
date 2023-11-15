@@ -1,9 +1,11 @@
+package com.mirego.debugpanel.repository
+
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mirego.debugpanel.DebugPanelPickerItem
 import com.mirego.debugpanel.Settings
 import com.mirego.debugpanel.annotations.DebugPanel
-import com.mirego.debugpanel.repository.TestDebugPanelRepositoryImpl
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
+import context
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
