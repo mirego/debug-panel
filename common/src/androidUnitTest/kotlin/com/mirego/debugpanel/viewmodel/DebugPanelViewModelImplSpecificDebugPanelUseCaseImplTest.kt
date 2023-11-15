@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import runTestWithPendingCoroutines
 
-class DebugPanelViewModelImplTest {
+class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
     private val useCase: DebugPanelUseCase = mockk()
 
     private fun createEveryItems(buttonAction: () -> Unit = {}): List<DebugPanelItemViewData> = listOf(

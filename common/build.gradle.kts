@@ -91,3 +91,9 @@ android {
 dependencies {
     add("kspAndroidTest", projects.debugpanelprocessor)
 }
+
+ktlint {
+    filter {
+        exclude { element -> element.file.path.contains("generated/") }
+    }
+}

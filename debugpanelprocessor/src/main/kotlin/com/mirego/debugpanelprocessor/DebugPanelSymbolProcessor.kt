@@ -37,11 +37,10 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
     private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
         annotations.find { it.annotationType.toString() == clazz.simpleName }
 
-    private fun getConfig(resolver: Resolver): ResolvedConfiguration? =
+    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
         resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
             .filterIsInstance<KSClassDeclaration>()
-            .firstOrNull()
-            ?.let { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
+            .map { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
 
     private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
         .mapNotNull { property ->
@@ -73,30 +72,27 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             return emptyList()
         }
 
-        val config = getConfig(resolver) ?: run {
-            invoked = true
-            return emptyList()
+        getConfigurations(resolver).forEach { configuration ->
+            val prefix = (configuration.annotation.arguments.first().value as String).capitalize()
+
+            val specificRepositoryName = "$prefix$REPOSITORY_NAME"
+            val specificRepositoryClassName = ClassName(REPOSITORY_PACKAGE_NAME, specificRepositoryName)
+            val specificRepositoryImplName = "$prefix$REPOSITORY_IMPL_NAME"
+
+            val specificUseCaseName = "$prefix$USE_CASE_NAME"
+            val specificUseCaseClassName = ClassName(USE_CASE_PACKAGE_NAME, specificUseCaseName)
+            val specificUseCaseImplName = "$prefix$USE_CASE_IMPL_NAME"
+
+            val attributes = createAttributes(configuration)
+
+            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, attributes)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, attributes)
+
+            writeFile(REPOSITORY_PACKAGE_NAME, specificRepositoryName, repositoryInterface)
+            writeFile(REPOSITORY_PACKAGE_NAME, specificRepositoryImplName, repositoryImplementation)
+            writeFile(USE_CASE_PACKAGE_NAME, specificUseCaseName, useCaseInterface)
+            writeFile(USE_CASE_PACKAGE_NAME, specificUseCaseImplName, useCaseImplementation)
         }
-
-        val prefix = (config.annotation.arguments.first().value as String).capitalize()
-
-        val specificRepositoryName = "$prefix$REPOSITORY_NAME"
-        val specificRepositoryClassName = ClassName(REPOSITORY_PACKAGE_NAME, specificRepositoryName)
-        val specificRepositoryImplName = "$prefix$REPOSITORY_IMPL_NAME"
-
-        val specificUseCaseName = "$prefix$USE_CASE_NAME"
-        val specificUseCaseClassName = ClassName(USE_CASE_PACKAGE_NAME, specificUseCaseName)
-        val specificUseCaseImplName = "$prefix$USE_CASE_IMPL_NAME"
-
-        val attributes = createAttributes(config)
-
-        val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, attributes)
-        val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, attributes)
-
-        writeFile(REPOSITORY_PACKAGE_NAME, specificRepositoryName, repositoryInterface)
-        writeFile(REPOSITORY_PACKAGE_NAME, specificRepositoryImplName, repositoryImplementation)
-        writeFile(USE_CASE_PACKAGE_NAME, specificUseCaseName, useCaseInterface)
-        writeFile(USE_CASE_PACKAGE_NAME, specificUseCaseImplName, useCaseImplementation)
 
         invoked = true
         return emptyList()

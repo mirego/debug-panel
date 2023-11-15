@@ -1,9 +1,7 @@
 package com.mirego.debugpanel.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mirego.debugpanel.DebugPanelPickerItem
 import com.mirego.debugpanel.Settings
-import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import context
 import io.mockk.every
@@ -18,19 +16,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 
-@Suppress("unused")
-@DebugPanel("Test")
-data class TestConfig(
-    val toggle: Boolean,
-    val action: () -> Unit,
-    var textField: String,
-    val picker: List<DebugPanelPickerItem>
-)
-
 @RunWith(AndroidJUnit4::class)
 class SpecificDebugPanelRepositoryImplTest {
     private val repository by lazy {
-        TestDebugPanelRepositoryImpl()
+        TestRepositoryDebugPanelRepositoryImpl()
     }
 
     @BeforeTest
