@@ -58,11 +58,11 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.androidx.monitor)
-                implementation("androidx.test.ext:junit:1.1.5")
-                implementation("org.robolectric:robolectric:4.11.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+                implementation(libs.androidx.junit)
+                implementation(libs.robolectric)
+                implementation(libs.kotlinx.coroutines.test)
                 implementation(projects.annotations)
-                implementation("io.mockk:mockk-android:1.13.8")
+                implementation(libs.mockk.android)
             }
         }
     }
