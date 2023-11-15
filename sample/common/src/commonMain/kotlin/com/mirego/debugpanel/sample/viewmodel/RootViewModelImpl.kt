@@ -1,19 +1,17 @@
-package com.mirego.debugpanel.sample
+package com.mirego.debugpanel.sample.viewmodel
 
 import com.mirego.debugpanel.DebugPanelPickerItem
-import com.mirego.debugpanel.repository.SampleDebugPanelRepository
-import com.mirego.debugpanel.repository.SampleDebugPanelRepositoryImpl
+import com.mirego.debugpanel.sample.Language
 import com.mirego.debugpanel.usecase.SampleDebugPanelUseCase
-import com.mirego.debugpanel.usecase.SampleDebugPanelUseCaseImpl
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 
-class RootViewModelImpl(coroutineScope: CoroutineScope) : RootViewModel, VMDViewModelImpl(coroutineScope) {
-    private val repository: SampleDebugPanelRepository = SampleDebugPanelRepositoryImpl()
-    private val useCase: SampleDebugPanelUseCase = SampleDebugPanelUseCaseImpl(repository)
-
+class RootViewModelImpl(
+    coroutineScope: CoroutineScope,
+    useCase: SampleDebugPanelUseCase
+) : RootViewModel, VMDViewModelImpl(coroutineScope) {
     override val debugPanel = DebugPanelViewModelImpl(
         coroutineScope,
         useCase,
@@ -22,7 +20,7 @@ class RootViewModelImpl(coroutineScope: CoroutineScope) : RootViewModel, VMDView
             initialLastNameInput = "",
             initialEnvironments = "qa",
             initialLanguage = Language.FRENCH,
-            firstName = flowOf("First name"),
+            firstName = flowOf("Some name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),
                 DebugPanelPickerItem("qa", "QA"),
