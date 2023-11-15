@@ -7,6 +7,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
+import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanelprocessor.Attribute
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
@@ -50,18 +51,19 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
 
     private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
         .mapNotNull { property ->
+            val identifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
             val type = property.type.resolve()
             val className = type.toClassName()
             val displayName = property.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
             val name = property.simpleName.getShortName()
 
             when {
-                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(displayName, name)
-                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(displayName, name)
-                className == LABEL_CLASS_NAME -> Attribute.Label(displayName, name)
-                className == PICKER_CLASS_NAME -> Attribute.Picker(displayName, name)
-                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(displayName, name, type)
-                className == BUTTON_CLASS_NAME -> Attribute.Function(displayName, name)
+                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(identifier, displayName, name)
+                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(identifier, displayName, name)
+                className == LABEL_CLASS_NAME -> Attribute.Label(identifier, displayName, name)
+                className == PICKER_CLASS_NAME -> Attribute.Picker(identifier, displayName, name)
+                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(identifier, displayName, name, type)
+                className == BUTTON_CLASS_NAME -> Attribute.Function(identifier, displayName, name)
                 else -> null
             }
         }

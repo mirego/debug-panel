@@ -18,7 +18,7 @@ class RootViewModelImpl(
         coroutineScope,
         useCase,
         useCase.createViewData(
-            initialPreviewMode = true,
+            initialPreviewMode = false,
             initialLastNameInput = "",
             initialEnvironments = "qa",
             initialLanguage = Language.FRENCH,

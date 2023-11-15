@@ -5,25 +5,30 @@ import com.google.devtools.ksp.symbol.KSDeclarationContainer
 import com.google.devtools.ksp.symbol.KSType
 
 internal sealed interface Attribute {
+    val identifier: String?
     val displayName: String?
     val name: String
 
     data class Label(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String
     ) : Attribute
 
     data class TextField(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String
     ) : Attribute
 
     data class Picker(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String
     ) : Attribute
 
     data class EnumPicker(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String,
         val type: KSType
@@ -34,11 +39,13 @@ internal sealed interface Attribute {
     }
 
     data class Toggle(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String
     ) : Attribute
 
     data class Function(
+        override val identifier: String?,
         override val displayName: String?,
         override val name: String
     ) : Attribute

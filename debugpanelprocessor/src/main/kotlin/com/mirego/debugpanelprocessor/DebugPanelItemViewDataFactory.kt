@@ -2,7 +2,7 @@ package com.mirego.debugpanelprocessor
 
 internal object DebugPanelItemViewDataFactory {
     fun createToggle(attribute: Attribute.Toggle): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
         val initialValue = "repository.getCurrentToggleValue(\"${attribute.name}\", ${attribute.initialValueParamName})"
 
@@ -10,7 +10,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createTextField(attribute: Attribute.TextField): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val placeholder = attribute.safeDisplayName
         val initialValue = "repository.getCurrentTextFieldValue(\"${attribute.name}\", ${attribute.initialValueParamName})"
 
@@ -18,7 +18,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createLabel(attribute: Attribute.Label): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
         val value = attribute.name
 
@@ -26,7 +26,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createPicker(attribute: Attribute.Picker): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
         val initialValue = "repository.getCurrentPickerValue(\"${attribute.name}\") ?: ${attribute.initialValueParamName}"
         val items = attribute.name
@@ -35,7 +35,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createPicker(attribute: Attribute.EnumPicker): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
         val initialValue = "repository.getCurrentPickerValue(\"${attribute.name}\") ?: ${attribute.initialValueParamName}?.name"
         val items = """
@@ -48,12 +48,15 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createButton(attribute: Attribute.Function): String {
-        val identifier = attribute.name
+        val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
         val action = attribute.name
 
         return "DebugPanelItemViewData.Button(\"$identifier\", \"$label\", $action)"
     }
+
+    private val Attribute.safeIdentifier
+        get() = identifier ?: name
 
     private val Attribute.safeDisplayName
         get() = displayName ?: name
