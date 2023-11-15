@@ -19,7 +19,9 @@ internal class SettingsInitializer : Initializer<Context> {
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
 
-@VisibleForTesting
-fun initializeSettingsForTesting(context: Context) {
-    AppInitializer.getInstance(context).initializeComponent(SettingsInitializer::class.java)
+object Settings {
+    @VisibleForTesting
+    fun initialize(context: Context) {
+        AppInitializer.getInstance(context).initializeComponent(SettingsInitializer::class.java)
+    }
 }

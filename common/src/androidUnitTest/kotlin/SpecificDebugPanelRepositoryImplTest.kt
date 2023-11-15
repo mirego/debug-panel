@@ -1,7 +1,7 @@
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mirego.debugpanel.DebugPanelPickerItem
+import com.mirego.debugpanel.Settings
 import com.mirego.debugpanel.annotations.DebugPanel
-import com.mirego.debugpanel.initializeSettingsForTesting
 import com.mirego.debugpanel.repository.TestDebugPanelRepositoryImpl
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import io.mockk.every
@@ -33,7 +33,7 @@ class SpecificDebugPanelRepositoryImplTest {
 
     @BeforeTest
     fun setup() {
-        initializeSettingsForTesting(context)
+        Settings.initialize(context)
     }
 
     @Test
