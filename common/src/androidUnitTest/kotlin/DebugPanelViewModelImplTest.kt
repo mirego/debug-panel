@@ -58,7 +58,7 @@ class DebugPanelViewModelImplTest {
     )
 
     @Test
-    fun `given debug panel items expect the view models to be configured properly`() = runTestAllowUncompletedCoroutines {
+    fun `given debug panel items expect the view models to be configured properly`() = runTestWithPendingCoroutines {
         var tapped = false
 
         val viewModel = DebugPanelViewModelImpl(
@@ -114,7 +114,7 @@ class DebugPanelViewModelImplTest {
     }
 
     @Test
-    fun `when updating the view model items expect the correct methods to be called on the use case`() = runTestAllowUncompletedCoroutines {
+    fun `when updating the view model items expect the correct methods to be called on the use case`() = runTestWithPendingCoroutines {
         val viewData = DebugPanelViewData(createEveryItems())
         val toggleItemViewData = viewData.items[0] as DebugPanelItemViewData.Toggle
         val textFieldItemViewData = viewData.items[1] as DebugPanelItemViewData.TextField

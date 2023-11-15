@@ -3,7 +3,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 
-fun runTestAllowUncompletedCoroutines(body: suspend TestScope.() -> Unit) {
+fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
     var testCompleted = false
     try {
         runTest {

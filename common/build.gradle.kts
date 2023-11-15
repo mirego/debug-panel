@@ -64,7 +64,7 @@ kotlin {
                 implementation(projects.annotations)
                 implementation("io.mockk:mockk-android:1.13.8")
             }
-            kotlin.srcDir("build/generated/ksp/metadata/androidUnitTestDebug/kotlin")
+            kotlin.srcDir("build/generated/ksp")
         }
     }
 }

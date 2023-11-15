@@ -40,7 +40,6 @@ class SpecificDebugPanelRepositoryImplTest {
     @Test
     fun `test`() = runTest {
         assertNull(repository.getToggle().first())
-
         assertEquals(null, repository.getTextField().first())
 
         repository.onToggleUpdated(mockk<DebugPanelItemViewData.Toggle> { every { identifier } returns "toggle" }, true)
@@ -49,7 +48,7 @@ class SpecificDebugPanelRepositoryImplTest {
         advanceUntilIdle()
 
         assertTrue(repository.getToggle().first() == true)
-        assertEquals(false, repository.getCurrentToggleValue("toggle", false))
+        assertEquals(true, repository.getCurrentToggleValue("toggle", false))
 
         assertTrue(repository.getTextField().first() == "newText")
         assertEquals("newText", repository.getCurrentTextFieldValue("textField", ""))
