@@ -4,6 +4,7 @@ import com.mirego.debugpanel.DebugPanelPickerItem
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
 
+@Suppress("unused")
 @DebugPanel("Sample")
 data class DebugPanelConfig(
     val previewMode: Boolean,

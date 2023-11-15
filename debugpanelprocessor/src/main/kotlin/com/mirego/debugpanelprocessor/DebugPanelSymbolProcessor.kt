@@ -3,6 +3,7 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
@@ -23,20 +24,30 @@ import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
+import kotlin.reflect.KClass
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
 
-    private fun getConfig(resolver: Resolver): KSClassDeclaration? =
+    private data class ResolvedConfiguration(
+        val declaration: KSClassDeclaration,
+        val annotation: KSAnnotation
+    )
+
+    private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
+        annotations.find { it.annotationType.toString() == clazz.simpleName }
+
+    private fun getConfig(resolver: Resolver): ResolvedConfiguration? =
         resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
             .filterIsInstance<KSClassDeclaration>()
             .firstOrNull()
+            ?.let { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
 
-    private fun createAttributes(config: KSClassDeclaration): Sequence<Attribute> = config.getAllProperties()
+    private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
         .mapNotNull { property ->
             val type = property.type.resolve()
             val className = type.toClassName()
-            val displayName = property.annotations.firstOrNull { it.annotationType.resolve().toClassName().simpleName == DisplayName::class.simpleName }?.arguments?.first()?.value as String?
+            val displayName = property.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
             val name = property.simpleName.getShortName()
 
             when {
@@ -67,7 +78,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             return emptyList()
         }
 
-        val prefix = (config.annotations.first().arguments.first().value as String).capitalize()
+        val prefix = (config.annotation.arguments.first().value as String).capitalize()
 
         val specificRepositoryName = "$prefix$REPOSITORY_NAME"
         val specificRepositoryClassName = ClassName(REPOSITORY_PACKAGE_NAME, specificRepositoryName)

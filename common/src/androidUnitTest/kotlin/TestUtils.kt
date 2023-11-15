@@ -1,9 +1,11 @@
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
 import kotlin.test.fail
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 
-fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
+internal fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
     var testCompleted = false
     try {
         runTest {
@@ -17,3 +19,6 @@ fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
         }
     }
 }
+
+internal val context: Context
+    get() = InstrumentationRegistry.getInstrumentation().targetContext

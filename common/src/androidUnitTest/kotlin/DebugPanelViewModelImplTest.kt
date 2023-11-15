@@ -11,6 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 
 class DebugPanelViewModelImplTest {
@@ -61,10 +62,8 @@ class DebugPanelViewModelImplTest {
     fun `given debug panel items expect the view models to be configured properly`() = runTestWithPendingCoroutines {
         var tapped = false
 
-        val viewModel = DebugPanelViewModelImpl(
-            coroutineScope = this,
-            useCase = useCase,
-            viewData = DebugPanelViewData(
+        val viewModel = createViewModel(
+            DebugPanelViewData(
                 createEveryItems {
                     tapped = true
                 }
@@ -120,11 +119,7 @@ class DebugPanelViewModelImplTest {
         val textFieldItemViewData = viewData.items[1] as DebugPanelItemViewData.TextField
         val pickerItemViewData = viewData.items[4] as DebugPanelItemViewData.Picker
 
-        val viewModel = DebugPanelViewModelImpl(
-            coroutineScope = this,
-            useCase = useCase,
-            viewData = viewData
-        )
+        val viewModel = createViewModel(viewData)
 
         val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
         val textField = viewModel.items.elements[1] as DebugPanelItemViewModel.TextField
@@ -146,4 +141,10 @@ class DebugPanelViewModelImplTest {
 
         confirmVerified(useCase)
     }
+
+    private fun TestScope.createViewModel(viewData: DebugPanelViewData) = DebugPanelViewModelImpl(
+        coroutineScope = this,
+        useCase = useCase,
+        viewData = viewData
+    )
 }
