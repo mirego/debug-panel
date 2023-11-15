@@ -2,7 +2,12 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.mirego.publish)
+    alias(libs.plugins.mirego.release)
+    `maven-publish`
 }
+
+group = "com.mirego.debugpanel"
 
 kotlin {
     @Suppress("OPT_IN_USAGE")

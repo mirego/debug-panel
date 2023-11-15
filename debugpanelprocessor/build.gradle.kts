@@ -1,6 +1,16 @@
 plugins {
     kotlin("jvm")
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.mirego.publish)
+    alias(libs.plugins.mirego.release)
+    `maven-publish`
+}
+
+group = "com.mirego.debugpanel"
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -8,4 +18,13 @@ dependencies {
     implementation(libs.kotlinpoet)
     implementation(libs.kotlinpoet.ksp)
     implementation(libs.ksp.api)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "debugpanelprocessor"
+            from(components["java"])
+        }
+    }
 }

@@ -101,9 +101,3 @@ ktlint {
         exclude { element -> element.file.path.contains("generated/") }
     }
 }
-
-release {
-    checkTasks = listOf("check")
-    buildTasks = listOf("publish")
-    updateVersionPart = 2
-}
