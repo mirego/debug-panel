@@ -9,10 +9,12 @@ import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanelprocessor.Attribute
 import com.mirego.debugpanelprocessor.Consts
+import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
+import com.mirego.debugpanelprocessor.Consts.USE_CASE_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.DebugPanelTypeSpecFactory
 import com.mirego.debugpanelprocessor.capitalize
 import com.squareup.kotlinpoet.ClassName
@@ -46,22 +48,20 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             .filterIsInstance<KSClassDeclaration>()
             .map { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
 
-    private fun createAttributes(packageName: String, config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
+    private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
         .mapNotNull { property ->
             val type = property.type.resolve()
             val className = type.toClassName()
             val displayName = property.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
             val name = property.simpleName.getShortName()
 
-            val configPackageName = Consts.getConfigPackageName(packageName)
-
             when {
-                className == ClassName(configPackageName, "DebugPanelToggle") -> Attribute.Toggle(displayName, name)
-                className == ClassName(configPackageName, "DebugPanelTextField") -> Attribute.TextField(displayName, name)
-                className == ClassName(configPackageName, "DebugPanelLabel") -> Attribute.Label(displayName, name)
-                className == ClassName(configPackageName, "DebugPanelPicker") -> Attribute.Picker(displayName, name)
+                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(displayName, name)
+                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(displayName, name)
+                className == LABEL_CLASS_NAME -> Attribute.Label(displayName, name)
+                className == PICKER_CLASS_NAME -> Attribute.Picker(displayName, name)
                 (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(displayName, name, type)
-                className == ClassName(configPackageName, "DebugPanelButton") -> Attribute.Function(displayName, name)
+                className == BUTTON_CLASS_NAME -> Attribute.Function(displayName, name)
                 else -> null
             }
         }
@@ -97,18 +97,31 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "$prefix$USE_CASE_IMPL_NAME"
 
-            val attributes = createAttributes(packageName, configuration)
+            val attributes = createAttributes(configuration)
 
-            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(packageName, specificRepositoryClassName, attributes)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(packageName, specificUseCaseClassName, specificRepositoryClassName, attributes)
+            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, attributes)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, attributes)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
-            writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation, Import(Consts.getConfigPackageName(packageName), "DebugPanelPickerItem"))
+            writeFile(
+                useCasePackageName,
+                specificUseCaseImplName,
+                useCaseImplementation,
+                Import(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"), Import(USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
+            )
         }
 
         invoked = true
         return emptyList()
+    }
+
+    companion object {
+        private val LABEL_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelLabel")
+        private val PICKER_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelPicker")
+        private val BUTTON_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelButton")
+        private val TOGGLE_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelToggle")
+        private val TEXT_FIELD_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelTextField")
     }
 }
