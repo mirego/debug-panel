@@ -1,7 +1,7 @@
 package com.mirego.debugpanel.usecase
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mirego.debugpanel.DebugPanelPickerItem
+import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
 import io.mockk.confirmVerified

@@ -1,6 +1,6 @@
 package com.mirego.debugpanel.sample.viewmodel
 
-import com.mirego.debugpanel.DebugPanelPickerItem
+import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.sample.Language
 import com.mirego.debugpanel.usecase.SampleDebugPanelUseCase
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl

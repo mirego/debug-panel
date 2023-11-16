@@ -1,7 +1,9 @@
 package com.mirego.debugpanelprocessor
 
+import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
+import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
@@ -22,9 +24,9 @@ internal object DebugPanelTypeSpecFactory {
         interfaceClassName = className,
         functions = attributes.mapNotNull { attribute ->
             val returnType = when (attribute) {
-                is Attribute.Picker, is Attribute.EnumPicker -> STRING
                 is Attribute.Function, is Attribute.Label -> return@mapNotNull null
-                else -> attribute.type.toTypeName()
+                is Attribute.Picker, is Attribute.EnumPicker, is Attribute.TextField -> STRING
+                is Attribute.Toggle -> BOOLEAN
             }
 
             @Suppress("KotlinConstantConditions")
@@ -56,9 +58,10 @@ internal object DebugPanelTypeSpecFactory {
                 @Suppress("KotlinConstantConditions")
                 val paramType: TypeName = when (attribute) {
                     is Attribute.Function, is Attribute.Label -> return@mapNotNull null
-                    is Attribute.Picker -> String::class.asTypeName().copy(nullable = true)
                     is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
-                    is Attribute.TextField, is Attribute.Toggle -> attribute.type.toTypeName()
+                    is Attribute.Picker -> STRING.copy(nullable = true)
+                    is Attribute.TextField -> STRING
+                    is Attribute.Toggle -> BOOLEAN
                 }
 
                 ParameterSpec(paramName, paramType)
@@ -75,8 +78,8 @@ internal object DebugPanelTypeSpecFactory {
                 val paramType: TypeName = when (attribute) {
                     is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
                     is Attribute.Function -> LambdaTypeName.get(null, emptyList(), Unit::class.asTypeName())
-                    is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(attribute.type.toTypeName())
-                    is Attribute.Picker -> attribute.type.toTypeName()
+                    is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(String::class.asTypeName())
+                    is Attribute.Picker -> List::class.asTypeName().plusParameter(ClassName(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"))
                 }
 
                 ParameterSpec(paramName, paramType)

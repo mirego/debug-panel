@@ -1,6 +1,6 @@
 package com.mirego.debugpanel.usecase
 
-import com.mirego.debugpanel.DebugPanelPickerItem
+import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.trikot.viewmodels.declarative.content.VMDIdentifiableContent
 import kotlinx.coroutines.flow.Flow
 

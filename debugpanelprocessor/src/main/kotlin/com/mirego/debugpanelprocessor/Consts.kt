@@ -1,7 +1,8 @@
 package com.mirego.debugpanelprocessor
 
 internal object Consts {
-    private const val BASE_PACKAGE_NAME = "com.mirego.debugpanel"
+    const val BASE_PACKAGE_NAME = "com.mirego.debugpanel"
+    const val CONFIG_PACKAGE_NAME = "$BASE_PACKAGE_NAME.config"
 
     const val REPOSITORY_PACKAGE_NAME = "$BASE_PACKAGE_NAME.repository"
     const val REPOSITORY_NAME = "DebugPanelRepository"
