@@ -1,6 +1,5 @@
 package com.mirego.debugpanelprocessor
 
-import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.squareup.kotlinpoet.BOOLEAN
@@ -20,7 +19,7 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 internal object DebugPanelTypeSpecFactory {
     private val FLOW_CLASS_NAME = ClassName("kotlinx.coroutines.flow", "Flow")
 
-    fun createRepository(className: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
+    fun createRepository(packageName: String, className: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = attributes.mapNotNull { attribute ->
             val returnType = when (attribute) {
@@ -43,11 +42,11 @@ internal object DebugPanelTypeSpecFactory {
                 code = "return $baseRepositoryFunctionName(\"${attribute.name}\")"
             )
         }.asIterable(),
-        configureInterface = { addSuperinterface(ClassName(Consts.REPOSITORY_PACKAGE_NAME, REPOSITORY_NAME)) },
-        configureImplementation = { superclass(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_IMPL_NAME)) }
+        configureInterface = { addSuperinterface(ClassName(Consts.getRepositoryPackageName(packageName), REPOSITORY_NAME)) },
+        configureImplementation = { superclass(ClassName(Consts.getRepositoryPackageName(packageName), Consts.REPOSITORY_IMPL_NAME)) }
     )
 
-    private fun createUseCaseParams(attributes: Sequence<Attribute>): Sequence<ParameterSpec> {
+    private fun createUseCaseParams(packageName: String, attributes: Sequence<Attribute>): Sequence<ParameterSpec> {
         val initialValueParams = attributes
             .mapNotNull { attribute ->
                 val paramName: String = when (attribute) {
@@ -79,7 +78,7 @@ internal object DebugPanelTypeSpecFactory {
                     is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
                     is Attribute.Function -> LambdaTypeName.get(null, emptyList(), Unit::class.asTypeName())
                     is Attribute.Label -> FLOW_CLASS_NAME.plusParameter(String::class.asTypeName())
-                    is Attribute.Picker -> List::class.asTypeName().plusParameter(ClassName(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"))
+                    is Attribute.Picker -> List::class.asTypeName().plusParameter(ClassName(Consts.getConfigPackageName(packageName), "DebugPanelPickerItem"))
                 }
 
                 ParameterSpec(paramName, paramType)
@@ -88,7 +87,7 @@ internal object DebugPanelTypeSpecFactory {
         return initialValueParams + valueParams
     }
 
-    fun createUseCase(className: ClassName, specificRepositoryClassName: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
+    fun createUseCase(packageName: String, className: ClassName, specificRepositoryClassName: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = listOf(
             attributes.map {
@@ -105,7 +104,7 @@ internal object DebugPanelTypeSpecFactory {
 
                 InterfaceImplementation.Function(
                     name = "createViewData",
-                    returnType = ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName),
+                    returnType = ClassName(Consts.getUseCasePackageName(packageName), viewDataName),
                     code = """
                         |return $viewDataName(
                         |   listOf(
@@ -114,15 +113,15 @@ internal object DebugPanelTypeSpecFactory {
                         |)
                         |
                     """.trimMargin(),
-                    params = createUseCaseParams(attributes).asIterable()
+                    params = createUseCaseParams(packageName, attributes).asIterable()
                 )
             }
         ),
-        configureInterface = { addSuperinterface(ClassName(Consts.USE_CASE_PACKAGE_NAME, Consts.USE_CASE_NAME)).addSuperinterface(specificRepositoryClassName) },
+        configureInterface = { addSuperinterface(ClassName(Consts.getUseCasePackageName(packageName), Consts.USE_CASE_NAME)).addSuperinterface(specificRepositoryClassName) },
         configureImplementation = {
             val repositoryParamName = "repository"
 
-            superclass(ClassName(Consts.USE_CASE_PACKAGE_NAME, USE_CASE_IMPL_NAME))
+            superclass(ClassName(Consts.getUseCasePackageName(packageName), USE_CASE_IMPL_NAME))
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
                         .addParameter(repositoryParamName, specificRepositoryClassName)

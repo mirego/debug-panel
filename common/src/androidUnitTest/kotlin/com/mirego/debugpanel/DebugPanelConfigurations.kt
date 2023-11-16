@@ -10,7 +10,7 @@ import com.mirego.debugpanel.config.DebugPanelToggle
 import com.mirego.debugpanel.usecase.TestEnum
 
 @Suppress("unused")
-@DebugPanel("TestRepository")
+@DebugPanel("TestRepository", "com.mirego.debugpanel")
 data class TestRepositoryConfig(
     val toggle: DebugPanelToggle,
     val action: DebugPanelButton,
@@ -19,7 +19,7 @@ data class TestRepositoryConfig(
 )
 
 @Suppress("unused")
-@DebugPanel("TestUseCase")
+@DebugPanel("TestUseCase", "com.mirego.debugpanel")
 data class TestUseCaseConfig(
     val toggle: DebugPanelToggle,
     val button: DebugPanelButton,
@@ -30,7 +30,7 @@ data class TestUseCaseConfig(
 )
 
 @Suppress("unused")
-@DebugPanel("TestUseCaseDisplayName")
+@DebugPanel("TestUseCaseDisplayName", "com.mirego.debugpanel")
 data class TestUseCaseDisplayNameConfig(
     @DisplayName("Test toggle") val toggle: DebugPanelToggle,
     @DisplayName("Test button") val button: DebugPanelButton,

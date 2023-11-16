@@ -9,7 +9,7 @@ import com.mirego.debugpanel.config.DebugPanelTextField
 import com.mirego.debugpanel.config.DebugPanelToggle
 
 @Suppress("unused")
-@DebugPanel("Sample")
+@DebugPanel("Sample", "com.mirego.debugpanel")
 data class DebugPanelConfig(
     val previewMode: DebugPanelToggle,
     @DisplayName("First name:") val firstName: DebugPanelLabel,
