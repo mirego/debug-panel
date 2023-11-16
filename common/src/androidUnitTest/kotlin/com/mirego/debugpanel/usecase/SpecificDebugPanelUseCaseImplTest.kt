@@ -47,12 +47,12 @@ class SpecificDebugPanelUseCaseImplTest {
 
         assertEquals(6, viewData.items.size)
 
-        val toggle = assertNotNull(viewData.items[0] as? DebugPanelItemViewData.Toggle)
-        val button = assertNotNull(viewData.items[1] as? DebugPanelItemViewData.Button)
-        val textField = assertNotNull(viewData.items[2] as? DebugPanelItemViewData.TextField)
-        val picker = assertNotNull(viewData.items[3] as? DebugPanelItemViewData.Picker)
-        val label = assertNotNull(viewData.items[4] as? DebugPanelItemViewData.Label)
-        val enumPicker = assertNotNull(viewData.items[5] as? DebugPanelItemViewData.Picker)
+        val toggle = assertNotNull(viewData.items[0].toggle)
+        val button = assertNotNull(viewData.items[1].button)
+        val textField = assertNotNull(viewData.items[2].textField)
+        val picker = assertNotNull(viewData.items[3].picker)
+        val label = assertNotNull(viewData.items[4].label)
+        val enumPicker = assertNotNull(viewData.items[5].picker)
 
         assertEquals("toggle", toggle.identifier)
         assertEquals("toggle", toggle.label)
@@ -141,18 +141,26 @@ class SpecificDebugPanelUseCaseImplTest {
 
         assertEquals(6, viewData.items.size)
 
-        val toggle = assertNotNull(viewData.items[0] as? DebugPanelItemViewData.Toggle)
-        val button = assertNotNull(viewData.items[1] as? DebugPanelItemViewData.Button)
-        val textField = assertNotNull(viewData.items[2] as? DebugPanelItemViewData.TextField)
-        val picker = assertNotNull(viewData.items[3] as? DebugPanelItemViewData.Picker)
-        val label = assertNotNull(viewData.items[4] as? DebugPanelItemViewData.Label)
-        val enumPicker = assertNotNull(viewData.items[5] as? DebugPanelItemViewData.Picker)
-
-        assertEquals("Test toggle", toggle.label)
-        assertEquals("Test button", button.label)
-        assertEquals("Test text field", textField.placeholder)
-        assertEquals("Test picker", picker.label)
-        assertEquals("Test label", label.label)
-        assertEquals("Test enum", enumPicker.label)
+        assertEquals("Test toggle", assertNotNull(viewData.items[0].toggle).label)
+        assertEquals("Test button", assertNotNull(viewData.items[1].button).label)
+        assertEquals("Test text field", assertNotNull(viewData.items[2].textField).placeholder)
+        assertEquals("Test picker", assertNotNull(viewData.items[3].picker).label)
+        assertEquals("Test label", assertNotNull(viewData.items[4].label).label)
+        assertEquals("Test enum", assertNotNull(viewData.items[5].picker).label)
     }
+
+    private val DebugPanelItemViewData.toggle: DebugPanelItemViewData.Toggle?
+        get() = this as? DebugPanelItemViewData.Toggle
+
+    private val DebugPanelItemViewData.button: DebugPanelItemViewData.Button?
+        get() = this as? DebugPanelItemViewData.Button
+
+    private val DebugPanelItemViewData.textField: DebugPanelItemViewData.TextField?
+        get() = this as? DebugPanelItemViewData.TextField
+
+    private val DebugPanelItemViewData.picker: DebugPanelItemViewData.Picker?
+        get() = this as? DebugPanelItemViewData.Picker
+
+    private val DebugPanelItemViewData.label: DebugPanelItemViewData.Label?
+        get() = this as? DebugPanelItemViewData.Label
 }
