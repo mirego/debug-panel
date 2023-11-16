@@ -9,6 +9,7 @@ plugins {
 }
 
 kotlin {
+    @Suppress("OPT_IN_USAGE")
     targetHierarchy.default()
 
     androidTarget {
@@ -43,11 +44,6 @@ kotlin {
             }
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
     }
 }
 
@@ -66,6 +62,12 @@ android {
 
 dependencies {
     add("kspCommonMainMetadata", projects.debugpanelprocessor)
+}
+
+ktlint {
+    filter {
+        exclude { element -> element.file.path.contains("generated/") }
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {

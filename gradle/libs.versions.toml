@@ -1,5 +1,6 @@
 [versions]
-agp = "8.2.0-rc02"
+agp = "8.2.0-rc03"
+junit = "1.1.5"
 kotlin = "1.9.10"
 compose = "1.5.4"
 compose-compiler = "1.5.3"
@@ -9,12 +10,16 @@ kotlinpoet = "1.14.2"
 kotlinxCoroutines = "1.7.3"
 ksp = "1.9.10-1.0.13"
 ktlint = "11.3.2"
+mockk = "1.13.8"
 multiplatformSettings = "1.1.0"
 preferenceKtx = "1.2.1"
+robolectric = "4.11.1"
 startupRuntime = "1.1.1"
 trikot = "5.3.0-dev2689"
+monitor = "1.6.1"
 
 [libraries]
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "startupRuntime" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -26,11 +31,15 @@ compose-material3 = { module = "androidx.compose.material3:material3", version.r
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
 viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
+androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,8 +1,11 @@
+
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -31,6 +34,12 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.optIn("com.russhwolf.settings.ExperimentalSettingsApi")
+            languageSettings.optIn("kotlinx.coroutines.FlowPreview")
+            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
+
         val androidMain by getting {
             dependencies {
                 implementation(libs.androidx.startup.runtime)
@@ -43,6 +52,17 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.coroutines)
+            }
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.androidx.monitor)
+                implementation(libs.androidx.junit)
+                implementation(libs.robolectric)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(projects.annotations)
+                implementation(libs.mockk.android)
             }
         }
     }
@@ -58,5 +78,22 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    add("kspAndroidTest", projects.debugpanelprocessor)
+}
+
+ktlint {
+    filter {
+        exclude { element -> element.file.path.contains("generated/") }
     }
 }

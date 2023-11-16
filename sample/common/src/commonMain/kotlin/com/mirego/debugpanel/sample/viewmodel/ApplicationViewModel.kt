@@ -1,4 +1,4 @@
-package com.mirego.debugpanel.sample
+package com.mirego.debugpanel.sample.viewmodel
 
 import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModel
 
