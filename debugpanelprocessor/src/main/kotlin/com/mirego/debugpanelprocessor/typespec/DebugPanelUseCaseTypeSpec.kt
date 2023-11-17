@@ -3,6 +3,7 @@ package com.mirego.debugpanelprocessor.typespec
 import com.mirego.debugpanelprocessor.Attribute
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
+import com.mirego.debugpanelprocessor.Import
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.capitalize
 import com.squareup.kotlinpoet.BOOLEAN
@@ -25,7 +26,11 @@ internal object DebugPanelUseCaseTypeSpec {
         interfaceClassName = className,
         functions = createFunctions(configuration),
         configureInterface = { configureInterface(specificRepositoryClassName) },
-        configureImplementation = { configureImplementation(specificRepositoryClassName) }
+        configureImplementation = { configureImplementation(specificRepositoryClassName) },
+        implementationImports = listOf(
+            Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
+            Import(Consts.USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
+        )
     )
 
     private fun createFunctions(configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(

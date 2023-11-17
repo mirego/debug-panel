@@ -15,25 +15,19 @@ import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
-import com.mirego.debugpanelprocessor.Consts.USE_CASE_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
+import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.mirego.debugpanelprocessor.capitalize
 import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
-
-    private data class Import(
-        val packageName: String,
-        val name: String
-    )
 
     private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
         annotations.find { it.annotationType.toString() == clazz.simpleName }
@@ -79,11 +73,11 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 )
             }
 
-    private fun writeFile(packageName: String, name: String, type: TypeSpec, vararg imports: Import) {
+    private fun writeFile(packageName: String, name: String, type: TypeSpecWithImports) {
         FileSpec.builder(packageName, name)
-            .addType(type)
+            .addType(type.typeSpec)
             .run {
-                imports.fold(this) { acc, element ->
+                type.imports.fold(this) { acc, element ->
                     acc.addImport(element.packageName, element.name)
                 }
             }
@@ -113,13 +107,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
-            writeFile(
-                useCasePackageName,
-                specificUseCaseImplName,
-                useCaseImplementation,
-                Import(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
-                Import(USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
-            )
+            writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation)
         }
 
         invoked = true
