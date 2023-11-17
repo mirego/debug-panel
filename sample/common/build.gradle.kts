@@ -37,7 +37,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(projects.debugPanel.common)
+                api(projects.debugPanel.common)
                 implementation(projects.annotations)
                 api(libs.viewmodels.declarative.flow)
                 api(libs.kotlinx.coroutines.core)

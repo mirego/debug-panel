@@ -1,4 +1,4 @@
-package com.mirego.debugpanel.sample.android
+package com.mirego.debugpanel
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
