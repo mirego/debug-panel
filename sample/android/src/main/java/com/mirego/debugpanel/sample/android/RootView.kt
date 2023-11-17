@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -92,11 +93,10 @@ private fun ButtonItem(item: DebugPanelItemViewModel.Button) {
     VMDButton(
         modifier = Modifier
             .height(48.dp)
-            .background(Color.LightGray)
-            .padding(horizontal = 16.dp),
+            .background(Color.LightGray),
         viewModel = item.viewModel,
         content = { content ->
-            Text(content.text)
+            Text(content.text, modifier = Modifier.padding(horizontal = 16.dp))
         }
     )
 }
@@ -122,15 +122,11 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
         Modifier
             .fillMaxWidth()
             .height(48.dp)
+            .background(Color(0xFFEEEEEE))
             .clickable { isExpanded = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        VMDText(
-            viewModel = item.label,
-            modifier = Modifier
-                .background(Color(0xFFEEEEEE))
-                .padding(16.dp)
-        )
+        VMDText(viewModel = item.label, modifier = Modifier.padding(horizontal = 16.dp))
     }
 
     VMDDropDownMenu(

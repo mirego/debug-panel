@@ -34,9 +34,8 @@ internal object DebugPanelRepositoryTypeSpec {
             returnType = UNIT,
             code = attributes
                 .filter { it.persistedType != null }
-                .joinToString("\n") {
-                    "settings.remove(\"${it.safeIdentifier}\")"
-                }
+                .joinToString(", ") { "\"${it.safeIdentifier}\"" }
+                .let { keys -> "removeKeys($keys)" }
         )
 
         return (attributeGetters + resetSettings).asIterable()

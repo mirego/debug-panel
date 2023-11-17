@@ -21,7 +21,7 @@ class RootViewModelImpl(
             initialPreviewMode = false,
             initialLastNameInput = "",
             initialEnvironments = "qa",
-            initialLanguage = Language.FRENCH,
+            initialLanguage = Language.ENGLISH,
             firstName = flowOf("Some name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),

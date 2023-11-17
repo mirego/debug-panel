@@ -88,7 +88,7 @@ internal object DebugPanelUseCaseTypeSpec {
 
     private fun createExtraItemViewDataList(configuration: ResolvedConfiguration): Sequence<String> = if (configuration.includeResetButton) {
         sequenceOf(
-            DebugPanelItemViewDataFactory.createButton("reset", "Reset", "{ System.out.println(\"Reset!!!\") }")
+            DebugPanelItemViewDataFactory.createButton("reset", "Reset", "::resetSettings")
         )
     } else {
         emptySequence()
