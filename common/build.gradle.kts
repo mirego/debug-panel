@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.mirego.publish)
-    alias(libs.plugins.mirego.release)
-    `maven-publish`
 }
 
 group = "com.mirego.debugpanel"
