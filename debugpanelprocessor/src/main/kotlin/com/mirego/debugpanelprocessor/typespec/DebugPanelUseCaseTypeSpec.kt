@@ -97,19 +97,13 @@ internal object DebugPanelUseCaseTypeSpec {
     private fun createParams(attributes: Sequence<Attribute>): Sequence<ParameterSpec> {
         val initialValueParams = attributes
             .mapNotNull { attribute ->
-                val paramName: String = when (attribute) {
-                    is Attribute.Function, is Attribute.Label -> return@mapNotNull null
-                    is Attribute.TextField, is Attribute.Toggle, is Attribute.Picker, is Attribute.EnumPicker -> "initial${attribute.name.capitalize()}"
-                }
+                val paramName: String = "initial${attribute.name.capitalize()}".takeIf { attribute.persistedType != null } ?: return@mapNotNull null
 
-                @Suppress("KotlinConstantConditions")
                 val paramType: TypeName = when (attribute) {
-                    is Attribute.Function, is Attribute.Label -> return@mapNotNull null
                     is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
                     is Attribute.Picker -> STRING.copy(nullable = true)
-                    is Attribute.TextField -> STRING
-                    is Attribute.Toggle -> BOOLEAN
-                }
+                    else -> attribute.persistedType?.asTypeName()
+                } ?: return@mapNotNull null
 
                 ParameterSpec(paramName, paramType)
             }
