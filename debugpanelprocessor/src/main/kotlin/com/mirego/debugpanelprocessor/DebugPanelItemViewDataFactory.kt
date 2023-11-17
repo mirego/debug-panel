@@ -52,8 +52,11 @@ internal object DebugPanelItemViewDataFactory {
         val label = attribute.safeDisplayName
         val action = attribute.name
 
-        return "DebugPanelItemViewData.Button(\"$identifier\", \"$label\", $action)"
+        return createButton(identifier, label, action)
     }
+
+    fun createButton(identifier: String, label: String, action: String): String =
+        "DebugPanelItemViewData.Button(\"$identifier\", \"$label\", $action)"
 
     private val Attribute.safeIdentifier
         get() = identifier ?: name

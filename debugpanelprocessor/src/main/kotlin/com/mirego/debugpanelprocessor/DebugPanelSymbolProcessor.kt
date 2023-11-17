@@ -17,6 +17,7 @@ import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_PACKAGE_NAME
 import com.mirego.debugpanelprocessor.DebugPanelTypeSpecFactory
+import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.capitalize
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
@@ -33,23 +34,13 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         val name: String
     )
 
-    private data class ResolvedConfiguration(
-        val declaration: KSClassDeclaration,
-        val annotation: KSAnnotation
-    )
-
     private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
         annotations.find { it.annotationType.toString() == clazz.simpleName }
 
     private fun KSAnnotation.findArgument(name: String): Any? =
         arguments.find { it.name?.getShortName() == name }?.value
 
-    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
-        resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
-            .filterIsInstance<KSClassDeclaration>()
-            .map { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
-
-    private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
+    private fun createAttributes(declaration: KSClassDeclaration): Sequence<Attribute> = declaration.getAllProperties()
         .mapNotNull { property ->
             val identifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
             val type = property.type.resolve()
@@ -67,6 +58,25 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 else -> null
             }
         }
+
+    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
+        resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
+            .filterIsInstance<KSClassDeclaration>()
+            .map { declaration ->
+                val annotation = declaration.findAnnotation(DebugPanel::class)!!
+                val prefix = (annotation.findArgument("prefix") as String).capitalize()
+                val packageName = annotation.findArgument("packageName") as String
+                val includeResetButton = annotation.findArgument("includeResetButton") as Boolean
+
+                ResolvedConfiguration(
+                    declaration = declaration,
+                    annotation = annotation,
+                    attributes = createAttributes(declaration),
+                    prefix = prefix,
+                    packageName = packageName,
+                    includeResetButton = includeResetButton
+                )
+            }
 
     private fun writeFile(packageName: String, name: String, type: TypeSpec, vararg imports: Import) {
         FileSpec.builder(packageName, name)
@@ -86,23 +96,18 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         }
 
         getConfigurations(resolver).forEach { configuration ->
-            val prefix = (configuration.annotation.findArgument("prefix") as String).capitalize()
-            val packageName = configuration.annotation.findArgument("packageName") as String
-
-            val repositoryPackageName = Consts.getRepositoryPackageName(packageName)
-            val specificRepositoryName = "$prefix$REPOSITORY_NAME"
+            val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)
+            val specificRepositoryName = "${configuration.prefix}$REPOSITORY_NAME"
             val specificRepositoryClassName = ClassName(repositoryPackageName, specificRepositoryName)
-            val specificRepositoryImplName = "$prefix$REPOSITORY_IMPL_NAME"
+            val specificRepositoryImplName = "${configuration.prefix}$REPOSITORY_IMPL_NAME"
 
-            val useCasePackageName = Consts.getUseCasePackageName(packageName)
-            val specificUseCaseName = "$prefix$USE_CASE_NAME"
+            val useCasePackageName = Consts.getUseCasePackageName(configuration.packageName)
+            val specificUseCaseName = "${configuration.prefix}$USE_CASE_NAME"
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
-            val specificUseCaseImplName = "$prefix$USE_CASE_IMPL_NAME"
+            val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
-            val attributes = createAttributes(configuration)
-
-            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, attributes)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, attributes)
+            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, configuration.attributes)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)

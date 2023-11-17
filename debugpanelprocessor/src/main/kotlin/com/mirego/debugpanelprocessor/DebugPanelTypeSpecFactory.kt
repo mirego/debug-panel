@@ -92,19 +92,29 @@ internal object DebugPanelTypeSpecFactory {
         return initialValueParams + valueParams
     }
 
-    fun createUseCase(className: ClassName, specificRepositoryClassName: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
+    private fun createAttributeItemViewDataList(attributes: Sequence<Attribute>): Sequence<String> = attributes.map {
+        when (it) {
+            is Attribute.Function -> DebugPanelItemViewDataFactory.createButton(it)
+            is Attribute.Label -> DebugPanelItemViewDataFactory.createLabel(it)
+            is Attribute.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
+            is Attribute.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
+            is Attribute.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
+            is Attribute.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
+        }
+    }
+
+    private fun createExtraItemViewDataList(configuration: ResolvedConfiguration): Sequence<String> = if (configuration.includeResetButton) {
+        sequenceOf(
+            DebugPanelItemViewDataFactory.createButton("reset", "Reset", "{ System.out.println(\"Reset!!!\") }")
+        )
+    } else {
+        emptySequence()
+    }
+
+    fun createUseCase(className: ClassName, specificRepositoryClassName: ClassName, configuration: ResolvedConfiguration) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = listOf(
-            attributes.map {
-                when (it) {
-                    is Attribute.Function -> DebugPanelItemViewDataFactory.createButton(it)
-                    is Attribute.Label -> DebugPanelItemViewDataFactory.createLabel(it)
-                    is Attribute.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
-                    is Attribute.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
-                    is Attribute.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
-                    is Attribute.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
-                }
-            }.let { itemViewDataList ->
+            (createAttributeItemViewDataList(configuration.attributes) + createExtraItemViewDataList(configuration)).let { itemViewDataList ->
                 val viewDataName = "DebugPanelViewData"
 
                 InterfaceImplementation.Function(
@@ -118,7 +128,7 @@ internal object DebugPanelTypeSpecFactory {
                         |)
                         |
                     """.trimMargin(),
-                    params = createUseCaseParams(attributes).asIterable()
+                    params = createUseCaseParams(configuration.attributes).asIterable()
                 )
             }
         ),
