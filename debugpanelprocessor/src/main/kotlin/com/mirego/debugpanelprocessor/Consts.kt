@@ -1,5 +1,7 @@
 package com.mirego.debugpanelprocessor
 
+import com.squareup.kotlinpoet.ClassName
+
 internal object Consts {
     fun getRepositoryPackageName(packageName: String) = "$packageName.repository"
     fun getUseCasePackageName(packageName: String) = "$packageName.usecase"
@@ -14,4 +16,6 @@ internal object Consts {
     val USE_CASE_PACKAGE_NAME = getUseCasePackageName(BASE_PACKAGE_NAME)
     const val USE_CASE_NAME = "DebugPanelUseCase"
     const val USE_CASE_IMPL_NAME = "DebugPanelUseCaseImpl"
+
+    val FLOW = ClassName("kotlinx.coroutines.flow", "Flow")
 }

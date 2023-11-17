@@ -16,9 +16,10 @@ import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_PACKAGE_NAME
-import com.mirego.debugpanelprocessor.DebugPanelTypeSpecFactory
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
+import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec
@@ -106,8 +107,8 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
-            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, configuration.attributes)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, configuration)
+            val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.attributes)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)
