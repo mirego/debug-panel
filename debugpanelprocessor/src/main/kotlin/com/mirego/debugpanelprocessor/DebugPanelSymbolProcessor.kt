@@ -109,7 +109,8 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 useCasePackageName,
                 specificUseCaseImplName,
                 useCaseImplementation,
-                Import(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"), Import(USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
+                Import(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
+                Import(USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
             )
         }
 
