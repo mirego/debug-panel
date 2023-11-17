@@ -18,10 +18,10 @@ class RootViewModelImpl(
         coroutineScope,
         useCase,
         useCase.createViewData(
-            initialPreviewMode = false,
+            initialPreviewMode = true,
             initialLastNameInput = "",
             initialEnvironments = "qa",
-            initialLanguage = Language.ENGLISH,
+            initialLanguage = Language.FRENCH,
             firstName = flowOf("Some name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),
