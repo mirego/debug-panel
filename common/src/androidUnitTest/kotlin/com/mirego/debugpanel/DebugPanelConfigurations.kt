@@ -20,6 +20,12 @@ data class TestRepositoryConfig(
 )
 
 @Suppress("unused")
+@DebugPanel("TestRepositoryIdentifier", "com.mirego.debugpanel", includeResetButton = false)
+data class TestRepositoryIdentifierConfig(
+    @Identifier("TOGGLE_IDENTIFIER") val toggle: DebugPanelToggle
+)
+
+@Suppress("unused")
 @DebugPanel("TestUseCase", "com.mirego.debugpanel", includeResetButton = false)
 data class TestUseCaseConfig(
     val toggle: DebugPanelToggle,
