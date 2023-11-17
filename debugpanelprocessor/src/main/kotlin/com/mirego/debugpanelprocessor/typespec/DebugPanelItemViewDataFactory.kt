@@ -7,7 +7,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createToggle(attribute: Attribute.Toggle): String {
         val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentToggleValue(\"${attribute.name}\", ${attribute.initialValueParamName})"
+        val initialValue = "repository.getCurrentToggleValue(\"$identifier\", ${attribute.initialValueParamName})"
 
         return "DebugPanelItemViewData.Toggle(\"$identifier\", \"$label\", $initialValue)"
     }
@@ -15,7 +15,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createTextField(attribute: Attribute.TextField): String {
         val identifier = attribute.safeIdentifier
         val placeholder = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentTextFieldValue(\"${attribute.name}\", ${attribute.initialValueParamName})"
+        val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\", ${attribute.initialValueParamName})"
 
         return "DebugPanelItemViewData.TextField(\"$identifier\", \"$placeholder\", $initialValue)"
     }
@@ -31,7 +31,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createPicker(attribute: Attribute.Picker): String {
         val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentPickerValue(\"${attribute.name}\") ?: ${attribute.initialValueParamName}"
+        val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
         val items = attribute.name
 
         return "DebugPanelItemViewData.Picker(\"$identifier\", \"$label\", $initialValue, $items)"
@@ -40,7 +40,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createPicker(attribute: Attribute.EnumPicker): String {
         val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentPickerValue(\"${attribute.name}\") ?: ${attribute.initialValueParamName}?.name"
+        val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}?.name"
         val items = """
             listOf(
                 ${attribute.values.joinToString(", ") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
