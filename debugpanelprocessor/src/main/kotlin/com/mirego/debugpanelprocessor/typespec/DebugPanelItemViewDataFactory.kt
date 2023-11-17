@@ -61,12 +61,6 @@ internal object DebugPanelItemViewDataFactory {
     fun createButton(identifier: String, label: String, action: String): String =
         "DebugPanelItemViewData.Button(\"$identifier\", \"$label\", $action)"
 
-    private val Attribute.safeIdentifier
-        get() = identifier ?: name
-
-    private val Attribute.safeDisplayName
-        get() = displayName ?: name
-
     private val Attribute.initialValueParamName
         get() = "initial${name.capitalize()}"
 }
