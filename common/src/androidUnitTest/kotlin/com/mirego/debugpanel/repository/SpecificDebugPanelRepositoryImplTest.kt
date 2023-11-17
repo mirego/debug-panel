@@ -72,33 +72,50 @@ class SpecificDebugPanelRepositoryImplTest {
 
     @Test
     fun `given a default identifier expect it to be passed to settings`() = runTest {
-        val settings = mockSettings()
+        val (_, flowSettings) = mockSettings()
 
         val repository = TestRepositoryDebugPanelRepositoryImpl()
 
         repository.getToggle().firstOrNull()
 
         verify(exactly = 1) {
-            settings.getBooleanOrNullFlow("toggle")
+            flowSettings.getBooleanOrNullFlow("toggle")
         }
-        confirmVerified(settings)
+        confirmVerified(flowSettings)
     }
 
     @Test
     fun `given a custom identifier expect it to be passed to settings`() = runTest {
-        val settings = mockSettings()
+        val (_, flowSettings) = mockSettings()
 
         val repository = TestRepositoryIdentifierDebugPanelRepositoryImpl()
 
         repository.getToggle().firstOrNull()
 
         verify(exactly = 1) {
-            settings.getBooleanOrNullFlow("TOGGLE_IDENTIFIER")
+            flowSettings.getBooleanOrNullFlow("TOGGLE_IDENTIFIER")
+        }
+        confirmVerified(flowSettings)
+    }
+
+    @Test
+    fun `given a config with reset button expect it to be created correctly`() = runTest {
+        val (settings, _) = mockSettings()
+
+        val repository = TestRepositoryResetButtonDebugPanelRepositoryImpl()
+
+        repository.resetSettings()
+
+        verify(exactly = 1) {
+            settings.remove("TOGGLE_IDENTIFIER")
+            settings.remove("textField")
+            settings.remove("picker")
+            settings.remove("enum")
         }
         confirmVerified(settings)
     }
 
-    private fun mockSettings(): FlowSettings {
+    private fun mockSettings(): Pair<ObservableSettings, FlowSettings> {
         val flowSettings = mockk<FlowSettings>()
         mockkStatic(ObservableSettings::toFlowSettings)
 
@@ -109,6 +126,6 @@ class SpecificDebugPanelRepositoryImplTest {
 
         every { settings } returns observableSettings
 
-        return flowSettings
+        return observableSettings to flowSettings
     }
 }

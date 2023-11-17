@@ -6,7 +6,6 @@ import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.Import
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.capitalize
-import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
@@ -88,7 +87,7 @@ internal object DebugPanelUseCaseTypeSpec {
 
     private fun createExtraItemViewDataList(configuration: ResolvedConfiguration): Sequence<String> = if (configuration.includeResetButton) {
         sequenceOf(
-            DebugPanelItemViewDataFactory.createButton("reset", "Reset", "::resetSettings")
+            DebugPanelItemViewDataFactory.createButton("_reset", "Reset", "::resetSettings")
         )
     } else {
         emptySequence()

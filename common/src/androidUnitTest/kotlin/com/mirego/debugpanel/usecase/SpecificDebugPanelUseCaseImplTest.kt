@@ -5,6 +5,7 @@ import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseIdentifierDebugPanelRepository
+import com.mirego.debugpanel.repository.TestUseCaseResetButtonDebugPanelRepository
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -189,6 +190,26 @@ class SpecificDebugPanelUseCaseImplTest {
         }
 
         confirmVerified(repository)
+    }
+
+    @Test
+    fun `expect reset button to be created correctly`() = runTest {
+        val repository: TestUseCaseResetButtonDebugPanelRepository = mockk()
+        val useCase = TestUseCaseResetButtonDebugPanelUseCaseImpl(repository)
+
+        val viewData = useCase.createViewData(initialToggle = false)
+
+        assertEquals(2, viewData.items.size)
+
+        val resetButton = assertNotNull(viewData.items[1].button)
+
+        assertEquals("_reset", resetButton.identifier)
+
+        resetButton.action()
+
+        verify(exactly = 1) {
+            repository.resetSettings()
+        }
     }
 
     private val DebugPanelItemViewData.toggle: DebugPanelItemViewData.Toggle?
