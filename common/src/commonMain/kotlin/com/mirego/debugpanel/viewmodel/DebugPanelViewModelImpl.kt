@@ -33,6 +33,7 @@ class DebugPanelViewModelImpl(
                 is DebugPanelItemViewData.Button -> createButton(item)
                 is DebugPanelItemViewData.Label -> createLabel(item)
                 is DebugPanelItemViewData.Picker -> createPicker(item)
+                is DebugPanelItemViewData.DatePicker -> createDatePicker(item)
             }
         }
     )
@@ -116,4 +117,10 @@ class DebugPanelViewModelImpl(
             picker
         )
     }
+
+    private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
+        viewData.identifier,
+        text(viewData.label),
+        textField { }
+    )
 }

@@ -30,6 +30,12 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
         val items: List<DebugPanelPickerItem>
     ) : DebugPanelItemViewData
 
+    data class DatePicker(
+        override val identifier: String,
+        val label: String,
+        val initialValue: Long?
+    ) : DebugPanelItemViewData
+
     data class Button(
         override val identifier: String,
         val label: String,

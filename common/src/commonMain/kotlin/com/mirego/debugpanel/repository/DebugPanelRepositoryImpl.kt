@@ -37,6 +37,12 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
         settings.putString(viewData.identifier, identifier)
     }
 
+    override fun getCurrentDatePickerValue(identifier: String) =
+        settings.getLongOrNull(identifier)
+
+    protected fun getDatePickerValue(identifier: String) =
+        flowSettings.getLongOrNullFlow(identifier)
+
     protected fun removeKeys(vararg keys: String) {
         keys.forEach { settings.remove(it) }
     }

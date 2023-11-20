@@ -14,6 +14,7 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
         initialLastNameInput: String,
         initialEnvironments: String?,
         initialLanguage: Language?,
+        initialDate: Long,
         firstName: Flow<String>,
         environments: List<DebugPanelPickerItem>,
         resetOnboarding: () -> Unit
@@ -26,6 +27,8 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
     override fun getEnvironments(): Flow<String?> = flowOf(null)
 
     override fun getLanguage(): Flow<String?> = flowOf(null)
+
+    override fun getDate(): Flow<Long?> = flowOf(null)
 
     override fun resetSettings() = Unit
 }

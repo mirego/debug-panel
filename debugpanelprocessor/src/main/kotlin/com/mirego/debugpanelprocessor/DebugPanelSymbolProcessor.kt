@@ -48,6 +48,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(identifier, displayName, name)
                 className == LABEL_CLASS_NAME -> Attribute.Label(identifier, displayName, name)
                 className == PICKER_CLASS_NAME -> Attribute.Picker(identifier, displayName, name)
+                className == DATE_PICKER_CLASS_NAME -> Attribute.DatePicker(identifier, displayName, name)
                 (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(identifier, displayName, name, type)
                 className == BUTTON_CLASS_NAME -> Attribute.Function(identifier, displayName, name)
                 else -> null
@@ -117,6 +118,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
     companion object {
         private val LABEL_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelLabel")
         private val PICKER_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelPicker")
+        private val DATE_PICKER_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelDatePicker")
         private val BUTTON_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelButton")
         private val TOGGLE_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelToggle")
         private val TEXT_FIELD_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelTextField")

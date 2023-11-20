@@ -47,6 +47,7 @@ fun DebugPanelView(viewModel: DebugPanelViewModel, modifier: Modifier = Modifier
             is DebugPanelItemViewModel.Button -> ButtonItem(item)
             is DebugPanelItemViewModel.Label -> LabelItem(item)
             is DebugPanelItemViewModel.Picker -> PickerItem(item)
+            is DebugPanelItemViewModel.DatePicker -> DatePickerItem(item)
         }
     }
 }
@@ -127,6 +128,11 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
             }
         )
     }
+}
+
+@Composable
+private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
+
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)

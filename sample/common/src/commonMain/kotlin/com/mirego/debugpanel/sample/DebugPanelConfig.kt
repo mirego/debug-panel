@@ -4,6 +4,7 @@ import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanel.config.DebugPanelButton
+import com.mirego.debugpanel.config.DebugPanelDatePicker
 import com.mirego.debugpanel.config.DebugPanelLabel
 import com.mirego.debugpanel.config.DebugPanelPicker
 import com.mirego.debugpanel.config.DebugPanelTextField
@@ -17,5 +18,6 @@ data class DebugPanelConfig(
     @DisplayName("Last name input") var lastNameInput: DebugPanelTextField,
     @DisplayName("Environment") val environments: DebugPanelPicker,
     @DisplayName("Reset onboarding") val resetOnboarding: DebugPanelButton,
-    @DisplayName("Language") val language: Language
+    @DisplayName("Language") val language: Language,
+    @DisplayName("Date picker") val date: DebugPanelDatePicker
 )

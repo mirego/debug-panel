@@ -41,6 +41,7 @@ kotlin {
                 implementation(projects.annotations)
                 api(libs.viewmodels.declarative.flow)
                 api(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.datetime)
             }
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }

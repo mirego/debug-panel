@@ -11,4 +11,6 @@ interface DebugPanelRepository {
 
     fun getCurrentPickerValue(identifier: String): String?
     fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String)
+
+    fun getCurrentDatePickerValue(identifier: String): Long?
 }

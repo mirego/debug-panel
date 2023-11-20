@@ -37,6 +37,14 @@ internal object DebugPanelItemViewDataFactory {
         return "DebugPanelItemViewData.Picker(\"$identifier\", \"$label\", $initialValue, $items)"
     }
 
+    fun createDatePicker(attribute: Attribute.DatePicker): String {
+        val identifier = attribute.safeIdentifier
+        val label = attribute.safeDisplayName
+        val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
+
+        return "DebugPanelItemViewData.DatePicker(\"$identifier\", \"$label\", $initialValue)"
+    }
+
     fun createPicker(attribute: Attribute.EnumPicker): String {
         val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
