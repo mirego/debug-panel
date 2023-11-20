@@ -46,6 +46,12 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.startup.runtime)
                 implementation(libs.androidx.preference.ktx)
+
+                implementation(libs.compose.ui)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.compose.material3)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.viewmodels.declarative.compose.flow)
             }
         }
         val commonMain by getting {
@@ -70,13 +76,22 @@ kotlin {
     }
 }
 
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
+}
+
 android {
     namespace = "com.mirego.debugpanel"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
     }
-
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

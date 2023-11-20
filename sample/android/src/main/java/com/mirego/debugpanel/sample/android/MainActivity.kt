@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.mirego.debugpanel.DebugPanelTheme
 import com.mirego.debugpanel.sample.viewmodel.ApplicationViewModelImpl
 
 class MainActivity : ComponentActivity() {
