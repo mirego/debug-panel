@@ -7,6 +7,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DisplayName
+import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanelprocessor.Attribute
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
@@ -14,12 +15,13 @@ import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
-import com.mirego.debugpanelprocessor.Consts.USE_CASE_PACKAGE_NAME
-import com.mirego.debugpanelprocessor.DebugPanelTypeSpecFactory
+import com.mirego.debugpanelprocessor.ResolvedConfiguration
+import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
+import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
@@ -27,50 +29,55 @@ import kotlin.reflect.KClass
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
 
-    private data class Import(
-        val packageName: String,
-        val name: String
-    )
-
-    private data class ResolvedConfiguration(
-        val declaration: KSClassDeclaration,
-        val annotation: KSAnnotation
-    )
-
     private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
         annotations.find { it.annotationType.toString() == clazz.simpleName }
 
     private fun KSAnnotation.findArgument(name: String): Any? =
         arguments.find { it.name?.getShortName() == name }?.value
 
-    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
-        resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
-            .filterIsInstance<KSClassDeclaration>()
-            .map { ResolvedConfiguration(it, it.findAnnotation(DebugPanel::class)!!) }
-
-    private fun createAttributes(config: ResolvedConfiguration): Sequence<Attribute> = config.declaration.getAllProperties()
+    private fun createAttributes(declaration: KSClassDeclaration): Sequence<Attribute> = declaration.getAllProperties()
         .mapNotNull { property ->
+            val identifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
             val type = property.type.resolve()
             val className = type.toClassName()
             val displayName = property.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
             val name = property.simpleName.getShortName()
 
             when {
-                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(displayName, name)
-                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(displayName, name)
-                className == LABEL_CLASS_NAME -> Attribute.Label(displayName, name)
-                className == PICKER_CLASS_NAME -> Attribute.Picker(displayName, name)
-                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(displayName, name, type)
-                className == BUTTON_CLASS_NAME -> Attribute.Function(displayName, name)
+                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(identifier, displayName, name)
+                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(identifier, displayName, name)
+                className == LABEL_CLASS_NAME -> Attribute.Label(identifier, displayName, name)
+                className == PICKER_CLASS_NAME -> Attribute.Picker(identifier, displayName, name)
+                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(identifier, displayName, name, type)
+                className == BUTTON_CLASS_NAME -> Attribute.Function(identifier, displayName, name)
                 else -> null
             }
         }
 
-    private fun writeFile(packageName: String, name: String, type: TypeSpec, vararg imports: Import) {
+    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
+        resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
+            .filterIsInstance<KSClassDeclaration>()
+            .map { declaration ->
+                val annotation = declaration.findAnnotation(DebugPanel::class)!!
+                val prefix = (annotation.findArgument("prefix") as String).capitalize()
+                val packageName = annotation.findArgument("packageName") as String
+                val includeResetButton = annotation.findArgument("includeResetButton") as Boolean
+
+                ResolvedConfiguration(
+                    declaration = declaration,
+                    annotation = annotation,
+                    attributes = createAttributes(declaration),
+                    prefix = prefix,
+                    packageName = packageName,
+                    includeResetButton = includeResetButton
+                )
+            }
+
+    private fun writeFile(packageName: String, name: String, type: TypeSpecWithImports) {
         FileSpec.builder(packageName, name)
-            .addType(type)
+            .addType(type.typeSpec)
             .run {
-                imports.fold(this) { acc, element ->
+                type.imports.fold(this) { acc, element ->
                     acc.addImport(element.packageName, element.name)
                 }
             }
@@ -84,34 +91,23 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         }
 
         getConfigurations(resolver).forEach { configuration ->
-            val prefix = (configuration.annotation.findArgument("prefix") as String).capitalize()
-            val packageName = configuration.annotation.findArgument("packageName") as String
-
-            val repositoryPackageName = Consts.getRepositoryPackageName(packageName)
-            val specificRepositoryName = "$prefix$REPOSITORY_NAME"
+            val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)
+            val specificRepositoryName = "${configuration.prefix}$REPOSITORY_NAME"
             val specificRepositoryClassName = ClassName(repositoryPackageName, specificRepositoryName)
-            val specificRepositoryImplName = "$prefix$REPOSITORY_IMPL_NAME"
+            val specificRepositoryImplName = "${configuration.prefix}$REPOSITORY_IMPL_NAME"
 
-            val useCasePackageName = Consts.getUseCasePackageName(packageName)
-            val specificUseCaseName = "$prefix$USE_CASE_NAME"
+            val useCasePackageName = Consts.getUseCasePackageName(configuration.packageName)
+            val specificUseCaseName = "${configuration.prefix}$USE_CASE_NAME"
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
-            val specificUseCaseImplName = "$prefix$USE_CASE_IMPL_NAME"
+            val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
-            val attributes = createAttributes(configuration)
-
-            val (repositoryInterface, repositoryImplementation) = DebugPanelTypeSpecFactory.createRepository(specificRepositoryClassName, attributes)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelTypeSpecFactory.createUseCase(specificUseCaseClassName, specificRepositoryClassName, attributes)
+            val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.attributes)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
-            writeFile(
-                useCasePackageName,
-                specificUseCaseImplName,
-                useCaseImplementation,
-                Import(CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
-                Import(USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData")
-            )
+            writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation)
         }
 
         invoked = true

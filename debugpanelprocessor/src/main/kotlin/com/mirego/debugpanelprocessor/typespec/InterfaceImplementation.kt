@@ -1,5 +1,7 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanelprocessor.typespec
 
+import com.mirego.debugpanelprocessor.Import
+import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
@@ -7,9 +9,9 @@ import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 
-data class InterfaceImplementation(
-    val int: TypeSpec,
-    val impl: TypeSpec
+internal data class InterfaceImplementation(
+    val int: TypeSpecWithImports,
+    val impl: TypeSpecWithImports
 ) {
     data class Function(
         val name: String,
@@ -23,7 +25,9 @@ data class InterfaceImplementation(
             interfaceClassName: ClassName,
             functions: Iterable<Function> = emptyList(),
             configureInterface: TypeSpec.Builder.() -> TypeSpec.Builder = { this },
-            configureImplementation: TypeSpec.Builder.() -> TypeSpec.Builder = { this }
+            configureImplementation: TypeSpec.Builder.() -> TypeSpec.Builder = { this },
+            interfaceImports: List<Import> = emptyList(),
+            implementationImports: List<Import> = emptyList()
         ): InterfaceImplementation {
             val int = configureInterface(
                 TypeSpec.interfaceBuilder(interfaceClassName.simpleName)
@@ -53,7 +57,7 @@ data class InterfaceImplementation(
                     )
             ).build()
 
-            return InterfaceImplementation(int, impl)
+            return InterfaceImplementation(TypeSpecWithImports(int, interfaceImports), TypeSpecWithImports(impl, implementationImports))
         }
     }
 }

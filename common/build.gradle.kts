@@ -1,12 +1,13 @@
-
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.mirego.publish)
 }
+
+group = "com.mirego.debugpanel"
 
 kotlin {
     @Suppress("OPT_IN_USAGE")
@@ -18,6 +19,7 @@ kotlin {
                 jvmTarget = "17"
             }
         }
+        publishLibraryVariants("release")
     }
     iosX64()
     iosArm64()

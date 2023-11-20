@@ -56,4 +56,6 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
     override fun getEnvironments(): Flow<String?> = flowOf(null)
 
     override fun getLanguage(): Flow<String?> = flowOf(null)
+
+    override fun resetSettings() = Unit
 }

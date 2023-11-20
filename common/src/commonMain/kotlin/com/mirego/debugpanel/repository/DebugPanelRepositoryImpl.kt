@@ -36,4 +36,8 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
     override fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String) {
         settings.putString(viewData.identifier, identifier)
     }
+
+    protected fun removeKeys(vararg keys: String) {
+        keys.forEach { settings.remove(it) }
+    }
 }

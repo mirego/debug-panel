@@ -4,6 +4,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
+import com.mirego.debugpanel.repository.TestUseCaseIdentifierDebugPanelRepository
+import com.mirego.debugpanel.repository.TestUseCaseResetButtonDebugPanelRepository
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -147,6 +149,67 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals("Test picker", assertNotNull(viewData.items[3].picker).label)
         assertEquals("Test label", assertNotNull(viewData.items[4].label).label)
         assertEquals("Test enum", assertNotNull(viewData.items[5].picker).label)
+    }
+
+    @Test
+    fun `expect custom identifier to be used correctly`() = runTest {
+        val repository: TestUseCaseIdentifierDebugPanelRepository = mockk()
+        val useCase = TestUseCaseIdentifierDebugPanelUseCaseImpl(repository)
+
+        val viewData = useCase.createViewData(
+            initialToggle = false,
+            initialTextField = "",
+            initialPicker = "item1",
+            initialEnum = TestEnum.VALUE_1,
+            button = {},
+            picker = emptyList(),
+            label = flowOf("label value")
+        )
+
+        assertEquals(6, viewData.items.size)
+
+        val toggle = assertNotNull(viewData.items[0].toggle)
+        val button = assertNotNull(viewData.items[1].button)
+        val textField = assertNotNull(viewData.items[2].textField)
+        val picker = assertNotNull(viewData.items[3].picker)
+        val label = assertNotNull(viewData.items[4].label)
+        val enumPicker = assertNotNull(viewData.items[5].picker)
+
+        assertEquals("TOGGLE_KEY", toggle.identifier)
+        assertEquals("BUTTON_KEY", button.identifier)
+        assertEquals("TEXT_FIELD_KEY", textField.identifier)
+        assertEquals("PICKER_KEY", picker.identifier)
+        assertEquals("LABEL_KEY", label.identifier)
+        assertEquals("ENUM_KEY", enumPicker.identifier)
+
+        verify(exactly = 1) {
+            repository.getCurrentToggleValue("TOGGLE_KEY", false)
+            repository.getCurrentTextFieldValue("TEXT_FIELD_KEY", "")
+            repository.getCurrentPickerValue("PICKER_KEY")
+            repository.getCurrentPickerValue("ENUM_KEY")
+        }
+
+        confirmVerified(repository)
+    }
+
+    @Test
+    fun `expect reset button to be created correctly`() = runTest {
+        val repository: TestUseCaseResetButtonDebugPanelRepository = mockk()
+        val useCase = TestUseCaseResetButtonDebugPanelUseCaseImpl(repository)
+
+        val viewData = useCase.createViewData(initialToggle = false)
+
+        assertEquals(2, viewData.items.size)
+
+        val resetButton = assertNotNull(viewData.items[1].button)
+
+        assertEquals("_reset", resetButton.identifier)
+
+        resetButton.action()
+
+        verify(exactly = 1) {
+            repository.resetSettings()
+        }
     }
 
     private val DebugPanelItemViewData.toggle: DebugPanelItemViewData.Toggle?
