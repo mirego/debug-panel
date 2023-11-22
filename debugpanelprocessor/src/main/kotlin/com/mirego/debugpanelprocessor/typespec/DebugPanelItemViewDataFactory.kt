@@ -9,7 +9,7 @@ internal object DebugPanelItemViewDataFactory {
         val label = attribute.safeDisplayName
         val initialValue = "repository.getCurrentToggleValue(\"$identifier\", ${attribute.initialValueParamName})"
 
-        return "DebugPanelItemViewData.Toggle(\"$identifier\", \"$label\", $initialValue)"
+        return "DebugPanelItemViewData.Toggle(\n\"$identifier\",\n\"$label\",\n$initialValue\n)"
     }
 
     fun createTextField(attribute: Attribute.TextField): String {
@@ -17,7 +17,7 @@ internal object DebugPanelItemViewDataFactory {
         val placeholder = attribute.safeDisplayName
         val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\", ${attribute.initialValueParamName})"
 
-        return "DebugPanelItemViewData.TextField(\"$identifier\", \"$placeholder\", $initialValue)"
+        return "DebugPanelItemViewData.TextField(\n\"$identifier\",\n\"$placeholder\",\n$initialValue\n)"
     }
 
     fun createLabel(attribute: Attribute.Label): String {
@@ -25,7 +25,7 @@ internal object DebugPanelItemViewDataFactory {
         val label = attribute.safeDisplayName
         val value = attribute.name
 
-        return "DebugPanelItemViewData.Label(\"$identifier\", \"$label\", $value)"
+        return "DebugPanelItemViewData.Label(\n\"$identifier\",\n\"$label\",\n$value\n)"
     }
 
     fun createPicker(attribute: Attribute.Picker): String {
@@ -34,7 +34,7 @@ internal object DebugPanelItemViewDataFactory {
         val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
         val items = attribute.name
 
-        return "DebugPanelItemViewData.Picker(\"$identifier\", \"$label\", $initialValue, $items)"
+        return "DebugPanelItemViewData.Picker(\n\"$identifier\",\n\"$label\",\n$initialValue,\n$items\n)"
     }
 
     fun createDatePicker(attribute: Attribute.DatePicker): String {
@@ -42,7 +42,7 @@ internal object DebugPanelItemViewDataFactory {
         val label = attribute.safeDisplayName
         val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
 
-        return "DebugPanelItemViewData.DatePicker(\"$identifier\", \"$label\", $initialValue)"
+        return "DebugPanelItemViewData.DatePicker(\n\"$identifier\",\n\"$label\",\n$initialValue\n)"
     }
 
     fun createPicker(attribute: Attribute.EnumPicker): String {
@@ -51,11 +51,11 @@ internal object DebugPanelItemViewDataFactory {
         val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}?.name"
         val items = """
             listOf(
-                ${attribute.values.joinToString(", ") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
+                ${attribute.values.joinToString(",\n") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
             )
         """.trimIndent()
 
-        return "DebugPanelItemViewData.Picker(\"$identifier\", \"$label\", $initialValue, $items)"
+        return "DebugPanelItemViewData.Picker(\n\"$identifier\",\n\"$label\",\n$initialValue,\n$items\n)"
     }
 
     fun createButton(attribute: Attribute.Function): String {
@@ -67,7 +67,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     fun createButton(identifier: String, label: String, action: String): String =
-        "DebugPanelItemViewData.Button(\"$identifier\", \"$label\", $action)"
+        "DebugPanelItemViewData.Button(\n\"$identifier\",\n\"$label\",\n$action\n)"
 
     private val Attribute.initialValueParamName
         get() = "initial${name.capitalize()}"

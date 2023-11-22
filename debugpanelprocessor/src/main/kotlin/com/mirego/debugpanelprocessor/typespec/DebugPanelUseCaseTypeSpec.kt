@@ -43,7 +43,7 @@ internal object DebugPanelUseCaseTypeSpec {
                 code = """
                         |return $viewDataName(
                         |   listOf(
-                        |       ${itemViewDataList.joinToString(", ")}
+                        |       ${itemViewDataList.joinToString(",\n")}
                         |   )
                         |)
                         |
