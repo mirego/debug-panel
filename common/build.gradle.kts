@@ -40,6 +40,7 @@ kotlin {
             languageSettings.optIn("com.russhwolf.settings.ExperimentalSettingsApi")
             languageSettings.optIn("kotlinx.coroutines.FlowPreview")
             languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            languageSettings.optIn("androidx.compose.material3.ExperimentalMaterial3Api")
         }
 
         val androidMain by getting {

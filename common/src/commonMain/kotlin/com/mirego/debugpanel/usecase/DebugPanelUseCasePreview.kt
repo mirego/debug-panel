@@ -18,6 +18,8 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
 
     override fun getCurrentDatePickerValue(identifier: String) = null
 
+    override fun onDatePickerUpdated(viewData: DebugPanelItemViewData.DatePicker, date: Long) {}
+
     fun createViewData() = DebugPanelViewData(
         listOf(
             DebugPanelItemViewData.Toggle(

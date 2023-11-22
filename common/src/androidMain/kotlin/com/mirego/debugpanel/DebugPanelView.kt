@@ -10,13 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -142,14 +148,47 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
     ) {
         VMDText(viewModel = item.label)
 
-        val textFieldViewModel by item.viewModel.observeAsState()
+        val showDialog = rememberSaveable { mutableStateOf(false) }
+
+        val datePickerViewModel by item.viewModel.observeAsState()
+        LaunchedEffect(datePickerViewModel) {
+            datePickerViewModel.showPicker = { showDialog.value = true }
+        }
+
         VMDTextField(
-            viewModel = textFieldViewModel,
+            viewModel = datePickerViewModel,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(textFieldViewModel.action),
+                .clickable(datePickerViewModel.action),
             textFieldColors = TextFieldDefaults.colors(disabledTextColor = MaterialTheme.colorScheme.onSurface)
         )
+        DatePickerView(showDialog.value, datePickerViewModel.date) { date ->
+            date?.let { datePickerViewModel.date = it }
+            showDialog.value = false
+        }
+    }
+}
+
+@Composable
+private fun DatePickerView(visible: Boolean, initialSelectedDate: Long, onDismissed: (Long?) -> Unit) {
+    val datePickerState = rememberDatePickerState(initialSelectedDate)
+
+    if (!visible) return
+
+    DatePickerDialog(
+        onDismissRequest = { onDismissed(datePickerState.selectedDateMillis) },
+        confirmButton = {
+            TextButton(onClick = { onDismissed(datePickerState.selectedDateMillis) }) {
+                Text("Ok")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismissed(datePickerState.selectedDateMillis) }) {
+                Text("Cancel")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
     }
 }
 
