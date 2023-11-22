@@ -123,9 +123,7 @@ class DebugPanelViewModelImpl(
     private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
         viewData.identifier,
         text(viewData.label),
-        datePicker(
-            initialDate = viewData.initialValue
-        ) {
+        datePicker(initialDate = viewData.initialValue) {
             isEnabled = false
             bindText(
                 flowForProperty(::date).map { date ->
