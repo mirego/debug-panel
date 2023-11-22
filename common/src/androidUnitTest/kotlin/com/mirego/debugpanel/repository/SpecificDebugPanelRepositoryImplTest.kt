@@ -1,8 +1,8 @@
 package com.mirego.debugpanel.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mirego.debugpanel.Settings
-import com.mirego.debugpanel.settings
+import com.mirego.debugpanel.service.Settings
+import com.mirego.debugpanel.service.settings
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.coroutines.FlowSettings
@@ -122,7 +122,7 @@ class SpecificDebugPanelRepositoryImplTest {
         val observableSettings = mockk<ObservableSettings> {
             every { toFlowSettings(any()) } returns flowSettings
         }
-        mockkStatic("com.mirego.debugpanel.SettingsKt")
+        mockkStatic("com.mirego.debugpanel.service.SettingsKt")
 
         every { settings } returns observableSettings
 

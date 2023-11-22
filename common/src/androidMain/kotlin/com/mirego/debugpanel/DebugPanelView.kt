@@ -3,6 +3,7 @@ package com.mirego.debugpanel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,10 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mirego.compose.utils.extensions.clickable
 import com.mirego.debugpanel.usecase.DebugPanelUseCasePreview
 import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModel
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
+import com.mirego.trikot.viewmodels.declarative.compose.extensions.observeAsState
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.VMDLazyColumn
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDButton
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDDropDownMenu
@@ -132,7 +136,21 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
 
 @Composable
 private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        VMDText(viewModel = item.label)
 
+        val textFieldViewModel by item.viewModel.observeAsState()
+        VMDTextField(
+            viewModel = textFieldViewModel,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(textFieldViewModel.action),
+            textFieldColors = TextFieldDefaults.colors(disabledTextColor = MaterialTheme.colorScheme.onSurface)
+        )
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)

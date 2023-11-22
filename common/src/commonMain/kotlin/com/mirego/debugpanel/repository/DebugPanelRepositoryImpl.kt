@@ -1,6 +1,6 @@
 package com.mirego.debugpanel.repository
 
-import com.mirego.debugpanel.settings
+import com.mirego.debugpanel.service.settings
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.russhwolf.settings.coroutines.toFlowSettings
 

@@ -8,7 +8,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.mirego.debugpanel.SettingsInitializer"
+                android:name="com.mirego.debugpanel.service.SettingsInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>

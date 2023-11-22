@@ -19,6 +19,7 @@ startupRuntime = "1.1.1"
 trikot = "5.3.0-dev2693"
 monitor = "1.6.1"
 miregoPublish = "1.0"
+composeUtils = "1.0.1-dev48"
 
 [libraries]
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit" }
@@ -40,6 +41,7 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+compose-utils = { module = "com.mirego.compose:utils", version.ref = "composeUtils" }
 viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
 viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }

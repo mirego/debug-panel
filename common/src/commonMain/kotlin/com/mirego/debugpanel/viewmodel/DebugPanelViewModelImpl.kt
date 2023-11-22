@@ -1,5 +1,7 @@
 package com.mirego.debugpanel.viewmodel
 
+import com.mirego.debugpanel.extensions.textFieldAction
+import com.mirego.debugpanel.service.dateFormatter
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.mirego.debugpanel.usecase.DebugPanelUseCase
 import com.mirego.debugpanel.usecase.DebugPanelViewData
@@ -121,6 +123,10 @@ class DebugPanelViewModelImpl(
     private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
         viewData.identifier,
         text(viewData.label),
-        textField { }
+        textFieldAction(viewData.initialValue?.let { dateFormatter.format(it) }.orEmpty(), action = {
+            println("Action yessir")
+        }) {
+            isEnabled = false
+        }
     )
 }
