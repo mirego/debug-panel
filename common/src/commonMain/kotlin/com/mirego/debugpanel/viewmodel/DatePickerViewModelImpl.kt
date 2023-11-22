@@ -13,8 +13,8 @@ open class DatePickerViewModelImpl(
     private val actionDelegate = emit({}, this, coroutineScope)
     override var action: () -> Unit by actionDelegate
 
-    private val dateDelegate = emit(initialDate ?: 0, this, coroutineScope)
-    override var date: Long by dateDelegate
+    private val dateDelegate = emit(initialDate, this, coroutineScope)
+    override var date: Long? by dateDelegate
 
     override var showPicker: (() -> Unit)? = null
 

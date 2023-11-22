@@ -6,5 +6,5 @@ interface DatePickerViewModel : VMDTextFieldViewModel {
     val action: () -> Unit
     var showPicker: (() -> Unit)?
 
-    var date: Long
+    var date: Long?
 }

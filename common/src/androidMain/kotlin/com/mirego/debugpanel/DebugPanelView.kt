@@ -170,20 +170,20 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
 }
 
 @Composable
-private fun DatePickerView(visible: Boolean, initialSelectedDate: Long, onDismissed: (Long?) -> Unit) {
+private fun DatePickerView(visible: Boolean, initialSelectedDate: Long?, onDismissed: (Long?) -> Unit) {
     val datePickerState = rememberDatePickerState(initialSelectedDate)
 
     if (!visible) return
 
     DatePickerDialog(
-        onDismissRequest = { onDismissed(datePickerState.selectedDateMillis) },
+        onDismissRequest = { onDismissed(null) },
         confirmButton = {
             TextButton(onClick = { onDismissed(datePickerState.selectedDateMillis) }) {
                 Text("Ok")
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed(datePickerState.selectedDateMillis) }) {
+            TextButton(onClick = { onDismissed(null) }) {
                 Text("Cancel")
             }
         }

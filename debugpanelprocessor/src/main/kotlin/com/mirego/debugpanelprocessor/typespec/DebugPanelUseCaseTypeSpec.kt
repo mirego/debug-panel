@@ -102,6 +102,7 @@ internal object DebugPanelUseCaseTypeSpec {
 
                 val paramType: TypeName = when (attribute) {
                     is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
+                    is Attribute.DatePicker -> attribute.persistedType.asTypeName().copy(nullable = true)
                     is Attribute.Picker -> STRING.copy(nullable = true)
                     else -> attribute.persistedType?.asTypeName()
                 } ?: return@mapNotNull null

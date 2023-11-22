@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -127,7 +128,7 @@ class DebugPanelViewModelImpl(
             isEnabled = false
             bindText(
                 flowForProperty(::date).map { date ->
-                    dateFormatter.format(date)
+                    date?.let { dateFormatter.format(it) }.orEmpty()
                 }
             )
 
@@ -135,6 +136,7 @@ class DebugPanelViewModelImpl(
                 flowForProperty(::date)
                     .drop(1)
                     .distinctUntilChanged()
+                    .filterNotNull()
                     .collect { date ->
                         useCase.onDatePickerUpdated(viewData, date)
                     }

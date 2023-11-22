@@ -14,7 +14,7 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
         initialLastNameInput: String,
         initialEnvironments: String?,
         initialLanguage: Language?,
-        initialDate: Long,
+        initialDate: Long?,
         firstName: Flow<String>,
         environments: List<DebugPanelPickerItem>,
         resetOnboarding: () -> Unit
