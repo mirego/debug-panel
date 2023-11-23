@@ -45,6 +45,15 @@ internal sealed interface Attribute {
         override val attributeTypeName = "Picker"
     }
 
+    data class DatePicker(
+        override val identifier: String?,
+        override val displayName: String?,
+        override val name: String
+    ) : Attribute {
+        override val persistedType = Long::class
+        override val attributeTypeName = "DatePicker"
+    }
+
     data class EnumPicker(
         override val identifier: String?,
         override val displayName: String?,

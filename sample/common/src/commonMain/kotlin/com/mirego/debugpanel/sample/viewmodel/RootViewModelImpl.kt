@@ -7,6 +7,7 @@ import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.datetime.Clock
 
 class RootViewModelImpl(
     coroutineScope: CoroutineScope,
@@ -22,6 +23,7 @@ class RootViewModelImpl(
             initialLastNameInput = "",
             initialEnvironments = "qa",
             initialLanguage = Language.FRENCH,
+            initialDate = Clock.System.now().toEpochMilliseconds(),
             firstName = flowOf("Some name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),

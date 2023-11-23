@@ -8,6 +8,7 @@ compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.1"
 kotlinpoet = "1.14.2"
 kotlinxCoroutines = "1.7.3"
+kotlinxDatetime = "0.4.1"
 ksp = "1.9.10-1.0.13"
 ktlint = "11.6.1"
 mockk = "1.13.8"
@@ -18,6 +19,7 @@ startupRuntime = "1.1.1"
 trikot = "5.3.0-dev2693"
 monitor = "1.6.1"
 miregoPublish = "1.0"
+composeUtils = "1.0.1-dev48"
 
 [libraries]
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit" }
@@ -33,11 +35,13 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+compose-utils = { module = "com.mirego.compose:utils", version.ref = "composeUtils" }
 viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
 viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }

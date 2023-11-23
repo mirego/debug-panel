@@ -36,4 +36,10 @@ sealed interface DebugPanelItemViewModel : VMDIdentifiableContent {
         val label: VMDTextViewModel,
         val viewModel: VMDPickerViewModel<VMDContentPickerItemViewModelImpl<VMDTextContent>>
     ) : DebugPanelItemViewModel
+
+    data class DatePicker(
+        override val identifier: String,
+        val label: VMDTextViewModel,
+        val viewModel: DatePickerViewModel
+    ) : DebugPanelItemViewModel
 }

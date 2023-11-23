@@ -1,14 +1,14 @@
 package com.mirego.debugpanel.repository
 
-import com.mirego.debugpanel.settings
+import com.mirego.debugpanel.service.settings
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.russhwolf.settings.coroutines.toFlowSettings
 
 abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
     private val flowSettings = settings.toFlowSettings()
 
-    override fun getCurrentToggleValue(identifier: String, defaultValue: Boolean) =
-        settings.getBoolean(identifier, defaultValue)
+    override fun getCurrentToggleValue(identifier: String) =
+        settings.getBooleanOrNull(identifier)
 
     protected fun getToggleValue(identifier: String) =
         flowSettings.getBooleanOrNullFlow(identifier)
@@ -17,8 +17,8 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
         settings.putBoolean(viewData.identifier, isOn)
     }
 
-    override fun getCurrentTextFieldValue(identifier: String, defaultValue: String) =
-        settings.getString(identifier, defaultValue)
+    override fun getCurrentTextFieldValue(identifier: String) =
+        settings.getStringOrNull(identifier)
 
     protected fun getTextFieldValue(identifier: String) =
         flowSettings.getStringOrNullFlow(identifier)
@@ -35,6 +35,16 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
 
     override fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String) {
         settings.putString(viewData.identifier, identifier)
+    }
+
+    override fun getCurrentDatePickerValue(identifier: String) =
+        settings.getLongOrNull(identifier)
+
+    protected fun getDatePickerValue(identifier: String) =
+        flowSettings.getLongOrNullFlow(identifier)
+
+    override fun onDatePickerUpdated(viewData: DebugPanelItemViewData.DatePicker, date: Long) {
+        settings.putLong(viewData.identifier, date)
     }
 
     protected fun removeKeys(vararg keys: String) {

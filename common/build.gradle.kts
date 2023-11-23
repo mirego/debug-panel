@@ -40,6 +40,7 @@ kotlin {
             languageSettings.optIn("com.russhwolf.settings.ExperimentalSettingsApi")
             languageSettings.optIn("kotlinx.coroutines.FlowPreview")
             languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            languageSettings.optIn("androidx.compose.material3.ExperimentalMaterial3Api")
         }
 
         val androidMain by getting {
@@ -52,6 +53,7 @@ kotlin {
                 implementation(libs.compose.material3)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.viewmodels.declarative.compose.flow)
+                implementation(libs.compose.utils)
             }
         }
         val commonMain by getting {
@@ -60,6 +62,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.coroutines)
+                implementation(libs.kotlinx.datetime)
             }
         }
         val androidUnitTest by getting {

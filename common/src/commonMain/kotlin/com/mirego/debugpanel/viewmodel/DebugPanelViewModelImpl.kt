@@ -1,5 +1,7 @@
 package com.mirego.debugpanel.viewmodel
 
+import com.mirego.debugpanel.extensions.datePicker
+import com.mirego.debugpanel.service.dateFormatter
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.mirego.debugpanel.usecase.DebugPanelUseCase
 import com.mirego.debugpanel.usecase.DebugPanelViewData
@@ -17,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -33,6 +36,7 @@ class DebugPanelViewModelImpl(
                 is DebugPanelItemViewData.Button -> createButton(item)
                 is DebugPanelItemViewData.Label -> createLabel(item)
                 is DebugPanelItemViewData.Picker -> createPicker(item)
+                is DebugPanelItemViewData.DatePicker -> createDatePicker(item)
             }
         }
     )
@@ -116,4 +120,27 @@ class DebugPanelViewModelImpl(
             picker
         )
     }
+
+    private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
+        viewData.identifier,
+        text(viewData.label),
+        datePicker(initialDate = viewData.initialValue) {
+            isEnabled = false
+            bindText(
+                flowForProperty(::date).map { date ->
+                    date?.let { dateFormatter.format(it) }.orEmpty()
+                }
+            )
+
+            coroutineScope.launch {
+                flowForProperty(::date)
+                    .drop(1)
+                    .distinctUntilChanged()
+                    .filterNotNull()
+                    .collect { date ->
+                        useCase.onDatePickerUpdated(viewData, date)
+                    }
+            }
+        }
+    )
 }

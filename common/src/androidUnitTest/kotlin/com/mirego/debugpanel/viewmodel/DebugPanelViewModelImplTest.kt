@@ -1,11 +1,19 @@
 package com.mirego.debugpanel.viewmodel
 
 import com.mirego.debugpanel.config.DebugPanelPickerItem
+import com.mirego.debugpanel.extensions.datePicker
+import com.mirego.debugpanel.extensions.picker
+import com.mirego.debugpanel.extensions.textField
+import com.mirego.debugpanel.extensions.toggle
+import com.mirego.debugpanel.service.DateFormatter
+import com.mirego.debugpanel.service.dateFormatter
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
 import com.mirego.debugpanel.usecase.DebugPanelUseCase
 import com.mirego.debugpanel.usecase.DebugPanelViewData
 import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,7 +23,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import runTestWithPendingCoroutines
 
-class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
+class DebugPanelViewModelImplTest {
     private val useCase: DebugPanelUseCase = mockk()
 
     private fun createEveryItems(buttonAction: () -> Unit = {}): List<DebugPanelItemViewData> = listOf(
@@ -56,24 +64,31 @@ class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
                 DebugPanelPickerItem("item0", "Item 0"),
                 DebugPanelPickerItem("item1", "Item 1")
             )
+        ),
+        DebugPanelItemViewData.DatePicker(
+            identifier = "datePickerId",
+            label = "datePicker",
+            initialValue = 123
         )
     )
 
     @Test
     fun `given debug panel items expect the view models to be configured properly`() = runTestWithPendingCoroutines {
+        val dateFormatter = mockDateFormatter()
+
         var tapped = false
 
-        val viewModel = createViewModel(
-            DebugPanelViewData(
-                createEveryItems {
-                    tapped = true
-                }
-            )
+        val viewDataList = DebugPanelViewData(
+            createEveryItems {
+                tapped = true
+            }
         )
+        val datePickerViewData = viewDataList.items[6].datePicker
+        val viewModel = createViewModel(viewDataList)
 
         advanceUntilIdle()
 
-        assertEquals(6, viewModel.items.elements.size)
+        assertEquals(7, viewModel.items.elements.size)
 
         val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
         val textField = viewModel.items.elements[1] as DebugPanelItemViewModel.TextField
@@ -81,6 +96,7 @@ class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
         val label = viewModel.items.elements[3] as DebugPanelItemViewModel.Label
         val picker = viewModel.items.elements[4] as DebugPanelItemViewModel.Picker
         val pickerWithInitialValue = viewModel.items.elements[5] as DebugPanelItemViewModel.Picker
+        val datePicker = viewModel.items.elements[6] as DebugPanelItemViewModel.DatePicker
 
         assertEquals("toggleId", toggle.identifier)
         assertEquals("toggle", toggle.viewModel.label.text)
@@ -110,27 +126,53 @@ class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
 
         assertEquals(1, pickerWithInitialValue.viewModel.selectedIndex)
 
+        assertEquals("datePickerId", datePicker.identifier)
+        assertEquals("datePicker", datePicker.label.text)
+        assertEquals("123", datePicker.viewModel.text)
+
+        datePicker.viewModel.date = 456
+
+        var showPickerCalled = false
+        datePicker.viewModel.showPicker = {
+            showPickerCalled = true
+        }
+
+        datePicker.viewModel.action()
+        assertTrue(showPickerCalled)
+
+        advanceUntilIdle()
+
+        verify(exactly = 1) {
+            dateFormatter.format(123)
+            useCase.onDatePickerUpdated(datePickerViewData, 456)
+            dateFormatter.format(456)
+        }
+
         confirmVerified(useCase)
+        confirmVerified(dateFormatter)
     }
 
     @Test
     fun `when updating the view model items expect the correct methods to be called on the use case`() = runTestWithPendingCoroutines {
         val viewData = DebugPanelViewData(createEveryItems())
-        val toggleItemViewData = viewData.items[0] as DebugPanelItemViewData.Toggle
-        val textFieldItemViewData = viewData.items[1] as DebugPanelItemViewData.TextField
-        val pickerItemViewData = viewData.items[4] as DebugPanelItemViewData.Picker
+        val toggleItemViewData = viewData.items[0].toggle
+        val textFieldItemViewData = viewData.items[1].textField
+        val pickerItemViewData = viewData.items[4].picker
+        val datePickerItemViewData = viewData.items[6].datePicker
 
         val viewModel = createViewModel(viewData)
 
         val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
         val textField = viewModel.items.elements[1] as DebugPanelItemViewModel.TextField
         val picker = viewModel.items.elements[4] as DebugPanelItemViewModel.Picker
+        val datePicker = viewModel.items.elements[6] as DebugPanelItemViewModel.DatePicker
 
         advanceUntilIdle()
 
         toggle.viewModel.onValueChange(true)
         textField.viewModel.onValueChange("newValue")
         picker.viewModel.selectedIndex = 1
+        datePicker.viewModel.date = 456
 
         advanceUntilIdle()
 
@@ -138,6 +180,7 @@ class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
             useCase.onToggleUpdated(toggleItemViewData, true)
             useCase.onTextFieldUpdated(textFieldItemViewData, "newValue")
             useCase.onPickerUpdated(pickerItemViewData, "item1")
+            useCase.onDatePickerUpdated(datePickerItemViewData, 456)
         }
 
         confirmVerified(useCase)
@@ -148,4 +191,15 @@ class DebugPanelViewModelImplSpecificDebugPanelUseCaseImplTest {
         useCase = useCase,
         viewData = viewData
     )
+
+    private fun mockDateFormatter(): DateFormatter {
+        val dateFormatterMock = mockk<DateFormatter> {
+            every { format(any()) } answers { arg<Long>(0).toString() }
+        }
+        mockkStatic("com.mirego.debugpanel.service.DateFormatterKt")
+
+        every { dateFormatter } returns dateFormatterMock
+
+        return dateFormatterMock
+    }
 }

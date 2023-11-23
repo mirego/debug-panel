@@ -1,4 +1,4 @@
-package com.mirego.debugpanel
+package com.mirego.debugpanel.service
 
 import com.russhwolf.settings.ObservableSettings
 
