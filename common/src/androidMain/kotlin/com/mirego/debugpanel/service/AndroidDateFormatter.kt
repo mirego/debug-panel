@@ -7,7 +7,7 @@ import java.util.Locale
 
 class AndroidDateFormatter : DateFormatter {
 
-    private val dateFormat = SimpleDateFormat(DateFormatter.DEFAULT_DATE_FORMAT, Locale.US).apply {
+    private val dateFormat = SimpleDateFormat(DateFormatter.DEFAULT_DATE_FORMAT, Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
