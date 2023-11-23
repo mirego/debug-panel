@@ -70,8 +70,7 @@ private fun TextFieldItem(item: DebugPanelItemViewModel.TextField) {
 @Composable
 private fun ToggleItem(item: DebugPanelItemViewModel.Toggle) {
     VMDSwitch(viewModel = item.viewModel, label = { content ->
-        Text(content.text)
-        Spacer(Modifier.width(8.dp))
+        Text(content.text, modifier = Modifier.weight(1f))
     })
 }
 
@@ -79,6 +78,7 @@ private fun ToggleItem(item: DebugPanelItemViewModel.Toggle) {
 private fun ButtonItem(item: DebugPanelItemViewModel.Button) {
     VMDButton(
         viewModel = item.viewModel,
+        modifier = Modifier.fillMaxWidth(),
         content = { content ->
             Text(
                 content.text,
@@ -93,7 +93,7 @@ private fun ButtonItem(item: DebugPanelItemViewModel.Button) {
 private fun LabelItem(item: DebugPanelItemViewModel.Label) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         VMDText(viewModel = item.label)
         VMDText(viewModel = item.viewModel)
