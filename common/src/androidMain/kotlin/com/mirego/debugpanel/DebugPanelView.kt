@@ -148,11 +148,11 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
     ) {
         VMDText(viewModel = item.label)
 
-        val showDialog = rememberSaveable { mutableStateOf(false) }
+        val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
         val datePickerViewModel by item.viewModel.observeAsState()
         LaunchedEffect(datePickerViewModel) {
-            datePickerViewModel.showPicker = { showDialog.value = true }
+            datePickerViewModel.showPicker = { dialogVisible.value = true }
         }
 
         VMDTextField(
@@ -162,9 +162,9 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
                 .clickable(datePickerViewModel.action),
             textFieldColors = TextFieldDefaults.colors(disabledTextColor = MaterialTheme.colorScheme.onSurface)
         )
-        DatePickerView(showDialog.value, datePickerViewModel.date) { date ->
+        DatePickerView(dialogVisible.value, datePickerViewModel.date) { date ->
             date?.let { datePickerViewModel.date = it }
-            showDialog.value = false
+            dialogVisible.value = false
         }
     }
 }

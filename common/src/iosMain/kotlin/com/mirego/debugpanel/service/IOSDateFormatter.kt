@@ -8,7 +8,7 @@ class IOSDateFormatter : DateFormatter {
 
     private val dateFormatter = NSDateFormatter().apply {
         locale = NSLocale("en_US")
-        dateFormat = "yyyy-MM-dd"
+        dateFormat = DateFormatter.DEFAULT_DATE_FORMAT
     }
 
     override fun format(date: Long): String = dateFormatter.stringFromDate(NSDate(date.toDouble()))

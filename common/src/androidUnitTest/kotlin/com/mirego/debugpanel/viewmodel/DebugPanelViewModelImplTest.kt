@@ -75,7 +75,6 @@ class DebugPanelViewModelImplTest {
     @Test
     fun `given debug panel items expect the view models to be configured properly`() = runTestWithPendingCoroutines {
         val dateFormatter = mockDateFormatter()
-        every { dateFormatter.format(123) } answers { arg<Long>(0).toString() }
 
         var tapped = false
 
@@ -130,7 +129,16 @@ class DebugPanelViewModelImplTest {
         assertEquals("datePickerId", datePicker.identifier)
         assertEquals("datePicker", datePicker.label.text)
         assertEquals("123", datePicker.viewModel.text)
+
         datePicker.viewModel.date = 456
+
+        var showPickerCalled = false
+        datePicker.viewModel.showPicker = {
+            showPickerCalled = true
+        }
+
+        datePicker.viewModel.action()
+        assertTrue(showPickerCalled)
 
         advanceUntilIdle()
 
@@ -185,7 +193,9 @@ class DebugPanelViewModelImplTest {
     )
 
     private fun mockDateFormatter(): DateFormatter {
-        val dateFormatterMock = mockk<DateFormatter>()
+        val dateFormatterMock = mockk<DateFormatter> {
+            every { format(any()) } answers { arg<Long>(0).toString() }
+        }
         mockkStatic("com.mirego.debugpanel.service.DateFormatterKt")
 
         every { dateFormatter } returns dateFormatterMock

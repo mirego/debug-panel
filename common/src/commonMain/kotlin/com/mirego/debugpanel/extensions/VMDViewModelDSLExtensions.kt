@@ -10,6 +10,6 @@ fun VMDViewModelDSL.datePicker(
     coroutineScope,
     initialDate
 ).apply {
-    this.action = { showPicker?.invoke() }
+    action = { showPicker?.invoke() }
     closure()
 }
