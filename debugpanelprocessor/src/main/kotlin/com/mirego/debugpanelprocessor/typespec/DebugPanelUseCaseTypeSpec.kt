@@ -41,12 +41,11 @@ internal object DebugPanelUseCaseTypeSpec {
                 name = "createViewData",
                 returnType = ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName),
                 code = """
-                        |return $viewDataName(
-                        |   listOf(
-                        |       ${itemViewDataList.joinToString(",\n")}
-                        |   )
-                        |)
-                        |
+                    |return $viewDataName(
+                    |⇥listOf(
+                    |⇥${itemViewDataList.joinToString(",\n")}
+                    |⇤)
+                    |⇤)
                 """.trimMargin(),
                 params = createParams(configuration.attributes).asIterable()
             )
