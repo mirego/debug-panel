@@ -7,7 +7,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createToggle(attribute: Attribute.Toggle): String {
         val identifier = attribute.safeIdentifier
         val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentToggleValue(\"$identifier\", ${attribute.initialValueParamName})"
+        val initialValue = "repository.getCurrentToggleValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
 
         return "DebugPanelItemViewData.Toggle(\n\"$identifier\",\n\"$label\",\n$initialValue\n)"
     }
@@ -15,7 +15,7 @@ internal object DebugPanelItemViewDataFactory {
     fun createTextField(attribute: Attribute.TextField): String {
         val identifier = attribute.safeIdentifier
         val placeholder = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\", ${attribute.initialValueParamName})"
+        val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
 
         return "DebugPanelItemViewData.TextField(\n\"$identifier\",\n\"$placeholder\",\n$initialValue\n)"
     }

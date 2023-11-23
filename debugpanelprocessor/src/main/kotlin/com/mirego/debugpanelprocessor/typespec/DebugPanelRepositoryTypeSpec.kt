@@ -22,7 +22,7 @@ internal object DebugPanelRepositoryTypeSpec {
     )
 
     private fun createFunctions(attributes: Sequence<Attribute>): Iterable<InterfaceImplementation.Function> {
-        val attributeGetters = attributes.mapNotNull { attribute ->
+        val attributeGettersFlow = attributes.mapNotNull { attribute ->
             val returnType = attribute.persistedType?.asTypeName() ?: return@mapNotNull null
             val baseRepositoryFunctionName = "get${attribute.attributeTypeName}Value"
 
@@ -30,6 +30,17 @@ internal object DebugPanelRepositoryTypeSpec {
                 name = "get${attribute.name.capitalize()}",
                 returnType = FLOW.plusParameter(returnType.copy(nullable = true)),
                 code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\")"
+            )
+        }
+
+        val attributeGetters = attributes.mapNotNull { attribute ->
+            val returnType = attribute.persistedType?.asTypeName() ?: return@mapNotNull null
+            val baseRepositoryFunctionName = "getCurrent${attribute.attributeTypeName}Value"
+
+            InterfaceImplementation.Function(
+                name = "getCurrent${attribute.name.capitalize()}",
+                returnType = returnType.copy(nullable = true),
+                code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\", )"
             )
         }
 
@@ -42,6 +53,6 @@ internal object DebugPanelRepositoryTypeSpec {
                 .let { keys -> "removeKeys($keys)" }
         )
 
-        return (attributeGetters + resetSettings).asIterable()
+        return (attributeGettersFlow + attributeGetters + resetSettings).asIterable()
     }
 }

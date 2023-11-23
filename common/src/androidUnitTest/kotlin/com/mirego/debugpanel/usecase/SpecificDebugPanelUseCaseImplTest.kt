@@ -85,8 +85,8 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals(expectedEnumPickerItems, enumPicker.items)
 
         verify(exactly = 1) {
-            repository.getCurrentToggleValue("toggle", true)
-            repository.getCurrentTextFieldValue("textField", "textField value")
+            repository.getCurrentToggleValue("toggle")
+            repository.getCurrentTextFieldValue("textField")
             repository.getCurrentPickerValue("picker")
             repository.getCurrentPickerValue("enum")
         }
@@ -183,8 +183,8 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals("ENUM_KEY", enumPicker.identifier)
 
         verify(exactly = 1) {
-            repository.getCurrentToggleValue("TOGGLE_KEY", false)
-            repository.getCurrentTextFieldValue("TEXT_FIELD_KEY", "")
+            repository.getCurrentToggleValue("TOGGLE_KEY")
+            repository.getCurrentTextFieldValue("TEXT_FIELD_KEY")
             repository.getCurrentPickerValue("PICKER_KEY")
             repository.getCurrentPickerValue("ENUM_KEY")
         }

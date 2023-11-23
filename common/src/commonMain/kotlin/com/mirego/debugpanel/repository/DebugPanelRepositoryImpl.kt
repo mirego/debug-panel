@@ -7,8 +7,8 @@ import com.russhwolf.settings.coroutines.toFlowSettings
 abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
     private val flowSettings = settings.toFlowSettings()
 
-    override fun getCurrentToggleValue(identifier: String, defaultValue: Boolean) =
-        settings.getBoolean(identifier, defaultValue)
+    override fun getCurrentToggleValue(identifier: String) =
+        settings.getBooleanOrNull(identifier)
 
     protected fun getToggleValue(identifier: String) =
         flowSettings.getBooleanOrNullFlow(identifier)
@@ -17,8 +17,8 @@ abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
         settings.putBoolean(viewData.identifier, isOn)
     }
 
-    override fun getCurrentTextFieldValue(identifier: String, defaultValue: String) =
-        settings.getString(identifier, defaultValue)
+    override fun getCurrentTextFieldValue(identifier: String) =
+        settings.getStringOrNull(identifier)
 
     protected fun getTextFieldValue(identifier: String) =
         flowSettings.getStringOrNullFlow(identifier)

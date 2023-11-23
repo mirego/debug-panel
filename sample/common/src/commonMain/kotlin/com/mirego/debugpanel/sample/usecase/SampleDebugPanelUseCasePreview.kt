@@ -30,5 +30,15 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
 
     override fun getDate(): Flow<Long?> = flowOf(null)
 
+    override fun getCurrentPreviewMode(): Boolean? = null
+
+    override fun getCurrentLastNameInput(): String? = null
+
+    override fun getCurrentEnvironments(): String? = null
+
+    override fun getCurrentLanguage(): String? = null
+
+    override fun getCurrentDate(): Long? = null
+
     override fun resetSettings() = Unit
 }
