@@ -40,7 +40,7 @@ internal object DebugPanelRepositoryTypeSpec {
             InterfaceImplementation.Function(
                 name = "getCurrent${attribute.name.capitalize()}",
                 returnType = returnType.copy(nullable = true),
-                code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\", )"
+                code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\")"
             )
         }
 
@@ -49,8 +49,14 @@ internal object DebugPanelRepositoryTypeSpec {
             returnType = UNIT,
             code = attributes
                 .filter { it.persistedType != null }
-                .joinToString(", ") { "\"${it.safeIdentifier}\"" }
-                .let { keys -> "removeKeys($keys)" }
+                .joinToString(",\n") { "\"${it.safeIdentifier}\"" }
+                .let { keys ->
+                    """
+                    |removeKeys(⇥
+                    |$keys
+                    |⇤)
+                    """.trimMargin()
+                }
         )
 
         return (attributeGettersFlow + attributeGetters + resetSettings).asIterable()
