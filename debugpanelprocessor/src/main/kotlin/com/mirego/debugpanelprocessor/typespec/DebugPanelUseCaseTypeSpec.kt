@@ -60,7 +60,8 @@ internal object DebugPanelUseCaseTypeSpec {
     private fun TypeSpec.Builder.configureImplementation(specificRepositoryClassName: ClassName): TypeSpec.Builder {
         val repositoryParamName = "repository"
 
-        return superclass(ClassName(Consts.USE_CASE_PACKAGE_NAME, Consts.USE_CASE_IMPL_NAME))
+        return addModifiers(KModifier.OPEN)
+            .superclass(ClassName(Consts.USE_CASE_PACKAGE_NAME, Consts.USE_CASE_IMPL_NAME))
             .primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter(repositoryParamName, specificRepositoryClassName)

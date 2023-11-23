@@ -5,6 +5,7 @@ import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.capitalize
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.plusParameter
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.asTypeName
@@ -14,7 +15,10 @@ internal object DebugPanelRepositoryTypeSpec {
         interfaceClassName = className,
         functions = createFunctions(attributes),
         configureInterface = { addSuperinterface(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_NAME)) },
-        configureImplementation = { superclass(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_IMPL_NAME)) }
+        configureImplementation = {
+            addModifiers(KModifier.OPEN)
+                .superclass(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_IMPL_NAME))
+        }
     )
 
     private fun createFunctions(attributes: Sequence<Attribute>): Iterable<InterfaceImplementation.Function> {
