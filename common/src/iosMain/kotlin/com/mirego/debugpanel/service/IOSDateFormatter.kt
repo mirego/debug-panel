@@ -7,7 +7,7 @@ import platform.Foundation.NSLocale
 class IOSDateFormatter : DateFormatter {
 
     private val dateFormatter = NSDateFormatter().apply {
-        locale = NSLocale("en_US")
+        locale = NSLocale()
         dateFormat = DateFormatter.DEFAULT_DATE_FORMAT
     }
 
