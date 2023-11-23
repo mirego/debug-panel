@@ -5,11 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mirego.compose.utils.SpacerHorizontal
 import com.mirego.compose.utils.extensions.clickable
 import com.mirego.debugpanel.usecase.DebugPanelUseCasePreview
 import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
@@ -96,6 +95,7 @@ private fun LabelItem(item: DebugPanelItemViewModel.Label) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         VMDText(viewModel = item.label)
+        SpacerHorizontal(32.dp)
         VMDText(viewModel = item.viewModel)
     }
 }
