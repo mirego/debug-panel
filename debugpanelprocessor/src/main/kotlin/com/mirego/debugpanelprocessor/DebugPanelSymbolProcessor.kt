@@ -5,6 +5,7 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
@@ -13,6 +14,7 @@ import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanelprocessor.Attribute
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
+import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
@@ -24,9 +26,16 @@ import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
+import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
@@ -96,6 +105,27 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         resolver.getSymbolsWithAnnotation(DebugProperty::class.qualifiedName.toString())
             .filterIsInstance<KSPropertyDeclaration>()
             .forEach {
+                val parent = it.parent as KSClassDeclaration
+                val parentName = parent.simpleName.getShortName()
+                val packageName = it.packageName.getShortName()
+                val propertyName = it.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
+                val fileName = parentName + propertyName.capitalize() + "Delegate"
+                val returnType = it.type.resolve()
+
+                writeFile(
+                    packageName, fileName, TypeSpecWithImports(
+                        TypeSpec.objectBuilder(fileName)
+                            .addFunction(
+                                FunSpec.builder("getValue")
+                                    .addModifiers(KModifier.OPERATOR)
+                                    .addParameter("parent", parent.toClassName())
+                                    .addParameter("property", KProperty::class.parameterizedBy())
+                                    .returns(returnType.toTypeName())
+                                    .build()
+                            )
+                            .build()
+                    )
+                )
             }
 
         getConfigurations(resolver).forEach { configuration ->

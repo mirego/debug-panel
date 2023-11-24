@@ -4,8 +4,8 @@ import com.mirego.debugpanel.service.DebugPanelSettings
 import kotlin.reflect.KProperty
 
 object SampleRepositoryFirstNameInputDelegate {
-    operator fun getValue(sampleRepositoryImpl: SampleRepositoryImpl, property: KProperty<*>): String =
-        DebugPanelSettings.observableSettings.getString("firstNameInput", sampleRepositoryImpl.firstNameInputInternal)
+    operator fun getValue(parent: SampleRepositoryImpl, property: KProperty<*>): String =
+        DebugPanelSettings.observableSettings.getString("firstNameInput", parent.firstNameInputInternal)
             .takeIf { it.isNotEmpty() }
-            ?: sampleRepositoryImpl.firstNameInputInternal
+            ?: parent.firstNameInputInternal
 }

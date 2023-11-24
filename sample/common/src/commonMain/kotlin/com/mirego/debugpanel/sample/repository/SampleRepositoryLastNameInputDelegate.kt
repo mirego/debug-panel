@@ -7,10 +7,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
 object SampleRepositoryLastNameInputDelegate {
-    private val flowSettings = DebugPanelSettings.flowSettings
-
     operator fun getValue(sampleRepositoryImpl: SampleRepositoryImpl, property: KProperty<*>): Flow<String> =
-        flowSettings.getStringOrNullFlow("lastNameInput")
+        DebugPanelSettings.flowSettings.getStringOrNullFlow("lastNameInput")
             .flatMapLatest { settingsValue ->
                 settingsValue
                     ?.takeIf { it.isNotEmpty() }
