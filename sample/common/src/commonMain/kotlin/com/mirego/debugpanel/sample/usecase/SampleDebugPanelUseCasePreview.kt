@@ -11,16 +11,18 @@ import kotlinx.coroutines.flow.flowOf
 class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCasePreview() {
     override fun createViewData(
         initialPreviewMode: Boolean,
+        initialFirstNameInput: String,
         initialLastNameInput: String,
         initialEnvironments: String?,
         initialLanguage: Language?,
         initialDate: Long?,
-        firstName: Flow<String>,
         environments: List<DebugPanelPickerItem>,
         resetOnboarding: () -> Unit
     ): DebugPanelViewData = createViewData()
 
     override fun getPreviewMode(): Flow<Boolean?> = flowOf(null)
+
+    override fun getFirstNameInput(): Flow<String?> = flowOf(null)
 
     override fun getLastNameInput(): Flow<String?> = flowOf(null)
 
@@ -31,6 +33,8 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
     override fun getDate(): Flow<Long?> = flowOf(null)
 
     override fun getCurrentPreviewMode(): Boolean? = null
+
+    override fun getCurrentFirstNameInput(): String? = null
 
     override fun getCurrentLastNameInput(): String? = null
 

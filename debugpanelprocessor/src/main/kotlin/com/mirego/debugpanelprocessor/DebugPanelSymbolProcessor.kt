@@ -5,7 +5,9 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
+import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanelprocessor.Attribute
@@ -90,6 +92,12 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         if (invoked) {
             return emptyList()
         }
+
+        resolver.getSymbolsWithAnnotation(DebugProperty::class.qualifiedName.toString())
+            .filterIsInstance<KSPropertyDeclaration>()
+            .forEach {
+
+            }
 
         getConfigurations(resolver).forEach { configuration ->
             val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)

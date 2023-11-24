@@ -14,8 +14,8 @@ import com.mirego.debugpanel.config.DebugPanelToggle
 @DebugPanel("Sample", "com.mirego.debugpanel", includeResetButton = true)
 data class DebugPanelConfig(
     @Identifier("PREVIEW_MODE") val previewMode: DebugPanelToggle,
-    @DisplayName("First name:") val firstName: DebugPanelLabel,
-    @DisplayName("Last name input") var lastNameInput: DebugPanelTextField,
+    @DisplayName("First name input") val firstNameInput: DebugPanelTextField,
+    @DisplayName("Last name input") val lastNameInput: DebugPanelTextField,
     @DisplayName("Environment") val environments: DebugPanelPicker,
     @DisplayName("Reset onboarding") val resetOnboarding: DebugPanelButton,
     @DisplayName("Language") val language: Language,
