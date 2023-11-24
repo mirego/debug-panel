@@ -5,7 +5,6 @@ import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanel.config.DebugPanelButton
 import com.mirego.debugpanel.config.DebugPanelDatePicker
-import com.mirego.debugpanel.config.DebugPanelLabel
 import com.mirego.debugpanel.config.DebugPanelPicker
 import com.mirego.debugpanel.config.DebugPanelTextField
 import com.mirego.debugpanel.config.DebugPanelToggle

@@ -8,7 +8,7 @@ import com.russhwolf.settings.SharedPreferencesSettings
 
 private var appContext: Context? = null
 
-actual val settings: ObservableSettings by lazy {
+internal actual val settings: ObservableSettings by lazy {
     SharedPreferencesSettings(PreferenceManager.getDefaultSharedPreferences(appContext!!))
 }
 

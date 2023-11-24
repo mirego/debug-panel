@@ -96,7 +96,6 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         resolver.getSymbolsWithAnnotation(DebugProperty::class.qualifiedName.toString())
             .filterIsInstance<KSPropertyDeclaration>()
             .forEach {
-
             }
 
         getConfigurations(resolver).forEach { configuration ->

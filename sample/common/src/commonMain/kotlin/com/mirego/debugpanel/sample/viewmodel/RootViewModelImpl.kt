@@ -6,7 +6,6 @@ import com.mirego.debugpanel.usecase.SampleDebugPanelUseCase
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
 import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Clock
 
 class RootViewModelImpl(

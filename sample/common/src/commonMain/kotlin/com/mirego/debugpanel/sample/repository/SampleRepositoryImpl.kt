@@ -10,9 +10,9 @@ class SampleRepositoryImpl : SampleRepository {
     @DebugProperty("lastNameInput")
     val lastNameInputInternal = flowOf("last name from SampleRepositoryImpl")
 
-    override val firstNameInput by SampleRepositoryProperties
+    override val firstNameInput by SampleRepositoryFirstNameInputDelegate
 
-    override val lastNameInput by SampleRepositoryObservableProperties
+    override val lastNameInput by SampleRepositoryLastNameInputDelegate
 
     override val otherField = "otherField"
 }
