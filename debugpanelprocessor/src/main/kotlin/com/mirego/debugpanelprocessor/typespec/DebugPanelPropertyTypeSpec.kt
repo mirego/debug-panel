@@ -17,7 +17,23 @@ import kotlin.reflect.KProperty
 
 internal object DebugPanelPropertyTypeSpec {
     fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
-        val isString = returnType.toTypeName() == STRING
+        val code = if (returnType.toTypeName() == STRING) {
+            """
+            |return DebugPanelSettings.observableSettings.get$returnType(
+            |⇥⇥⇥"$propertyName",
+            |parent.$name
+            |⇤)
+            |.takeIf { it.isNotEmpty() }
+            |?: parent.$name
+            """.trimMargin()
+        } else {
+            """
+            |return DebugPanelSettings.observableSettings.get$returnType(
+            |⇥⇥⇥"$propertyName",
+            |parent.$name
+            |⇤)
+            """.trimMargin()
+        }
 
         return TypeSpecWithImports(
             TypeSpec.objectBuilder(typeSpecName)
@@ -26,16 +42,7 @@ internal object DebugPanelPropertyTypeSpec {
                         .addModifiers(KModifier.OPERATOR)
                         .addParameter("parent", parent.toClassName())
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
-                        .addCode(
-                            """
-                            |return DebugPanelSettings.observableSettings.get$returnType(
-                            |⇥⇥⇥"$propertyName",
-                            |parent.$name
-                            |⇤)
-                            |.takeIf { it.isNotEmpty() }
-                            |?: parent.$name
-                            """.trimMargin()
-                        )
+                        .addCode(code)
                         .returns(returnType.toTypeName())
                         .build()
                 )

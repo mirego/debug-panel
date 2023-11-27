@@ -19,7 +19,26 @@ import kotlin.reflect.KProperty
 internal object DebugPanelObservablePropertyTypeSpec {
     fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
         val argumentName = returnType.arguments.first().toTypeName() as ClassName
-        val isString = argumentName == STRING
+        val code = if (argumentName == STRING) {
+            """
+            |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
+            |⇥⇥⇥.flatMapLatest { settingsValue ->
+            |⇥settingsValue⇥
+            |?.takeIf { it.isNotEmpty() }
+            |?.let { flowOf(it) }
+            |?: parent.$name
+            |⇤⇤}
+            """.trimMargin()
+        } else {
+            """
+            |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
+            |⇥⇥⇥.flatMapLatest { settingsValue ->
+            |⇥settingsValue⇥
+            |?.let { flowOf(it) }
+            |?: parent.$name
+            |⇤⇤}
+            """.trimMargin()
+        }
 
         return TypeSpecWithImports(
             TypeSpec.objectBuilder(typeSpecName)
@@ -28,17 +47,7 @@ internal object DebugPanelObservablePropertyTypeSpec {
                         .addModifiers(KModifier.OPERATOR)
                         .addParameter("parent", parent.toClassName())
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
-                        .addCode(
-                            """
-                        |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
-                        |⇥⇥⇥.flatMapLatest { settingsValue ->
-                        |⇥settingsValue⇥
-                        |?.takeIf { it.isNotEmpty() }
-                        |?.let { flowOf(it) }
-                        |?: parent.$name
-                        |⇤⇤}
-                            """.trimMargin()
-                        )
+                        .addCode(code)
                         .returns(returnType.toTypeName())
                         .build()
                 )
