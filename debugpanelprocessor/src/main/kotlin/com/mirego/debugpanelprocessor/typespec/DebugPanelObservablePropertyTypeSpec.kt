@@ -9,6 +9,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
@@ -17,7 +18,8 @@ import kotlin.reflect.KProperty
 
 internal object DebugPanelObservablePropertyTypeSpec {
     fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
-        val argumentName = (returnType.arguments.first().toTypeName() as ClassName).simpleName
+        val argumentName = returnType.arguments.first().toTypeName() as ClassName
+        val isString = argumentName == STRING
 
         return TypeSpecWithImports(
             TypeSpec.objectBuilder(typeSpecName)
@@ -28,10 +30,10 @@ internal object DebugPanelObservablePropertyTypeSpec {
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
                         .addCode(
                             """
-                        |return DebugPanelSettings.flowSettings.get${argumentName}OrNullFlow("$propertyName")
+                        |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
                         |⇥⇥⇥.flatMapLatest { settingsValue ->
-                        |⇥settingsValue
-                        |⇥?.takeIf { it.isNotEmpty() }
+                        |⇥settingsValue⇥
+                        |?.takeIf { it.isNotEmpty() }
                         |?.let { flowOf(it) }
                         |?: parent.$name
                         |⇤⇤}

@@ -7,5 +7,9 @@ interface SampleRepository {
 
     val lastNameInput: Flow<String>
 
+    val int: Int
+
+    val intFlow: Flow<Int>
+
     val otherField: String
 }

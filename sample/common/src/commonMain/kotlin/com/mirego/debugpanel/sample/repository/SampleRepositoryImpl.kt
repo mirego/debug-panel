@@ -2,6 +2,10 @@ package com.mirego.debugpanel.sample.repository
 
 import com.mirego.debugpanel.annotations.DebugProperty
 import kotlinx.coroutines.flow.flowOf
+import repository.SampleRepositoryImplFirstNameInputDelegate
+import repository.SampleRepositoryImplIntDelegate
+import repository.SampleRepositoryImplIntFlowDelegate
+import repository.SampleRepositoryImplLastNameInputDelegate
 
 class SampleRepositoryImpl : SampleRepository {
     @DebugProperty("firstNameInput")
@@ -10,9 +14,17 @@ class SampleRepositoryImpl : SampleRepository {
     @DebugProperty("lastNameInput")
     val lastNameInputInternal = flowOf("last name from SampleRepositoryImpl")
 
-    override val firstNameInput by SampleRepositoryFirstNameInputDelegate
+    @DebugProperty("int")
+    val intInternal = 123
 
-    override val lastNameInput by SampleRepositoryLastNameInputDelegate
+    @DebugProperty("intFlow")
+    val intFlowInternal = flowOf(123)
+
+    override val firstNameInput by SampleRepositoryImplFirstNameInputDelegate
+    override val lastNameInput by SampleRepositoryImplLastNameInputDelegate
+
+    override val int by SampleRepositoryImplIntDelegate
+    override val intFlow by SampleRepositoryImplIntFlowDelegate
 
     override val otherField = "otherField"
 }
