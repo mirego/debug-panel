@@ -1,10 +1,13 @@
 package com.mirego.debugpanel.sample.repository
 
 import com.mirego.debugpanel.annotations.DebugProperty
+import com.mirego.debugpanel.sample.Language
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import repository.SampleRepositoryImplFirstNameInputDelegate
 import repository.SampleRepositoryImplIntDelegate
 import repository.SampleRepositoryImplIntFlowDelegate
+import repository.SampleRepositoryImplLanguageDelegate
 import repository.SampleRepositoryImplLastNameInputDelegate
 
 class SampleRepositoryImpl : SampleRepository {
@@ -20,11 +23,16 @@ class SampleRepositoryImpl : SampleRepository {
     @DebugProperty("intFlow")
     val intFlowInternal = flowOf(123)
 
+    @DebugProperty("language")
+    val languageInternal = flowOf(Language.FRENCH)
+
     override val firstNameInput by SampleRepositoryImplFirstNameInputDelegate
     override val lastNameInput by SampleRepositoryImplLastNameInputDelegate
 
     override val int by SampleRepositoryImplIntDelegate
     override val intFlow by SampleRepositoryImplIntFlowDelegate
+
+    override val language by SampleRepositoryImplLanguageDelegate
 
     override val otherField = "otherField"
 }

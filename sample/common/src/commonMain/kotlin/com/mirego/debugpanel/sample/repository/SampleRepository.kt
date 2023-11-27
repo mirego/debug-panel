@@ -1,5 +1,6 @@
 package com.mirego.debugpanel.sample.repository
 
+import com.mirego.debugpanel.sample.Language
 import kotlinx.coroutines.flow.Flow
 
 interface SampleRepository {
@@ -10,6 +11,8 @@ interface SampleRepository {
     val int: Int
 
     val intFlow: Flow<Int>
+
+    val language: Flow<Language>
 
     val otherField: String
 }

@@ -22,11 +22,11 @@ class ApplicationViewModelImpl(
     override val rootViewModel: RootViewModel = RootViewModelImpl(coroutineScope, useCase)
 
     init {
-        println("tsst123 first name input: " + testRepository.firstNameInput)
+        println("tsst123 language: " + testRepository.language)
 
         coroutineScope.launch {
-            testRepository.lastNameInput.collect {
-                println("tsst123 last name input: " + it)
+            testRepository.language.collect {
+                println("tsst123 languageFLow: " + it)
             }
         }
     }

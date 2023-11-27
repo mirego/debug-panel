@@ -1,5 +1,6 @@
 package com.mirego.debugpanelprocessor.typespec
 
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.mirego.debugpanelprocessor.Consts
@@ -17,22 +18,28 @@ import kotlin.reflect.KProperty
 
 internal object DebugPanelPropertyTypeSpec {
     fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
-        val code = if (returnType.toTypeName() == STRING) {
-            """
-            |return DebugPanelSettings.observableSettings.get$returnType(
-            |⇥⇥⇥"$propertyName",
-            |parent.$name
-            |⇤)
-            |.takeIf { it.isNotEmpty() }
-            |?: parent.$name
-            """.trimMargin()
-        } else {
-            """
-            |return DebugPanelSettings.observableSettings.get$returnType(
-            |⇥⇥⇥"$propertyName",
-            |parent.$name
-            |⇤)
-            """.trimMargin()
+        val code = when {
+            returnType.toTypeName() == STRING -> """
+                |return DebugPanelSettings.observableSettings.getString(
+                |⇥⇥⇥"$propertyName",
+                |parent.$name
+                |⇤)
+                |.takeIf { it.isNotEmpty() }
+                |?: parent.$name
+                """.trimMargin()
+            (returnType.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> """
+                |return DebugPanelSettings.observableSettings.getStringOrNull(
+                |⇥⇥⇥"$propertyName"
+                |⇤)
+                |?.let { ${returnType.toClassName().simpleName}.valueOf(it) } 
+                |?: parent.$name
+                """.trimMargin()
+            else -> """
+                |return DebugPanelSettings.observableSettings.get$returnType(
+                |⇥⇥⇥"$propertyName",
+                |parent.$name
+                |⇤)
+                """.trimMargin()
         }
 
         return TypeSpecWithImports(

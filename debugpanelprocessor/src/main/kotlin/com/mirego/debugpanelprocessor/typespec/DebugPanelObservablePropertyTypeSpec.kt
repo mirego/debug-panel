@@ -1,5 +1,6 @@
 package com.mirego.debugpanelprocessor.typespec
 
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.mirego.debugpanelprocessor.Consts
@@ -18,25 +19,35 @@ import kotlin.reflect.KProperty
 
 internal object DebugPanelObservablePropertyTypeSpec {
     fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
-        val argumentName = returnType.arguments.first().toTypeName() as ClassName
-        val code = if (argumentName == STRING) {
-            """
-            |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
-            |⇥⇥⇥.flatMapLatest { settingsValue ->
-            |⇥settingsValue⇥
-            |?.takeIf { it.isNotEmpty() }
-            |?.let { flowOf(it) }
-            |?: parent.$name
-            |⇤⇤}
+        val argument = returnType.arguments.first()
+        val argumentName = argument.toTypeName() as ClassName
+
+        val code = when {
+            argumentName == STRING -> """
+                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$propertyName")
+                |⇥⇥⇥.flatMapLatest { settingsValue ->
+                |⇥settingsValue⇥
+                |?.takeIf { it.isNotEmpty() }
+                |?.let { flowOf(it) }
+                |?: parent.$name
+                |⇤⇤}
             """.trimMargin()
-        } else {
-            """
-            |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
-            |⇥⇥⇥.flatMapLatest { settingsValue ->
-            |⇥settingsValue⇥
-            |?.let { flowOf(it) }
-            |?: parent.$name
-            |⇤⇤}
+            (argument.type?.resolve()?.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> """
+                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$propertyName")
+                |⇥⇥⇥.flatMapLatest { settingsValue ->
+                |⇥settingsValue⇥
+                |?.takeIf { it.isNotEmpty() }
+                |?.let { flowOf(${argumentName.simpleName}.valueOf(it)) }
+                |?: parent.$name
+                |⇤⇤}
+            """.trimMargin()
+            else -> """
+                |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
+                |⇥⇥⇥.flatMapLatest { settingsValue ->
+                |⇥settingsValue⇥
+                |?.let { flowOf(it) }
+                |?: parent.$name
+                |⇤⇤}
             """.trimMargin()
         }
 
