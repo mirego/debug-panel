@@ -5,7 +5,6 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
@@ -22,20 +21,15 @@ import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanelprocessor.typespec.DebugPanelObservablePropertyTypeSpec
+import com.mirego.debugpanelprocessor.typespec.DebugPanelPropertyTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeSpec
-import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
-import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
@@ -97,37 +91,28 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             .writeTo(environment.codeGenerator, aggregating = false)
     }
 
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        if (invoked) {
-            return emptyList()
-        }
-
+    private fun writeDebugProperties(resolver: Resolver) {
         resolver.getSymbolsWithAnnotation(DebugProperty::class.qualifiedName.toString())
             .filterIsInstance<KSPropertyDeclaration>()
             .forEach {
+                val name = it.simpleName.getShortName()
                 val parent = it.parent as KSClassDeclaration
                 val parentName = parent.simpleName.getShortName()
                 val packageName = it.packageName.getShortName()
                 val propertyName = it.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
                 val fileName = parentName + propertyName.capitalize() + "Delegate"
                 val returnType = it.type.resolve()
+                val isFlow = returnType.declaration.simpleName.getShortName() == FLOW.simpleName
 
-                writeFile(
-                    packageName, fileName, TypeSpecWithImports(
-                        TypeSpec.objectBuilder(fileName)
-                            .addFunction(
-                                FunSpec.builder("getValue")
-                                    .addModifiers(KModifier.OPERATOR)
-                                    .addParameter("parent", parent.toClassName())
-                                    .addParameter("property", KProperty::class.parameterizedBy())
-                                    .returns(returnType.toTypeName())
-                                    .build()
-                            )
-                            .build()
-                    )
-                )
+                if (isFlow) {
+                    writeFile(packageName, fileName, DebugPanelObservablePropertyTypeSpec.create(fileName, parent, returnType, propertyName, name))
+                } else {
+                    writeFile(packageName, fileName, DebugPanelPropertyTypeSpec.create(fileName, parent, returnType, propertyName, name))
+                }
             }
+    }
 
+    private fun writeClasses(resolver: Resolver) {
         getConfigurations(resolver).forEach { configuration ->
             val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)
             val specificRepositoryName = "${configuration.prefix}$REPOSITORY_NAME"
@@ -147,6 +132,15 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
             writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation)
         }
+    }
+
+    override fun process(resolver: Resolver): List<KSAnnotated> {
+        if (invoked) {
+            return emptyList()
+        }
+
+        writeDebugProperties(resolver)
+        writeClasses(resolver)
 
         invoked = true
         return emptyList()
