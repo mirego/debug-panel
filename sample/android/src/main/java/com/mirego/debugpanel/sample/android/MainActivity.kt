@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.mirego.debugpanel.DebugPanelTheme
 import com.mirego.debugpanel.sample.viewmodel.ApplicationViewModelImpl
-import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.VMDButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +28,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     RootView(applicationViewModel.rootViewModel)
                 }
-                
-                Column {
 
+                Column {
                 }
             }
         }

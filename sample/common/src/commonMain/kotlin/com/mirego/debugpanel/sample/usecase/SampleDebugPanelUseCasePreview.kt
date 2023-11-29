@@ -1,7 +1,6 @@
 package com.mirego.debugpanel.sample.usecase
 
 import com.mirego.debugpanel.config.DebugPanelPickerItem
-import com.mirego.debugpanel.sample.Language
 import com.mirego.debugpanel.usecase.DebugPanelUseCasePreview
 import com.mirego.debugpanel.usecase.DebugPanelViewData
 import com.mirego.debugpanel.usecase.SampleDebugPanelUseCase

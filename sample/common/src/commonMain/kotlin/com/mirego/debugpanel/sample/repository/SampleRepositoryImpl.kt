@@ -3,7 +3,6 @@ package com.mirego.debugpanel.sample.repository
 import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.sample.Language
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import repository.SampleRepositoryImplFirstNameInputDelegate
 import repository.SampleRepositoryImplIntDelegate

@@ -26,20 +26,20 @@ internal object DebugPanelPropertyTypeSpec {
                 |⇤)
                 |.takeIf { it.isNotEmpty() }
                 |?: parent.$name
-                """.trimMargin()
+            """.trimMargin()
             (returnType.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> """
                 |return DebugPanelSettings.observableSettings.getStringOrNull(
                 |⇥⇥⇥"$propertyName"
                 |⇤)
                 |?.let { ${returnType.toClassName().simpleName}.valueOf(it) } 
                 |?: parent.$name
-                """.trimMargin()
+            """.trimMargin()
             else -> """
                 |return DebugPanelSettings.observableSettings.get$returnType(
                 |⇥⇥⇥"$propertyName",
                 |parent.$name
                 |⇤)
-                """.trimMargin()
+            """.trimMargin()
         }
 
         return TypeSpecWithImports(
