@@ -68,9 +68,6 @@ kotlin {
         val androidUnitTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(libs.androidx.monitor)
-                implementation(libs.androidx.junit)
-                implementation(libs.robolectric)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(projects.annotations)
                 implementation(libs.mockk.android)

@@ -1,6 +1,6 @@
 package com.mirego.debugpanel.usecase
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mirego.debugpanel.Consts.NUMBER_OF_DEBUG_PROPERTIES
 import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.extensions.button
 import com.mirego.debugpanel.extensions.datePicker
@@ -21,14 +21,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
 enum class TestEnum {
     VALUE_0,
     VALUE_1
 }
 
-@RunWith(AndroidJUnit4::class)
 class SpecificDebugPanelUseCaseImplTest {
 
     @Test
@@ -54,7 +52,7 @@ class SpecificDebugPanelUseCaseImplTest {
             initialDatePicker = 123L
         )
 
-        assertEquals(7, viewData.items.size)
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
         val toggle = viewData.items[0].toggle
         val button = viewData.items[1].button
@@ -102,6 +100,12 @@ class SpecificDebugPanelUseCaseImplTest {
             repository.getCurrentPickerValue("picker")
             repository.getCurrentPickerValue("enum")
             repository.getCurrentDatePickerValue("datePicker")
+            repository.getCurrentTextFieldValue("stringValueKey")
+            repository.getCurrentTextFieldValue("stringFlowValueKey")
+            repository.getCurrentPickerValue("enumValueKey")
+            repository.getCurrentPickerValue("enumFlowValueKey")
+            repository.getCurrentToggleValue("booleanValueKey")
+            repository.getCurrentToggleValue("booleanFlowValueKey")
         }
 
         confirmVerified(repository)
@@ -127,7 +131,7 @@ class SpecificDebugPanelUseCaseImplTest {
             initialDatePicker = 123
         )
 
-        assertEquals(7, viewData.items.size)
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
         val picker = viewData.items[3].picker
         val enumPicker = viewData.items[5].picker
@@ -160,7 +164,7 @@ class SpecificDebugPanelUseCaseImplTest {
             initialDatePicker = 123
         )
 
-        assertEquals(7, viewData.items.size)
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
         assertEquals("Test toggle", viewData.items[0].toggle.label)
         assertEquals("Test button", viewData.items[1].button.label)
@@ -187,7 +191,7 @@ class SpecificDebugPanelUseCaseImplTest {
             initialDatePicker = 123
         )
 
-        assertEquals(7, viewData.items.size)
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
         val toggle = viewData.items[0].toggle
         val button = viewData.items[1].button
@@ -211,6 +215,12 @@ class SpecificDebugPanelUseCaseImplTest {
             repository.getCurrentPickerValue("PICKER_KEY")
             repository.getCurrentPickerValue("ENUM_KEY")
             repository.getCurrentDatePickerValue("DATE_PICKER_KEY")
+            repository.getCurrentTextFieldValue("stringValueKey")
+            repository.getCurrentTextFieldValue("stringFlowValueKey")
+            repository.getCurrentPickerValue("enumValueKey")
+            repository.getCurrentPickerValue("enumFlowValueKey")
+            repository.getCurrentToggleValue("booleanValueKey")
+            repository.getCurrentToggleValue("booleanFlowValueKey")
         }
 
         confirmVerified(repository)
@@ -223,9 +233,9 @@ class SpecificDebugPanelUseCaseImplTest {
 
         val viewData = useCase.createViewData(initialToggle = false)
 
-        assertEquals(2, viewData.items.size)
+        assertEquals(2 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
-        val resetButton = viewData.items[1].button
+        val resetButton = viewData.items.last().button
 
         assertEquals("_reset", resetButton.identifier)
 

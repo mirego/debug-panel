@@ -1,3 +1,5 @@
+package com.mirego.debugpanelprocessor
+
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
@@ -7,17 +9,11 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.Identifier
-import com.mirego.debugpanelprocessor.ComponentFactory
-import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
-import com.mirego.debugpanelprocessor.ResolvedConfiguration
-import com.mirego.debugpanelprocessor.capitalize
-import com.mirego.debugpanelprocessor.findAnnotation
-import com.mirego.debugpanelprocessor.findArgument
 import com.mirego.debugpanelprocessor.typespec.DebugPanelObservablePropertyTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelPropertyTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec

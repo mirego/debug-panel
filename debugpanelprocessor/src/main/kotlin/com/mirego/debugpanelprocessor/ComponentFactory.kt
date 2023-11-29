@@ -7,6 +7,7 @@ import com.google.devtools.ksp.symbol.KSType
 import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.annotations.Identifier
+import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.ksp.toClassName
@@ -61,6 +62,7 @@ internal object ComponentFactory {
             }
             val propertyType = when {
                 type.toClassName() == STRING -> Type.TextField
+                type.toClassName() == BOOLEAN -> Type.Toggle
                 (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Type.EnumPicker(type)
                 else -> return@mapNotNull null
             }

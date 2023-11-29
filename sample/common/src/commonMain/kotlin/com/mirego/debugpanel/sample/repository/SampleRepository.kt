@@ -14,5 +14,9 @@ interface SampleRepository {
 
     val language: Flow<Language>
 
+    val toggle: Boolean
+
+    val toggleFlow: Flow<Boolean>
+
     val otherField: String
 }

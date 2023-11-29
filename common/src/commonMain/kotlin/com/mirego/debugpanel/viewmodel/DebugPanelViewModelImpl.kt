@@ -43,7 +43,7 @@ class DebugPanelViewModelImpl(
 
     private fun createToggle(viewData: DebugPanelItemViewData.Toggle) = DebugPanelItemViewModel.Toggle(
         viewData.identifier,
-        toggleWithText(viewData.label, viewData.initialValue) {
+        toggleWithText(viewData.label, viewData.initialValue ?: false) {
             coroutineScope.launch {
                 flowForProperty(::isOn)
                     .drop(1)

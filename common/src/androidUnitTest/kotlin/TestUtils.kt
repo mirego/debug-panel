@@ -1,5 +1,9 @@
-import android.content.Context
-import androidx.test.platform.app.InstrumentationRegistry
+import com.mirego.debugpanel.service.DebugPanelSettings
+import com.russhwolf.settings.ObservableSettings
+import com.russhwolf.settings.coroutines.FlowSettings
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
 import kotlin.test.fail
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestScope
@@ -20,5 +24,14 @@ internal fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
     }
 }
 
-internal val context: Context
-    get() = InstrumentationRegistry.getInstrumentation().targetContext
+fun mockSettings(): Pair<ObservableSettings, FlowSettings> {
+    mockkObject(DebugPanelSettings)
+
+    val flowSettings = mockk<FlowSettings>()
+    val observableSettings = mockk<ObservableSettings>()
+
+    every { DebugPanelSettings.observableSettings } returns observableSettings
+    every { DebugPanelSettings.flowSettings } returns flowSettings
+
+    return observableSettings to flowSettings
+}

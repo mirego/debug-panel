@@ -8,7 +8,7 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class Toggle(
         override val identifier: String,
         val label: String,
-        val initialValue: Boolean
+        val initialValue: Boolean?
     ) : DebugPanelItemViewData
 
     data class TextField(

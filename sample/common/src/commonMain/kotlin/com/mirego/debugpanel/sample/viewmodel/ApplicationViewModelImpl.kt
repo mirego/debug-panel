@@ -33,5 +33,11 @@ class ApplicationViewModelImpl(
                 println("tsst123 lastNameInput: " + it)
             }
         }
+
+        coroutineScope.launch {
+            testRepository.toggleFlow.collect {
+                println("tsst123 toggleFlow: " + it)
+            }
+        }
     }
 }

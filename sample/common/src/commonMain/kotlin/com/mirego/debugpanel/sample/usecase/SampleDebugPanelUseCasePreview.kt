@@ -26,6 +26,10 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
 
     override fun getLanguage(): Flow<String?> = flowOf(null)
 
+    override fun getToggle(): Flow<Boolean?> = flowOf(null)
+
+    override fun getToggleFlow(): Flow<Boolean?> = flowOf(null)
+
     override fun getDate(): Flow<Long?> = flowOf(null)
 
     override fun getCurrentPreviewMode(): Boolean? = null
@@ -37,6 +41,10 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
     override fun getCurrentEnvironments(): String? = null
 
     override fun getCurrentLanguage(): String? = null
+
+    override fun getCurrentToggle(): Boolean? = null
+
+    override fun getCurrentToggleFlow(): Boolean? = null
 
     override fun getCurrentDate(): Long? = null
 

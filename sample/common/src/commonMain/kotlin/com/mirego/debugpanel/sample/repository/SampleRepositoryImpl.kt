@@ -10,6 +10,8 @@ import repository.SampleRepositoryImplIntDelegate
 import repository.SampleRepositoryImplIntFlowDelegate
 import repository.SampleRepositoryImplLanguageDelegate
 import repository.SampleRepositoryImplLastNameInputDelegate
+import repository.SampleRepositoryImplToggleDelegate
+import repository.SampleRepositoryImplToggleFlowDelegate
 
 class SampleRepositoryImpl : SampleRepository {
     @DisplayName("First name input")
@@ -40,4 +42,13 @@ class SampleRepositoryImpl : SampleRepository {
     override val language by SampleRepositoryImplLanguageDelegate
 
     override val otherField = "otherField"
+
+    @DebugProperty("toggle")
+    val toggleInternal = true
+
+    @DebugProperty("toggleFlow")
+    val toggleFlowInternal = flowOf(true)
+
+    override val toggle by SampleRepositoryImplToggleDelegate
+    override val toggleFlow by SampleRepositoryImplToggleFlowDelegate
 }
