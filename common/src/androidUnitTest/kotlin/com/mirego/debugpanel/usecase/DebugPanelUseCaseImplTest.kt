@@ -61,6 +61,12 @@ class SpecificDebugPanelUseCaseImplTest {
         val label = viewData.items[4].label
         val enumPicker = viewData.items[5].picker
         val datePicker = viewData.items[6].datePicker
+        val stringValueTextField = viewData.items[7].textField
+        val stringFlowValueTextField = viewData.items[8].textField
+        val enumValuePicker = viewData.items[9].picker
+        val enumFlowValuePicker = viewData.items[10].picker
+        val booleanValueToggle = viewData.items[11].toggle
+        val booleanFlowValueToggle = viewData.items[12].toggle
 
         assertEquals("toggle", toggle.identifier)
         assertEquals("toggle", toggle.label)
@@ -93,6 +99,26 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals("datePicker", datePicker.identifier)
         assertEquals("datePicker", datePicker.label)
         assertEquals(123, datePicker.initialValue)
+
+        assertEquals("stringValueKey", stringValueTextField.identifier)
+        assertEquals("stringValue", stringValueTextField.placeholder)
+
+        assertEquals("stringFlowValueKey", stringFlowValueTextField.identifier)
+        assertEquals("stringFlowValue", stringFlowValueTextField.placeholder)
+
+        assertEquals("enumValueKey", enumValuePicker.identifier)
+        assertEquals("enumValue", enumValuePicker.label)
+        assertEquals(expectedEnumPickerItems, enumValuePicker.items)
+
+        assertEquals("enumFlowValueKey", enumFlowValuePicker.identifier)
+        assertEquals("enumFlowValue", enumFlowValuePicker.label)
+        assertEquals(expectedEnumPickerItems, enumFlowValuePicker.items)
+
+        assertEquals("booleanValueKey", booleanValueToggle.identifier)
+        assertEquals("booleanValue", booleanValueToggle.label)
+
+        assertEquals("booleanFlowValueKey", booleanFlowValueToggle.identifier)
+        assertEquals("booleanFlowValue", booleanFlowValueToggle.label)
 
         verify(exactly = 1) {
             repository.getCurrentToggleValue("toggle")
