@@ -15,11 +15,11 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 import kotlin.reflect.KProperty
 
 internal object DebugPanelPropertyTypeSpec {
-    fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
+    fun create(typeSpecName: String, parentDeclaration: KSClassDeclaration, returnType: KSType, identifier: String, name: String): TypeSpecWithImports {
         val code = when {
             returnType.toTypeName() == STRING -> """
                 |return DebugPanelSettings.observableSettings.getString(
-                |⇥⇥⇥"$propertyName",
+                |⇥⇥⇥"$identifier",
                 |parent.$name
                 |⇤)
                 |.takeIf { it.isNotEmpty() }
@@ -27,14 +27,14 @@ internal object DebugPanelPropertyTypeSpec {
             """.trimMargin()
             (returnType.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> """
                 |return DebugPanelSettings.observableSettings.getStringOrNull(
-                |⇥⇥⇥"$propertyName"
+                |⇥⇥⇥"$identifier"
                 |⇤)
                 |?.let { ${returnType.toClassName().simpleName}.valueOf(it) } 
                 |?: parent.$name
             """.trimMargin()
             else -> """
                 |return DebugPanelSettings.observableSettings.get$returnType(
-                |⇥⇥⇥"$propertyName",
+                |⇥⇥⇥"$identifier",
                 |parent.$name
                 |⇤)
             """.trimMargin()
@@ -45,7 +45,7 @@ internal object DebugPanelPropertyTypeSpec {
                 .addFunction(
                     FunSpec.builder("getValue")
                         .addModifiers(KModifier.OPERATOR)
-                        .addParameter("parent", parent.toClassName())
+                        .addParameter("parent", parentDeclaration.toClassName())
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
                         .addCode(code)
                         .returns(returnType.toTypeName())

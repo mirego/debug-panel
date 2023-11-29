@@ -16,13 +16,13 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 import kotlin.reflect.KProperty
 
 internal object DebugPanelObservablePropertyTypeSpec {
-    fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, propertyName: String, name: String): TypeSpecWithImports {
+    fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, identifier: String, name: String): TypeSpecWithImports {
         val argument = returnType.arguments.first()
         val argumentName = argument.toTypeName() as ClassName
 
         val code = when {
             argumentName == STRING -> """
-                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$propertyName")
+                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$identifier")
                 |⇥⇥⇥.flatMapLatest { settingsValue ->
                 |⇥settingsValue⇥
                 |?.takeIf { it.isNotEmpty() }
@@ -31,7 +31,7 @@ internal object DebugPanelObservablePropertyTypeSpec {
                 |⇤⇤}
             """.trimMargin()
             (argument.type?.resolve()?.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> """
-                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$propertyName")
+                |return DebugPanelSettings.flowSettings.getStringOrNullFlow("$identifier")
                 |⇥⇥⇥.flatMapLatest { settingsValue ->
                 |⇥settingsValue⇥
                 |?.takeIf { it.isNotEmpty() }
@@ -40,7 +40,7 @@ internal object DebugPanelObservablePropertyTypeSpec {
                 |⇤⇤}
             """.trimMargin()
             else -> """
-                |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$propertyName")
+                |return DebugPanelSettings.flowSettings.get${argumentName.simpleName}OrNullFlow("$identifier")
                 |⇥⇥⇥.flatMapLatest { settingsValue ->
                 |⇥settingsValue⇥
                 |?.let { flowOf(it) }

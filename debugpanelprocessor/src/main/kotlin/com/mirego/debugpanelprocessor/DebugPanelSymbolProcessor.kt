@@ -6,6 +6,7 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
+import com.mirego.debugpanel.annotations.Identifier
 import com.mirego.debugpanelprocessor.ComponentFactory
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
@@ -62,17 +63,18 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
     private fun writeDebugProperties(debugProperties: Sequence<KSPropertyDeclaration>) {
         debugProperties
             .forEach { property ->
-                val name = property.simpleName.getShortName()
-                val parent = property.parent as KSClassDeclaration
+                val declarationName = property.simpleName.getShortName()
+                val parentDeclaration = property.parent as KSClassDeclaration
                 val packageName = property.packageName.getShortName()
                 val propertyName = property.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
-                val fileName = parent.simpleName.getShortName() + propertyName.capitalize() + "Delegate"
+                val fileName = parentDeclaration.simpleName.getShortName() + propertyName.capitalize() + "Delegate"
                 val returnType = property.type.resolve()
+                val safeIdentifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String? ?: propertyName
 
                 if (returnType.declaration.simpleName.getShortName() == FLOW.simpleName) {
-                    writeFile(packageName, fileName, DebugPanelObservablePropertyTypeSpec.create(fileName, parent, returnType, propertyName, name))
+                    writeFile(packageName, fileName, DebugPanelObservablePropertyTypeSpec.create(fileName, parentDeclaration, returnType, safeIdentifier, declarationName))
                 } else {
-                    writeFile(packageName, fileName, DebugPanelPropertyTypeSpec.create(fileName, parent, returnType, propertyName, name))
+                    writeFile(packageName, fileName, DebugPanelPropertyTypeSpec.create(fileName, parentDeclaration, returnType, safeIdentifier, declarationName))
                 }
             }
     }
