@@ -24,7 +24,7 @@ internal fun runTestWithPendingCoroutines(body: suspend TestScope.() -> Unit) {
     }
 }
 
-fun mockSettings(): Pair<ObservableSettings, FlowSettings> {
+internal fun mockSettings(): Pair<ObservableSettings, FlowSettings> {
     mockkObject(DebugPanelSettings)
 
     val flowSettings = mockk<FlowSettings>()
