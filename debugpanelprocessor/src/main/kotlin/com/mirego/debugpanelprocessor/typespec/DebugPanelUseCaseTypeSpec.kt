@@ -97,7 +97,7 @@ internal object DebugPanelUseCaseTypeSpec {
 
     private fun createParams(components: Sequence<Component>): Sequence<ParameterSpec> {
         val initialValueParams = components
-            .filter { !it.isFromDebugProperty }
+            .filter { it.requiresInitialValue }
             .mapNotNull { component ->
                 val paramName: String = "initial${component.name.capitalize()}".takeIf { component.persistedType != null } ?: return@mapNotNull null
 

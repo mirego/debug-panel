@@ -85,15 +85,17 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
         properties.map { property ->
             val identifier = property.declaration.findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
             val displayName = property.declaration.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
+            val name = property.name
+            val requiresInitialValue = !isFromDebugProperty
 
             when (property.component) {
-                Property.Component.DatePicker -> Component.DatePicker(identifier, displayName, property.name, isFromDebugProperty)
-                is Property.Component.EnumPicker -> Component.EnumPicker(identifier, displayName, property.name, isFromDebugProperty, property.component.type)
-                Property.Component.Button -> Component.Button(identifier, displayName, property.name, isFromDebugProperty)
-                Property.Component.Label -> Component.Label(identifier, displayName, property.name, isFromDebugProperty)
-                Property.Component.Picker -> Component.Picker(identifier, displayName, property.name, isFromDebugProperty)
-                Property.Component.TextField -> Component.TextField(identifier, displayName, property.name, isFromDebugProperty)
-                Property.Component.Toggle -> Component.Toggle(identifier, displayName, property.name, isFromDebugProperty)
+                Property.Component.DatePicker -> Component.DatePicker(identifier, displayName, name, requiresInitialValue)
+                is Property.Component.EnumPicker -> Component.EnumPicker(identifier, displayName, name, requiresInitialValue, property.component.type)
+                Property.Component.Button -> Component.Button(identifier, displayName, name, requiresInitialValue)
+                Property.Component.Label -> Component.Label(identifier, displayName, name, requiresInitialValue)
+                Property.Component.Picker -> Component.Picker(identifier, displayName, name, requiresInitialValue)
+                Property.Component.TextField -> Component.TextField(identifier, displayName, name, requiresInitialValue)
+                Property.Component.Toggle -> Component.Toggle(identifier, displayName, name, requiresInitialValue)
             }
         }
 

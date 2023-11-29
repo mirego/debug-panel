@@ -99,12 +99,12 @@ internal object DebugPanelItemViewDataFactory {
 
     private fun getFallbackValuePart(component: Component): String =
         " ?: ${component.initialValueParamName}"
-            .takeUnless { component.isFromDebugProperty }
+            .takeIf { component.requiresInitialValue }
             .orEmpty()
 
     private fun getEnumFallbackValuePart(component: Component): String =
         " ?: ${component.initialValueParamName}?.name"
-            .takeUnless { component.isFromDebugProperty }
+            .takeIf { component.requiresInitialValue }
             .orEmpty()
 
     private val Component.initialValueParamName
