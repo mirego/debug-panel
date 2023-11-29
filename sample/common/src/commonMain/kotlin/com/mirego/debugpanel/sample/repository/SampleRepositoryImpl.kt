@@ -1,6 +1,7 @@
 package com.mirego.debugpanel.sample.repository
 
 import com.mirego.debugpanel.annotations.DebugProperty
+import com.mirego.debugpanel.annotations.DisplayName
 import com.mirego.debugpanel.sample.Language
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -11,9 +12,11 @@ import repository.SampleRepositoryImplLanguageDelegate
 import repository.SampleRepositoryImplLastNameInputDelegate
 
 class SampleRepositoryImpl : SampleRepository {
+    @DisplayName("First name input")
     @DebugProperty("firstNameInput")
     val firstNameInputInternal = "first name from SampleRepositoryImpl"
 
+    @DisplayName("Last name input")
     @DebugProperty("lastNameInput")
     val lastNameInputInternal = flowOf("last name from SampleRepositoryImpl")
 
@@ -23,6 +26,7 @@ class SampleRepositoryImpl : SampleRepository {
     @DebugProperty("intFlow")
     val intFlowInternal = flowOf(123)
 
+    @DisplayName("Language")
     @DebugProperty("language")
     val languageInternal = flowOf(Language.FRENCH)
 

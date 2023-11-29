@@ -1,6 +1,6 @@
 package com.mirego.debugpanelprocessor.typespec
 
-import com.mirego.debugpanelprocessor.Attribute
+import com.mirego.debugpanelprocessor.Component
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.capitalize
@@ -11,9 +11,9 @@ import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.asTypeName
 
 internal object DebugPanelRepositoryTypeSpec {
-    fun create(className: ClassName, attributes: Sequence<Attribute>) = InterfaceImplementation.create(
+    fun create(className: ClassName, components: Sequence<Component>) = InterfaceImplementation.create(
         interfaceClassName = className,
-        functions = createFunctions(attributes),
+        functions = createFunctions(components),
         configureInterface = { addSuperinterface(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_NAME)) },
         configureImplementation = {
             addModifiers(KModifier.OPEN)
@@ -21,33 +21,33 @@ internal object DebugPanelRepositoryTypeSpec {
         }
     )
 
-    private fun createFunctions(attributes: Sequence<Attribute>): Iterable<InterfaceImplementation.Function> {
-        val attributeGettersFlow = attributes.mapNotNull { attribute ->
-            val returnType = attribute.persistedType?.asTypeName() ?: return@mapNotNull null
-            val baseRepositoryFunctionName = "get${attribute.attributeTypeName}Value"
+    private fun createFunctions(components: Sequence<Component>): Iterable<InterfaceImplementation.Function> {
+        val componentGettersFlow = components.mapNotNull { component ->
+            val returnType = component.persistedType?.asTypeName() ?: return@mapNotNull null
+            val baseRepositoryFunctionName = "get${component.componentTypeName}Value"
 
             InterfaceImplementation.Function(
-                name = "get${attribute.name.capitalize()}",
+                name = "get${component.name.capitalize()}",
                 returnType = FLOW.plusParameter(returnType.copy(nullable = true)),
-                code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\")"
+                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")"
             )
         }
 
-        val attributeGetters = attributes.mapNotNull { attribute ->
-            val returnType = attribute.persistedType?.asTypeName() ?: return@mapNotNull null
-            val baseRepositoryFunctionName = "getCurrent${attribute.attributeTypeName}Value"
+        val componentGetters = components.mapNotNull { component ->
+            val returnType = component.persistedType?.asTypeName() ?: return@mapNotNull null
+            val baseRepositoryFunctionName = "getCurrent${component.componentTypeName}Value"
 
             InterfaceImplementation.Function(
-                name = "getCurrent${attribute.name.capitalize()}",
+                name = "getCurrent${component.name.capitalize()}",
                 returnType = returnType.copy(nullable = true),
-                code = "return $baseRepositoryFunctionName(\"${attribute.safeIdentifier}\")"
+                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")"
             )
         }
 
         val resetSettings = InterfaceImplementation.Function(
             name = "resetSettings",
             returnType = UNIT,
-            code = attributes
+            code = components
                 .filter { it.persistedType != null }
                 .joinToString(",\n") { "\"${it.safeIdentifier}\"" }
                 .let { keys ->
@@ -59,6 +59,6 @@ internal object DebugPanelRepositoryTypeSpec {
                 }
         )
 
-        return (attributeGettersFlow + attributeGetters + resetSettings).asIterable()
+        return (componentGettersFlow + componentGetters + resetSettings).asIterable()
     }
 }

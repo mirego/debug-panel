@@ -14,7 +14,7 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class TextField(
         override val identifier: String,
         val placeholder: String,
-        val initialValue: String
+        val initialValue: String?
     ) : DebugPanelItemViewData
 
     data class Label(

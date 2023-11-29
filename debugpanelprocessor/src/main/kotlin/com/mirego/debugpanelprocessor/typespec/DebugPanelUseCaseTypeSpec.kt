@@ -1,6 +1,6 @@
 package com.mirego.debugpanelprocessor.typespec
 
-import com.mirego.debugpanelprocessor.Attribute
+import com.mirego.debugpanelprocessor.Component
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.Import
@@ -34,7 +34,7 @@ internal object DebugPanelUseCaseTypeSpec {
     )
 
     private fun createFunctions(configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(
-        (createAttributeItemViewDataList(configuration.attributes) + createExtraItemViewDataList(configuration)).let { itemViewDataList ->
+        (createComponentItemViewDataList(configuration.components) + createExtraItemViewDataList(configuration)).let { itemViewDataList ->
             val viewDataName = "DebugPanelViewData"
 
             InterfaceImplementation.Function(
@@ -47,7 +47,7 @@ internal object DebugPanelUseCaseTypeSpec {
                     |⇤)
                     |⇤)
                 """.trimMargin(),
-                params = createParams(configuration.attributes).asIterable()
+                params = createParams(configuration.components).asIterable()
             )
         }
     )
@@ -75,15 +75,15 @@ internal object DebugPanelUseCaseTypeSpec {
             .addSuperinterface(specificRepositoryClassName, CodeBlock.of(repositoryParamName))
     }
 
-    private fun createAttributeItemViewDataList(attributes: Sequence<Attribute>): Sequence<String> = attributes.map {
+    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<String> = components.map {
         when (it) {
-            is Attribute.Function -> DebugPanelItemViewDataFactory.createButton(it)
-            is Attribute.Label -> DebugPanelItemViewDataFactory.createLabel(it)
-            is Attribute.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
-            is Attribute.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(it)
-            is Attribute.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
-            is Attribute.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
-            is Attribute.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
+            is Component.Button -> DebugPanelItemViewDataFactory.createButton(it)
+            is Component.Label -> DebugPanelItemViewDataFactory.createLabel(it)
+            is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
+            is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(it)
+            is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
+            is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
+            is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
         }
     }
 
@@ -95,34 +95,35 @@ internal object DebugPanelUseCaseTypeSpec {
         emptySequence()
     }
 
-    private fun createParams(attributes: Sequence<Attribute>): Sequence<ParameterSpec> {
-        val initialValueParams = attributes
-            .mapNotNull { attribute ->
-                val paramName: String = "initial${attribute.name.capitalize()}".takeIf { attribute.persistedType != null } ?: return@mapNotNull null
+    private fun createParams(components: Sequence<Component>): Sequence<ParameterSpec> {
+        val initialValueParams = components
+            .filter { !it.isFromDebugProperty }
+            .mapNotNull { component ->
+                val paramName: String = "initial${component.name.capitalize()}".takeIf { component.persistedType != null } ?: return@mapNotNull null
 
-                val paramType: TypeName = when (attribute) {
-                    is Attribute.EnumPicker -> attribute.type.toTypeName().copy(nullable = true)
-                    is Attribute.DatePicker -> attribute.persistedType.asTypeName().copy(nullable = true)
-                    is Attribute.Picker -> STRING.copy(nullable = true)
-                    else -> attribute.persistedType?.asTypeName()
+                val paramType: TypeName = when (component) {
+                    is Component.EnumPicker -> component.type.toTypeName().copy(nullable = true)
+                    is Component.DatePicker -> component.persistedType.asTypeName().copy(nullable = true)
+                    is Component.Picker -> STRING.copy(nullable = true)
+                    else -> component.persistedType?.asTypeName()
                 } ?: return@mapNotNull null
 
                 ParameterSpec(paramName, paramType)
             }
 
-        val valueParams = attributes
-            .mapNotNull { attribute ->
-                val paramName: String = when (attribute) {
-                    is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker -> return@mapNotNull null
-                    is Attribute.Function, is Attribute.Label, is Attribute.Picker, is Attribute.DatePicker -> attribute.name
+        val valueParams = components
+            .mapNotNull { component ->
+                val paramName: String = when (component) {
+                    is Component.TextField, is Component.Toggle, is Component.EnumPicker -> return@mapNotNull null
+                    is Component.Button, is Component.Label, is Component.Picker, is Component.DatePicker -> component.name
                 }
 
                 @Suppress("KotlinConstantConditions")
-                val paramType: TypeName = when (attribute) {
-                    is Attribute.TextField, is Attribute.Toggle, is Attribute.EnumPicker, is Attribute.DatePicker -> return@mapNotNull null
-                    is Attribute.Function -> LambdaTypeName.get(null, emptyList(), UNIT)
-                    is Attribute.Label -> FLOW.plusParameter(STRING)
-                    is Attribute.Picker -> List::class.asTypeName().plusParameter(ClassName(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"))
+                val paramType: TypeName = when (component) {
+                    is Component.TextField, is Component.Toggle, is Component.EnumPicker, is Component.DatePicker -> return@mapNotNull null
+                    is Component.Button -> LambdaTypeName.get(null, emptyList(), UNIT)
+                    is Component.Label -> FLOW.plusParameter(STRING)
+                    is Component.Picker -> List::class.asTypeName().plusParameter(ClassName(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"))
                 }
 
                 ParameterSpec(paramName, paramType)

@@ -11,10 +11,7 @@ import kotlinx.coroutines.flow.flowOf
 class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCasePreview() {
     override fun createViewData(
         initialPreviewMode: Boolean,
-        initialFirstNameInput: String,
-        initialLastNameInput: String,
         initialEnvironments: String?,
-        initialLanguage: Language?,
         initialDate: Long?,
         environments: List<DebugPanelPickerItem>,
         resetOnboarding: () -> Unit

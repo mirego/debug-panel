@@ -19,10 +19,7 @@ class RootViewModelImpl(
         useCase,
         useCase.createViewData(
             initialPreviewMode = true,
-            initialFirstNameInput = "",
-            initialLastNameInput = "",
             initialEnvironments = "qa",
-            initialLanguage = Language.FRENCH,
             initialDate = Clock.System.now().toEpochMilliseconds(),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),

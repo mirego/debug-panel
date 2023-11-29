@@ -1,13 +1,13 @@
 package com.mirego.debugpanelprocessor.typespec
 
-import com.mirego.debugpanelprocessor.Attribute
+import com.mirego.debugpanelprocessor.Component
 import com.mirego.debugpanelprocessor.capitalize
 
 internal object DebugPanelItemViewDataFactory {
-    fun createToggle(attribute: Attribute.Toggle): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentToggleValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
+    fun createToggle(component: Component.Toggle): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val initialValue = "repository.getCurrentToggleValue(\"$identifier\")${getFallbackValuePart(component)}"
 
         return """DebugPanelItemViewData.Toggle(⇥
             |"$identifier",
@@ -16,10 +16,10 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createTextField(attribute: Attribute.TextField): String {
-        val identifier = attribute.safeIdentifier
-        val placeholder = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
+    fun createTextField(component: Component.TextField): String {
+        val identifier = component.safeIdentifier
+        val placeholder = component.safeDisplayName
+        val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\")${getFallbackValuePart(component)}"
 
         return """DebugPanelItemViewData.TextField(⇥
             |"$identifier",
@@ -28,10 +28,10 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createLabel(attribute: Attribute.Label): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val value = attribute.name
+    fun createLabel(component: Component.Label): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val value = component.name
 
         return """DebugPanelItemViewData.Label(⇥
             |"$identifier",
@@ -40,11 +40,11 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createPicker(attribute: Attribute.Picker): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
-        val items = attribute.name
+    fun createPicker(component: Component.Picker): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val initialValue = "repository.getCurrentPickerValue(\"$identifier\")${getFallbackValuePart(component)}"
+        val items = component.name
 
         return """DebugPanelItemViewData.Picker(⇥
             |"$identifier",
@@ -54,10 +54,10 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createDatePicker(attribute: Attribute.DatePicker): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}"
+    fun createDatePicker(component: Component.DatePicker): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\")${getFallbackValuePart(component)}"
 
         return """DebugPanelItemViewData.DatePicker(⇥
             |"$identifier",
@@ -66,12 +66,12 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createPicker(attribute: Attribute.EnumPicker): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val initialValue = "repository.getCurrentPickerValue(\"$identifier\") ?: ${attribute.initialValueParamName}?.name"
+    fun createPicker(component: Component.EnumPicker): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val initialValue = "repository.getCurrentPickerValue(\"$identifier\")${getEnumFallbackValuePart(component)}"
         val items = """listOf(⇥
-            |${attribute.values.joinToString(",\n") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
+            |${component.values.joinToString(",\n") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
             |⇤)"""
 
         return """DebugPanelItemViewData.Picker(⇥
@@ -82,10 +82,10 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
     }
 
-    fun createButton(attribute: Attribute.Function): String {
-        val identifier = attribute.safeIdentifier
-        val label = attribute.safeDisplayName
-        val action = attribute.name
+    fun createButton(component: Component.Button): String {
+        val identifier = component.safeIdentifier
+        val label = component.safeDisplayName
+        val action = component.name
 
         return createButton(identifier, label, action)
     }
@@ -97,6 +97,16 @@ internal object DebugPanelItemViewDataFactory {
             |$action
             |⇤)"""
 
-    private val Attribute.initialValueParamName
+    private fun getFallbackValuePart(component: Component): String =
+        " ?: ${component.initialValueParamName}"
+            .takeUnless { component.isFromDebugProperty }
+            .orEmpty()
+
+    private fun getEnumFallbackValuePart(component: Component): String =
+        " ?: ${component.initialValueParamName}?.name"
+            .takeUnless { component.isFromDebugProperty }
+            .orEmpty()
+
+    private val Component.initialValueParamName
         get() = "initial${name.capitalize()}"
 }

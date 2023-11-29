@@ -57,7 +57,7 @@ class DebugPanelViewModelImpl(
 
     private fun createTextField(viewData: DebugPanelItemViewData.TextField) = DebugPanelItemViewModel.TextField(
         viewData.identifier,
-        textField(viewData.initialValue, viewData.placeholder) {
+        textField(viewData.initialValue.orEmpty(), viewData.placeholder) {
             coroutineScope.launch {
                 flowForProperty(::text)
                     .drop(1)

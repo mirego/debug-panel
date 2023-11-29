@@ -5,12 +5,13 @@ import com.google.devtools.ksp.symbol.KSDeclarationContainer
 import com.google.devtools.ksp.symbol.KSType
 import kotlin.reflect.KClass
 
-internal sealed interface Attribute {
+internal sealed interface Component {
     val identifier: String?
     val displayName: String?
     val name: String
     val persistedType: KClass<*>?
-    val attributeTypeName: String
+    val componentTypeName: String
+    val isFromDebugProperty: Boolean
 
     val safeIdentifier
         get() = identifier ?: name
@@ -21,68 +22,75 @@ internal sealed interface Attribute {
     data class Label(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = null
-        override val attributeTypeName = "Label"
+        override val componentTypeName = "Label"
     }
 
     data class TextField(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = String::class
-        override val attributeTypeName = "TextField"
+        override val componentTypeName = "TextField"
     }
 
     data class Picker(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = String::class
-        override val attributeTypeName = "Picker"
+        override val componentTypeName = "Picker"
     }
 
     data class DatePicker(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = Long::class
-        override val attributeTypeName = "DatePicker"
+        override val componentTypeName = "DatePicker"
     }
 
     data class EnumPicker(
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
+        override val isFromDebugProperty: Boolean,
         val type: KSType
-    ) : Attribute {
+    ) : Component {
         val values: Sequence<String> = (type.declaration as KSDeclarationContainer)
             .declarations
             .mapNotNull { (it as? KSClassDeclaration)?.toString() }
 
         override val persistedType = String::class
-        override val attributeTypeName = "Picker"
+        override val componentTypeName = "Picker"
     }
 
     data class Toggle(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = Boolean::class
-        override val attributeTypeName = "Toggle"
+        override val componentTypeName = "Toggle"
     }
 
-    data class Function(
+    data class Button(
         override val identifier: String?,
         override val displayName: String?,
-        override val name: String
-    ) : Attribute {
+        override val name: String,
+        override val isFromDebugProperty: Boolean
+    ) : Component {
         override val persistedType = null
-        override val attributeTypeName = "Function"
+        override val componentTypeName = "Button"
     }
 }

@@ -30,7 +30,7 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
             DebugPanelItemViewData.TextField(
                 identifier = "textField",
                 placeholder = "Text field",
-                initialValue = ""
+                initialValue = null
             ),
             DebugPanelItemViewData.Label(
                 identifier = "label",
