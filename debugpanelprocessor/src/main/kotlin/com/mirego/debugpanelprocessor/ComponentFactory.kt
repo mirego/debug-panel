@@ -33,6 +33,7 @@ internal object ComponentFactory {
     fun createAllComponents(configDeclaration: KSClassDeclaration, debugPropertyDeclarations: Sequence<KSPropertyDeclaration>): Sequence<Component> {
         val configProperties = configDeclaration.getAllProperties()
             .mapNotNull {
+                val propertyName = it.simpleName.getShortName()
                 val type = it.type.resolve()
                 val className = type.toClassName()
                 val propertyType: Type = when {
@@ -46,34 +47,34 @@ internal object ComponentFactory {
                     else -> return@mapNotNull null
                 }
 
-                it.toComponent(propertyType, it.simpleName.getShortName(), false)
+                it.toComponent(type = propertyType, name = propertyName, isDebugProperty = false)
             }
 
         val debugProperties = debugPropertyDeclarations.mapNotNull {
             val propertyName = it.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
-            val type = it.type.resolve()
-            val typeToUse = if (type.declaration.simpleName.getShortName() == Consts.FLOW.simpleName) {
-                type.arguments.first().type!!.resolve()
-            } else {
-                type
+            val type = it.type.resolve().let { type ->
+                if (type.declaration.simpleName.getShortName() == Consts.FLOW.simpleName) {
+                    type.arguments.first().type!!.resolve()
+                } else {
+                    type
+                }
             }
-            val className = typeToUse.toClassName()
             val propertyType = when {
-                className == STRING -> Type.TextField
-                (typeToUse.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Type.EnumPicker(typeToUse)
+                type.toClassName() == STRING -> Type.TextField
+                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Type.EnumPicker(type)
                 else -> return@mapNotNull null
             }
 
-            it.toComponent(propertyType, propertyName, true)
+            it.toComponent(type = propertyType, name = propertyName, isDebugProperty = true)
         }
 
         return configProperties + debugProperties
     }
 
-    private fun KSPropertyDeclaration.toComponent(type: Type, name: String, isFromDebugProperty: Boolean): Component {
+    private fun KSPropertyDeclaration.toComponent(type: Type, name: String, isDebugProperty: Boolean): Component {
         val identifier = findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
         val displayName = findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
-        val requiresInitialValue = !isFromDebugProperty
+        val requiresInitialValue = !isDebugProperty
 
         return when (type) {
             Type.DatePicker -> Component.DatePicker(identifier, displayName, name, requiresInitialValue)
