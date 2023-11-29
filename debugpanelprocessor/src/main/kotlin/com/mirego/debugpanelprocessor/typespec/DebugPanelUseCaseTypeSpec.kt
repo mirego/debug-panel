@@ -3,7 +3,6 @@ package com.mirego.debugpanelprocessor.typespec
 import com.mirego.debugpanelprocessor.Component
 import com.mirego.debugpanelprocessor.Consts
 import com.mirego.debugpanelprocessor.Consts.FLOW
-import com.mirego.debugpanelprocessor.Import
 import com.mirego.debugpanelprocessor.ResolvedConfiguration
 import com.mirego.debugpanelprocessor.capitalize
 import com.squareup.kotlinpoet.ClassName

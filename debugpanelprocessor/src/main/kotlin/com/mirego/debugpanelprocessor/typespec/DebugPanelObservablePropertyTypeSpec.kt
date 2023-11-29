@@ -4,8 +4,6 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.mirego.debugpanelprocessor.Consts
-import com.mirego.debugpanelprocessor.Import
-import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
