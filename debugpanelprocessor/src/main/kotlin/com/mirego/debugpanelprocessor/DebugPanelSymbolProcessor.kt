@@ -1,63 +1,33 @@
+package com.mirego.debugpanelprocessor
+
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
-import com.mirego.debugpanel.annotations.DisplayName
+import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.Identifier
-import com.mirego.debugpanelprocessor.Attribute
-import com.mirego.debugpanelprocessor.Consts
-import com.mirego.debugpanelprocessor.Consts.CONFIG_PACKAGE_NAME
+import com.mirego.debugpanelprocessor.Consts.FLOW
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
-import com.mirego.debugpanelprocessor.ResolvedConfiguration
-import com.mirego.debugpanelprocessor.TypeSpecWithImports
-import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanelprocessor.typespec.DebugPanelObservablePropertyTypeSpec
+import com.mirego.debugpanelprocessor.typespec.DebugPanelPropertyTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
 import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
+import com.mirego.debugpanelprocessor.typespec.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
-import kotlin.reflect.KClass
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
 
-    private fun KSAnnotated.findAnnotation(clazz: KClass<*>): KSAnnotation? =
-        annotations.find { it.annotationType.toString() == clazz.simpleName }
-
-    private fun KSAnnotation.findArgument(name: String): Any? =
-        arguments.find { it.name?.getShortName() == name }?.value
-
-    private fun createAttributes(declaration: KSClassDeclaration): Sequence<Attribute> = declaration.getAllProperties()
-        .mapNotNull { property ->
-            val identifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
-            val type = property.type.resolve()
-            val className = type.toClassName()
-            val displayName = property.findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
-            val name = property.simpleName.getShortName()
-
-            when {
-                className == TOGGLE_CLASS_NAME -> Attribute.Toggle(identifier, displayName, name)
-                className == TEXT_FIELD_CLASS_NAME -> Attribute.TextField(identifier, displayName, name)
-                className == LABEL_CLASS_NAME -> Attribute.Label(identifier, displayName, name)
-                className == PICKER_CLASS_NAME -> Attribute.Picker(identifier, displayName, name)
-                className == DATE_PICKER_CLASS_NAME -> Attribute.DatePicker(identifier, displayName, name)
-                (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Attribute.EnumPicker(identifier, displayName, name, type)
-                className == BUTTON_CLASS_NAME -> Attribute.Function(identifier, displayName, name)
-                else -> null
-            }
-        }
-
-    private fun getConfigurations(resolver: Resolver): Sequence<ResolvedConfiguration> =
-        resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
-            .filterIsInstance<KSClassDeclaration>()
+    private fun getConfigurations(declarations: Sequence<KSClassDeclaration>, debugProperties: Sequence<KSPropertyDeclaration>): Sequence<ResolvedConfiguration> =
+        declarations
             .map { declaration ->
                 val annotation = declaration.findAnnotation(DebugPanel::class)!!
                 val prefix = (annotation.findArgument("prefix") as String).capitalize()
@@ -67,7 +37,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 ResolvedConfiguration(
                     declaration = declaration,
                     annotation = annotation,
-                    attributes = createAttributes(declaration),
+                    components = ComponentFactory.createAllComponents(declaration, debugProperties),
                     prefix = prefix,
                     packageName = packageName,
                     includeResetButton = includeResetButton
@@ -86,12 +56,27 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             .writeTo(environment.codeGenerator, aggregating = false)
     }
 
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        if (invoked) {
-            return emptyList()
-        }
+    private fun writeDebugProperties(debugProperties: Sequence<KSPropertyDeclaration>) {
+        debugProperties
+            .forEach { property ->
+                val declarationName = property.simpleName.getShortName()
+                val parentDeclaration = property.parent as KSClassDeclaration
+                val packageName = property.packageName.getShortName()
+                val propertyName = property.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
+                val fileName = parentDeclaration.simpleName.getShortName() + propertyName.capitalize() + "Delegate"
+                val returnType = property.type.resolve()
+                val safeIdentifier = property.findAnnotation(Identifier::class)?.arguments?.first()?.value as String? ?: propertyName
 
-        getConfigurations(resolver).forEach { configuration ->
+                if (returnType.declaration.simpleName.getShortName() == FLOW.simpleName) {
+                    writeFile(packageName, fileName, DebugPanelObservablePropertyTypeSpec.create(fileName, parentDeclaration, returnType, safeIdentifier, declarationName))
+                } else {
+                    writeFile(packageName, fileName, DebugPanelPropertyTypeSpec.create(fileName, parentDeclaration, returnType, safeIdentifier, declarationName))
+                }
+            }
+    }
+
+    private fun writeClasses(declarations: Sequence<KSClassDeclaration>, debugProperties: Sequence<KSPropertyDeclaration>) {
+        getConfigurations(declarations, debugProperties).forEach { configuration ->
             val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)
             val specificRepositoryName = "${configuration.prefix}$REPOSITORY_NAME"
             val specificRepositoryClassName = ClassName(repositoryPackageName, specificRepositoryName)
@@ -102,7 +87,7 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
-            val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.attributes)
+            val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.components)
             val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
@@ -110,17 +95,23 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
             writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation)
         }
+    }
+
+    override fun process(resolver: Resolver): List<KSAnnotated> {
+        if (invoked) {
+            return emptyList()
+        }
+
+        val declarations = resolver.getSymbolsWithAnnotation(DebugPanel::class.qualifiedName.toString())
+            .filterIsInstance<KSClassDeclaration>()
+
+        val debugProperties = resolver.getSymbolsWithAnnotation(DebugProperty::class.qualifiedName.toString())
+            .filterIsInstance<KSPropertyDeclaration>()
+
+        writeDebugProperties(debugProperties)
+        writeClasses(declarations, debugProperties)
 
         invoked = true
         return emptyList()
-    }
-
-    companion object {
-        private val LABEL_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelLabel")
-        private val PICKER_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelPicker")
-        private val DATE_PICKER_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelDatePicker")
-        private val BUTTON_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelButton")
-        private val TOGGLE_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelToggle")
-        private val TEXT_FIELD_CLASS_NAME = ClassName(CONFIG_PACKAGE_NAME, "DebugPanelTextField")
     }
 }

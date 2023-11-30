@@ -1,8 +1,8 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanelprocessor.typespec
 
 import com.squareup.kotlinpoet.TypeSpec
 
 internal data class TypeSpecWithImports(
     val typeSpec: TypeSpec,
-    val imports: List<Import>
+    val imports: List<Import> = emptyList()
 )

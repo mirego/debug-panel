@@ -1,53 +1,50 @@
 package com.mirego.debugpanel.repository
 
-import com.mirego.debugpanel.service.settings
+import com.mirego.debugpanel.service.DebugPanelSettings
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
-import com.russhwolf.settings.coroutines.toFlowSettings
 
 abstract class DebugPanelRepositoryImpl : DebugPanelRepository {
-    private val flowSettings = settings.toFlowSettings()
-
     override fun getCurrentToggleValue(identifier: String) =
-        settings.getBooleanOrNull(identifier)
+        DebugPanelSettings.observableSettings.getBooleanOrNull(identifier)
 
     protected fun getToggleValue(identifier: String) =
-        flowSettings.getBooleanOrNullFlow(identifier)
+        DebugPanelSettings.flowSettings.getBooleanOrNullFlow(identifier)
 
     override fun onToggleUpdated(viewData: DebugPanelItemViewData.Toggle, isOn: Boolean) {
-        settings.putBoolean(viewData.identifier, isOn)
+        DebugPanelSettings.observableSettings.putBoolean(viewData.identifier, isOn)
     }
 
     override fun getCurrentTextFieldValue(identifier: String) =
-        settings.getStringOrNull(identifier)
+        DebugPanelSettings.observableSettings.getStringOrNull(identifier)
 
     protected fun getTextFieldValue(identifier: String) =
-        flowSettings.getStringOrNullFlow(identifier)
+        DebugPanelSettings.flowSettings.getStringOrNullFlow(identifier)
 
     override fun onTextFieldUpdated(viewData: DebugPanelItemViewData.TextField, text: String) {
-        settings.putString(viewData.identifier, text)
+        DebugPanelSettings.observableSettings.putString(viewData.identifier, text)
     }
 
     override fun getCurrentPickerValue(identifier: String) =
-        settings.getStringOrNull(identifier)
+        DebugPanelSettings.observableSettings.getStringOrNull(identifier)
 
     protected fun getPickerValue(identifier: String) =
-        flowSettings.getStringOrNullFlow(identifier)
+        DebugPanelSettings.flowSettings.getStringOrNullFlow(identifier)
 
     override fun onPickerUpdated(viewData: DebugPanelItemViewData.Picker, identifier: String) {
-        settings.putString(viewData.identifier, identifier)
+        DebugPanelSettings.observableSettings.putString(viewData.identifier, identifier)
     }
 
     override fun getCurrentDatePickerValue(identifier: String) =
-        settings.getLongOrNull(identifier)
+        DebugPanelSettings.observableSettings.getLongOrNull(identifier)
 
     protected fun getDatePickerValue(identifier: String) =
-        flowSettings.getLongOrNullFlow(identifier)
+        DebugPanelSettings.flowSettings.getLongOrNullFlow(identifier)
 
     override fun onDatePickerUpdated(viewData: DebugPanelItemViewData.DatePicker, date: Long) {
-        settings.putLong(viewData.identifier, date)
+        DebugPanelSettings.observableSettings.putLong(viewData.identifier, date)
     }
 
     protected fun removeKeys(vararg keys: String) {
-        keys.forEach { settings.remove(it) }
+        keys.forEach { DebugPanelSettings.observableSettings.remove(it) }
     }
 }

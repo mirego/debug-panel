@@ -1,15 +1,9 @@
 package com.mirego.debugpanel.repository
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mirego.debugpanel.service.settings
 import com.mirego.debugpanel.usecase.DebugPanelItemViewData
-import com.russhwolf.settings.ObservableSettings
-import com.russhwolf.settings.coroutines.FlowSettings
-import com.russhwolf.settings.coroutines.toFlowSettings
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import junit.framework.TestCase.assertEquals
 import kotlin.test.Test
@@ -20,9 +14,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.runner.RunWith
+import mockSettings
 
-@RunWith(AndroidJUnit4::class)
 class DebugPanelRepositoryImplTest {
 
     @Test
@@ -173,21 +166,13 @@ class DebugPanelRepositoryImplTest {
             settings.remove("picker")
             settings.remove("enum")
             settings.remove("datePicker")
+            settings.remove("stringValueKey")
+            settings.remove("stringFlowValueKey")
+            settings.remove("enumValueKey")
+            settings.remove("enumFlowValueKey")
+            settings.remove("booleanValueKey")
+            settings.remove("booleanFlowValueKey")
         }
         confirmVerified(settings)
-    }
-
-    private fun mockSettings(): Pair<ObservableSettings, FlowSettings> {
-        val flowSettings = mockk<FlowSettings>()
-        mockkStatic(ObservableSettings::toFlowSettings)
-
-        val observableSettings = mockk<ObservableSettings> {
-            every { toFlowSettings(any()) } returns flowSettings
-        }
-        mockkStatic("com.mirego.debugpanel.service.SettingsKt")
-
-        every { settings } returns observableSettings
-
-        return observableSettings to flowSettings
     }
 }

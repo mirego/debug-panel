@@ -60,17 +60,14 @@ kotlin {
             dependencies {
                 implementation(libs.viewmodels.declarative.flow)
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.multiplatform.settings)
-                implementation(libs.multiplatform.settings.coroutines)
+                api(libs.multiplatform.settings)
+                api(libs.multiplatform.settings.coroutines)
                 implementation(libs.kotlinx.datetime)
             }
         }
         val androidUnitTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(libs.androidx.monitor)
-                implementation(libs.androidx.junit)
-                implementation(libs.robolectric)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(projects.annotations)
                 implementation(libs.mockk.android)

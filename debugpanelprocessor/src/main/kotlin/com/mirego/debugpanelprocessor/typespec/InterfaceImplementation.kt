@@ -1,7 +1,5 @@
 package com.mirego.debugpanelprocessor.typespec
 
-import com.mirego.debugpanelprocessor.Import
-import com.mirego.debugpanelprocessor.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
