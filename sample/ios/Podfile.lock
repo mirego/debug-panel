@@ -1,16 +1,42 @@
 PODS:
   - common (1.0)
+  - Kingfisher (7.8.1)
+  - SwiftUIIntrospect (1.1.1)
+  - Trikot/viewmodels.declarative.flow (5.3.0):
+    - common
+  - Trikot/viewmodels.declarative.SwiftUI.flow (5.3.0):
+    - common
+    - Kingfisher (~> 7.8.1)
+    - SwiftUIIntrospect (~> 1.0)
+    - Trikot/viewmodels.declarative.flow
 
 DEPENDENCIES:
   - common (from `../common`)
+  - "Trikot/viewmodels.declarative.SwiftUI.flow (from `git@github.com:mirego/trikot.git`, tag `5.3.0-dev2693`)"
+
+SPEC REPOS:
+  trunk:
+    - Kingfisher
+    - SwiftUIIntrospect
 
 EXTERNAL SOURCES:
   common:
     :path: "../common"
+  Trikot:
+    :git: "git@github.com:mirego/trikot.git"
+    :tag: 5.3.0-dev2693
+
+CHECKOUT OPTIONS:
+  Trikot:
+    :git: "git@github.com:mirego/trikot.git"
+    :tag: 5.3.0-dev2693
 
 SPEC CHECKSUMS:
   common: 1bbef30958e3bf71a3c1fa7b782d66b912d74da5
+  Kingfisher: 63f677311d36a3473f6b978584f8a3845d023dc5
+  SwiftUIIntrospect: db5290a3492424eb4afcab77cebcd4595de3bd71
+  Trikot: 847a3fb103bb537876fb1b0f02ab15173b675a2c
 
-PODFILE CHECKSUM: 59a818ad6f6d84df40b9374e25033779b09a7d20
+PODFILE CHECKSUM: f51975571d84a1d709dc7d1a99806982b66b7ff5
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3

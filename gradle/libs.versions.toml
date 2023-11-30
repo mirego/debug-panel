@@ -37,8 +37,8 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
 compose-utils = { module = "com.mirego.compose:utils", version.ref = "composeUtils" }
-viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
-viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
+trikot-viewmodels-declarative-compose-flow = { module = "com.mirego.trikot:viewmodels-declarative-compose-flow", version.ref = "trikot" }
+trikot-viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-declarative-flow", version.ref = "trikot" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

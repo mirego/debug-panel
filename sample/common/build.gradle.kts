@@ -31,6 +31,9 @@ kotlin {
         podfile = project.file("../ios/Podfile")
         framework {
             baseName = "common"
+            transitiveExport = true
+            export(libs.trikot.viewmodels.declarative.flow)
+            export(projects.debugPanel.common)
         }
     }
 
@@ -39,7 +42,7 @@ kotlin {
             dependencies {
                 api(projects.debugPanel.common)
                 implementation(projects.annotations)
-                api(libs.viewmodels.declarative.flow)
+                api(libs.trikot.viewmodels.declarative.flow)
                 api(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.datetime)
             }

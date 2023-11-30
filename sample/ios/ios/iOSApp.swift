@@ -1,10 +1,13 @@
 import SwiftUI
+import common
 
 @main
 struct iOSApp: App {
-	var body: some Scene {
-		WindowGroup {
-			ContentView()
-		}
-	}
+    let applicationViewModel = ApplicationViewModelImpl(coroutineScope: CoroutineScopeProvider().provideMainWithSuperviserJob())
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView(viewModel: applicationViewModel)
+        }
+    }
 }

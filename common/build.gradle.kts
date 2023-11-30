@@ -52,13 +52,13 @@ kotlin {
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.compose.material3)
                 implementation(libs.androidx.activity.compose)
-                implementation(libs.viewmodels.declarative.compose.flow)
+                implementation(libs.trikot.viewmodels.declarative.compose.flow)
                 implementation(libs.compose.utils)
             }
         }
         val commonMain by getting {
             dependencies {
-                implementation(libs.viewmodels.declarative.flow)
+                implementation(libs.trikot.viewmodels.declarative.flow)
                 implementation(libs.kotlinx.coroutines.core)
                 api(libs.multiplatform.settings)
                 api(libs.multiplatform.settings.coroutines)
