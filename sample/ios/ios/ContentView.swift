@@ -25,15 +25,17 @@ struct ContentView: View {
                             VMDText(label.viewModel)
                         }
                     } else if let toggle = item as? DebugPanelItemViewModelToggle {
-
+                        VMDToggle(toggle.viewModel)
                     } else if let textField = item as? DebugPanelItemViewModelTextField {
-
+                        VMDTextField(textField.viewModel) {}
                     } else if let button = item as? DebugPanelItemViewModelButton {
-
+                        VMDButton(button.viewModel) {
+                            Text($0.text)
+                        }
                     } else if let picker = item as? DebugPanelItemViewModelPicker {
-
+                        
                     } else if let datePicker = item as? DebugPanelItemViewModelDatePicker {
-
+                        DatePickerView(datePicker.viewModel)
                     }
                 }
             }

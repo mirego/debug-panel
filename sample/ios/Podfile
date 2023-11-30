@@ -1,5 +1,4 @@
 source 'https://cdn.cocoapods.org/'
-source 'git@github.com:mirego/MCPodSpecs.git'
 require_relative 'podspec_versions.rb'
 
 use_frameworks!
@@ -13,6 +12,7 @@ target 'ios' do
 
   pod 'common', :path => '../common'
   pod 'Trikot/viewmodels.declarative.SwiftUI.flow', :git => 'git@github.com:mirego/trikot.git', :tag => $libs['trikot'], :inhibit_warnings => true
+  pod 'Popovers'
 
   post_install do |installer|
       installer.pods_project.targets.each do |target|
