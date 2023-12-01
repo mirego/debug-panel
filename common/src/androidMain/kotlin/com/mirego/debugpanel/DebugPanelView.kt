@@ -3,6 +3,7 @@ package com.mirego.debugpanel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -106,37 +107,46 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
         mutableStateOf(false)
     }
 
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .clickable { isExpanded = true },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        VMDText(
-            viewModel = item.label,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
+    Box {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            VMDText(viewModel = item.label)
 
-    VMDDropDownMenu(
-        viewModel = item.viewModel,
-        expanded = isExpanded,
-        onDismissRequest = {
-            isExpanded = false
-        }
-    ) { dropdownItem, index ->
-        VMDDropDownMenuItem(
-            pickerViewModel = item.viewModel,
-            viewModel = dropdownItem,
-            index = index,
-            onClick = { isExpanded = false },
-            text = {
-                Text(text = dropdownItem.content.text)
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clickable { isExpanded = true },
+                contentAlignment = Alignment.CenterStart
+            ) {
+                VMDText(
+                    viewModel = item.selectedItem,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-        )
+        }
+
+        VMDDropDownMenu(
+            viewModel = item.viewModel,
+            expanded = isExpanded,
+            onDismissRequest = {
+                isExpanded = false
+            }
+        ) { dropdownItem, index ->
+            VMDDropDownMenuItem(
+                pickerViewModel = item.viewModel,
+                viewModel = dropdownItem,
+                index = index,
+                onClick = { isExpanded = false },
+                text = {
+                    Text(text = dropdownItem.content.text)
+                }
+            )
+        }
     }
 }
 

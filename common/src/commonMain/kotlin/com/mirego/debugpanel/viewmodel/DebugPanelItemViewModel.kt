@@ -34,6 +34,7 @@ sealed interface DebugPanelItemViewModel : VMDIdentifiableContent {
     data class Picker(
         override val identifier: String,
         val label: VMDTextViewModel,
+        val selectedItem: VMDTextViewModel,
         val viewModel: VMDPickerViewModel<VMDContentPickerItemViewModelImpl<VMDTextContent>>
     ) : DebugPanelItemViewModel
 

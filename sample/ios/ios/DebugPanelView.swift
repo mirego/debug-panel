@@ -36,10 +36,14 @@ struct DebugPanelView: View {
                     }
                     .height(itemHeight)
                 } else if let picker = item as? DebugPanelItemViewModelPicker {
-                    VMDPicker(picker.viewModel, label: picker.label) {
-                        Text($0.text)
+                    HStack {
+                        VMDText(picker.label)
+                        Spacer()
+                        VMDPicker(picker.viewModel, label: picker.selectedItem) {
+                            Text($0.text)
+                        }
                     }
-                    .height(itemHeight)
+                    .frame(maxWidth: .infinity, minHeight: itemHeight)
                 } else if let datePicker = item as? DebugPanelItemViewModelDatePicker {
                     DatePickerView(datePicker: datePicker)
                         .height(itemHeight)

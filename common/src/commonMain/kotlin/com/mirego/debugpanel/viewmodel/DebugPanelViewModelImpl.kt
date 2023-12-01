@@ -42,8 +42,8 @@ class DebugPanelViewModelImpl(
     )
 
     private fun createToggle(viewData: DebugPanelItemViewData.Toggle) = DebugPanelItemViewModel.Toggle(
-        viewData.identifier,
-        toggleWithText(viewData.label, viewData.initialValue ?: false) {
+        identifier = viewData.identifier,
+        viewModel = toggleWithText(viewData.label, viewData.initialValue ?: false) {
             coroutineScope.launch {
                 flowForProperty(::isOn)
                     .drop(1)
@@ -56,8 +56,8 @@ class DebugPanelViewModelImpl(
     )
 
     private fun createTextField(viewData: DebugPanelItemViewData.TextField) = DebugPanelItemViewModel.TextField(
-        viewData.identifier,
-        textField(viewData.initialValue.orEmpty(), viewData.placeholder) {
+        identifier = viewData.identifier,
+        viewModel = textField(viewData.initialValue.orEmpty(), viewData.placeholder) {
             coroutineScope.launch {
                 flowForProperty(::text)
                     .drop(1)
@@ -71,16 +71,16 @@ class DebugPanelViewModelImpl(
     )
 
     private fun createButton(viewData: DebugPanelItemViewData.Button) = DebugPanelItemViewModel.Button(
-        viewData.identifier,
-        buttonWithText(viewData.label) {
+        identifier = viewData.identifier,
+        viewModel = buttonWithText(viewData.label) {
             setAction(viewData.action)
         }
     )
 
     private fun createLabel(viewData: DebugPanelItemViewData.Label) = DebugPanelItemViewModel.Label(
-        viewData.identifier,
-        text(viewData.label),
-        text(viewData.identifier) {
+        identifier = viewData.identifier,
+        label = text(viewData.label),
+        viewModel = text(viewData.identifier) {
             bindText(viewData.value)
         }
     )
@@ -108,8 +108,9 @@ class DebugPanelViewModelImpl(
             }
         }
         return DebugPanelItemViewModel.Picker(
-            viewData.identifier,
-            text(viewData.label) {
+            identifier = viewData.identifier,
+            label = text(viewData.label),
+            selectedItem = text {
                 val initialValue = text
                 bindText(
                     picker.flowForProperty(picker::selectedIndex).map { index ->
@@ -117,14 +118,14 @@ class DebugPanelViewModelImpl(
                     }
                 )
             },
-            picker
+            viewModel = picker
         )
     }
 
     private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
-        viewData.identifier,
-        text(viewData.label),
-        datePicker(initialDate = viewData.initialValue) {
+        identifier = viewData.identifier,
+        label = text(viewData.label),
+        viewModel = datePicker(initialDate = viewData.initialValue) {
             isEnabled = false
             bindText(
                 flowForProperty(::date).map { date ->

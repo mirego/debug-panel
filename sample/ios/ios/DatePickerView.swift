@@ -20,7 +20,7 @@ struct DatePickerView: View {
     var labelViewModel: VMDTextViewModel {
         observableLabelViewModel.viewModel
     }
-    
+
     @State private var selectedDate: Foundation.Date = Foundation.Date()
 
     var body: some View {

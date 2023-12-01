@@ -117,6 +117,7 @@ class DebugPanelViewModelImplTest {
 
         assertEquals("pickerId", picker.identifier)
         assertEquals("picker", picker.label.text)
+        assertEquals("", picker.selectedItem.text)
         assertEquals(-1, picker.viewModel.selectedIndex)
         assertEquals(2, picker.viewModel.elements.size)
         assertEquals("item0", picker.viewModel.elements[0].identifier)
@@ -125,6 +126,7 @@ class DebugPanelViewModelImplTest {
         assertEquals("Item 1", picker.viewModel.elements[1].content.text)
 
         assertEquals(1, pickerWithInitialValue.viewModel.selectedIndex)
+        assertEquals("Item 1", pickerWithInitialValue.selectedItem.text)
 
         assertEquals("datePickerId", datePicker.identifier)
         assertEquals("datePicker", datePicker.label.text)
