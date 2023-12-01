@@ -24,15 +24,14 @@ kotlin {
     iosSimulatorArm64()
 
     cocoapods {
+        name = "TRIKOT_FRAMEWORK_NAME"
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
         ios.deploymentTarget = "14.1"
-        podfile = project.file("../ios/Podfile")
         framework {
-            baseName = "common"
+            baseName = "TRIKOT_FRAMEWORK_NAME"
             transitiveExport = true
-            export(libs.trikot.viewmodels.declarative.flow)
             export(projects.debugPanel.common)
         }
     }

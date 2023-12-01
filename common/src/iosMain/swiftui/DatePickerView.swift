@@ -1,5 +1,5 @@
 import SwiftUI
-import common
+import TRIKOT_FRAMEWORK_NAME
 import Trikot
 import Popovers
 

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
@@ -24,16 +23,6 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-
-    cocoapods {
-        summary = "Debug panel"
-        homepage = "https://www.mirego.com"
-        version = "1.0"
-        ios.deploymentTarget = "14.1"
-        framework {
-            baseName = "common"
-        }
-    }
 
     sourceSets {
         all {

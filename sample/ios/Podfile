@@ -5,14 +5,14 @@ use_frameworks!
 platformVersion = '14.1'
 platform :ios, platformVersion
 
-ENV['TRIKOT_FRAMEWORK_NAME']='common'
+ENV['TRIKOT_FRAMEWORK_NAME']='TRIKOT_FRAMEWORK_NAME'
 
 target 'ios' do
   $libs = load_properties('../../gradle/libs.versions.toml')
 
-  pod 'common', :path => '../common'
+  pod 'TRIKOT_FRAMEWORK_NAME', :path => '../common'
+  pod 'DebugPanel', :path => '../../'
   pod 'Trikot/viewmodels.declarative.SwiftUI.flow', :git => 'git@github.com:mirego/trikot.git', :tag => $libs['trikot'], :inhibit_warnings => true
-  pod 'Popovers'
 
   post_install do |installer|
       installer.pods_project.targets.each do |target|
