@@ -1,6 +1,7 @@
 import SwiftUI
 import Trikot
 import TRIKOT_FRAMEWORK_NAME
+import DebugPanel
 
 struct ContentView: View {
     @ObservedObject private var observableViewModel: ObservableViewModelAdapter<ApplicationViewModel>
