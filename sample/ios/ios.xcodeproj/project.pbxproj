@@ -12,6 +12,7 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		66063D092B19379500477DD4 /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66063D082B19379500477DD4 /* DatePickerView.swift */; };
 		66EB931E2B1A14EC00A612A3 /* DebugPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EB931D2B1A14EC00A612A3 /* DebugPanelView.swift */; };
+		66EB93212B1A1A2E00A612A3 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EB93202B1A1A2E00A612A3 /* View.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		D7A8A99C38FD13819415D507 /* Pods_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53CDE725BFE3AE09035F4E03 /* Pods_ios.framework */; };
 /* End PBXBuildFile section */
@@ -23,6 +24,7 @@
 		53CDE725BFE3AE09035F4E03 /* Pods_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66063D082B19379500477DD4 /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		66EB931D2B1A14EC00A612A3 /* DebugPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPanelView.swift; sourceTree = "<group>"; };
+		66EB93202B1A1A2E00A612A3 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,6 +60,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		66EB931F2B1A1A2400A612A3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				66EB93202B1A1A2E00A612A3 /* View.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		6B46DC942345ACD7A3471C06 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +98,7 @@
 		7555FF7D242A565900829871 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				66EB931F2B1A1A2400A612A3 /* Extensions */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -215,6 +226,7 @@
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				66EB931E2B1A14EC00A612A3 /* DebugPanelView.swift in Sources */,
+				66EB93212B1A1A2E00A612A3 /* View.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				66063D092B19379500477DD4 /* DatePickerView.swift in Sources */,
 			);

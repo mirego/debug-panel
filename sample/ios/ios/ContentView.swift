@@ -13,14 +13,15 @@ struct ContentView: View {
         observableViewModel.viewModel.rootViewModel
     }
 
-	var body: some View {
+    var body: some View {
         ZStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 24) {
                 Text(viewModel.title)
+                    .font(.title)
                 DebugPanelView(viewModel.debugPanel)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(16)
-	}
+    }
 }

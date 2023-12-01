@@ -20,20 +20,17 @@ struct DatePickerView: View {
     var labelViewModel: VMDTextViewModel {
         observableLabelViewModel.viewModel
     }
-
+    
     @State private var selectedDate: Foundation.Date = Foundation.Date()
 
     var body: some View {
-        VStack(spacing: 16) {
-            DatePicker(labelViewModel.text, selection: $selectedDate, displayedComponents: [.date])
-                .environment(\.timeZone, TimeZone(abbreviation: "GMT")!)
-        }
-        .padding(.horizontal, 16)
-        .onAppear {
-            selectedDate = Date(timeIntervalSince1970: (Double(truncating: viewModel.date ?? 0) / 1000.0))
-        }
-        .onChange(of: selectedDate) { newValue in
-            viewModel.date = KotlinLong(longLong: Int64(newValue.timeIntervalSince1970 * 1000.0))
-        }
+        DatePicker(labelViewModel.text, selection: $selectedDate, displayedComponents: [.date])
+            .environment(\.timeZone, TimeZone(abbreviation: "GMT")!)
+            .onAppear {
+                selectedDate = Date(timeIntervalSince1970: (Double(truncating: viewModel.date ?? 0) / 1000.0))
+            }
+            .onChange(of: selectedDate) { newValue in
+                viewModel.date = KotlinLong(longLong: Int64(newValue.timeIntervalSince1970 * 1000.0))
+            }
     }
 }
