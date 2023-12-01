@@ -33,9 +33,11 @@ struct ContentView: View {
                             Text($0.text)
                         }
                     } else if let picker = item as? DebugPanelItemViewModelPicker {
-                        
+                        VMDPicker(picker.viewModel, label: picker.label) {
+                            Text($0.text)
+                        }
                     } else if let datePicker = item as? DebugPanelItemViewModelDatePicker {
-                        DatePickerView(datePicker.viewModel)
+                        DatePickerView(datePicker: datePicker)
                     }
                 }
             }
