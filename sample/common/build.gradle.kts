@@ -25,8 +25,9 @@ kotlin {
 
     cocoapods {
         name = "TRIKOT_FRAMEWORK_NAME"
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
+        summary = "Sample app for the debug panel library"
+        homepage = "https://github.com/mirego/debug-panel"
+        license = "MIT license"
         version = "1.0"
         ios.deploymentTarget = "15.0"
         framework {

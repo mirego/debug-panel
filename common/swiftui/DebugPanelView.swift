@@ -15,7 +15,7 @@ public struct DebugPanelView: View {
 
     public var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 24) {
                 VMDForEach(viewModel.items) { item in
                     if let label = item as? DebugPanelItemViewModelLabel {
                         HStack {

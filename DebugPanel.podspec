@@ -5,8 +5,7 @@ properties = load_properties('gradle.properties')
 Pod::Spec.new do |spec|
   spec.name          = "DebugPanel"
   spec.version       = "#{properties['version']}"
-  spec.summary       = "Plugins for DebugPanel"
-  spec.description   = "Plugins for DebugPanel"
+  spec.summary       = "Generic debug panel views for Swift UI applications"
   spec.homepage      = "https://github.com/mirego/debug-panel"
   spec.license       = "MIT license"
   spec.author        = { "Mathieu Larue" => "mlarue@mirego.com" }

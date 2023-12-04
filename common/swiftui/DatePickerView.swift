@@ -27,7 +27,9 @@ struct DatePickerView: View {
         DatePicker(labelViewModel.text, selection: $selectedDate, displayedComponents: [.date])
             .environment(\.timeZone, TimeZone(abbreviation: "GMT")!)
             .onAppear {
-                selectedDate = Date(timeIntervalSince1970: (Double(truncating: viewModel.date ?? 0) / 1000.0))
+                if let date = viewModel.date {
+                    selectedDate = Date(timeIntervalSince1970: (Double(truncating: date) / 1000.0))
+                }
             }
             .onChange(of: selectedDate) { newValue in
                 viewModel.date = KotlinLong(longLong: Int64(newValue.timeIntervalSince1970 * 1000.0))

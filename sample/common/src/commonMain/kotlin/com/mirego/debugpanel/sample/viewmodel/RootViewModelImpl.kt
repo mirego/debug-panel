@@ -8,10 +8,6 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 
 class RootViewModelImpl(
     coroutineScope: CoroutineScope,
@@ -27,7 +23,7 @@ class RootViewModelImpl(
             initialLastNameInput = "",
             initialEnvironments = "qa",
             initialLanguage = Language.FRENCH,
-            initialDate = LocalDateTime(2023, 11, 28, 0, 0, 0, 0).toInstant(TimeZone.UTC).toEpochMilliseconds(),
+            initialDate = Clock.System.now().toEpochMilliseconds(),
             firstName = flowOf("Some name"),
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),
