@@ -15,12 +15,10 @@ struct ContentView: View {
     }
 
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading, spacing: 24) {
-                Text(viewModel.title)
-                    .font(.title)
-                DebugPanelView(viewModel.debugPanel)
-            }
+        VStack(alignment: .leading, spacing: 24) {
+            Text(viewModel.title)
+                .font(.title)
+            DebugPanelView(viewModel.debugPanel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(16)

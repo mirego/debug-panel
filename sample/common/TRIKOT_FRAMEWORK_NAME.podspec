@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'Some description for the Shared Module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/TRIKOT_FRAMEWORK_NAME.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '14.1'
+    spec.ios.deployment_target = '15.0'
                 
                 
     spec.pod_target_xcconfig = {
@@ -35,5 +35,7 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-                
+    spec.prepare_command = <<-CMD
+    ../../gradlew :sample:common:generateDummyFramework
+CMD
 end
