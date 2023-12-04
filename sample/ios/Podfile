@@ -2,7 +2,7 @@ source 'https://cdn.cocoapods.org/'
 require_relative 'podspec_versions.rb'
 
 use_frameworks!
-platformVersion = '14.1'
+platformVersion = '15.0'
 platform :ios, platformVersion
 
 ENV['TRIKOT_FRAMEWORK_NAME']='TRIKOT_FRAMEWORK_NAME'
