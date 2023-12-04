@@ -47,10 +47,10 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                api(libs.trikot.viewmodels.declarative.flow)
+                implementation(libs.trikot.viewmodels.declarative.flow)
                 implementation(libs.kotlinx.coroutines.core)
-                api(libs.multiplatform.settings)
-                api(libs.multiplatform.settings.coroutines)
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.coroutines)
                 implementation(libs.kotlinx.datetime)
             }
         }
