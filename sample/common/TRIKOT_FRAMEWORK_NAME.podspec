@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'TRIKOT_FRAMEWORK_NAME'
     spec.version                  = '1.0'
-    spec.homepage                 = 'Link to the Shared Module homepage'
+    spec.homepage                 = 'https://github.com/mirego/debug-panel'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
-    spec.license                  = ''
-    spec.summary                  = 'Some description for the Shared Module'
+    spec.license                  = 'MIT license'
+    spec.summary                  = 'Sample app for the debug panel library'
     spec.vendored_frameworks      = 'build/cocoapods/framework/TRIKOT_FRAMEWORK_NAME.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '15.0'

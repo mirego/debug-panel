@@ -62,6 +62,18 @@ kotlin {
                 implementation(libs.mockk.android)
             }
         }
+        val iosMain by getting {
+            dependsOn(commonMain)
+        }
+        val iosArm64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosX64Main by getting {
+            dependsOn(iosMain)
+        }
     }
 }
 
