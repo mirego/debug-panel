@@ -10,8 +10,8 @@ Pod::Spec.new do |spec|
   spec.homepage      = "https://github.com/mirego/debug-panel"
   spec.license       = "MIT license"
   spec.author        = { "Mathieu Larue" => "mlarue@mirego.com" }
-  spec.source        = { :git => "https://github.com/mirego/debug-panel.git", :branch => "origin/feature/ios-ui" }
-  spec.source_files = 'common/src/iosMain/swiftui/**/*.swift'
+  spec.source        = { :git => 'https://github.com/mirego/debug-panel', :branch => 'feature/ios-ui' }
+  spec.source_files = 'common/swiftui/**/*.swift'
   spec.dependency 'Popovers'
   spec.dependency 'Trikot/viewmodels.declarative.SwiftUI.flow'
 
