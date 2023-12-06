@@ -16,6 +16,7 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.textField
 import com.mirego.trikot.viewmodels.declarative.viewmodel.toggleWithText
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -28,6 +29,11 @@ class DebugPanelViewModelImpl(
     private val useCase: DebugPanelUseCase,
     viewData: DebugPanelViewData
 ) : VMDViewModelImpl(coroutineScope), DebugPanelViewModel {
+    private val DebugPanelItemViewData.labelWithDirtyIndicator: Flow<VMDTextContent>
+        get() = isDirty.map { isDirty ->
+            VMDTextContent(label + "*".takeIf { isDirty }.orEmpty())
+        }
+
     override val items = list(
         viewData.items.map { item ->
             when (item) {
@@ -44,6 +50,8 @@ class DebugPanelViewModelImpl(
     private fun createToggle(viewData: DebugPanelItemViewData.Toggle) = DebugPanelItemViewModel.Toggle(
         identifier = viewData.identifier,
         viewModel = toggleWithText(viewData.label, viewData.initialValue ?: false) {
+            bindContent(viewData.labelWithDirtyIndicator)
+
             coroutineScope.launch {
                 flowForProperty(::isOn)
                     .drop(1)
@@ -57,7 +65,7 @@ class DebugPanelViewModelImpl(
 
     private fun createTextField(viewData: DebugPanelItemViewData.TextField) = DebugPanelItemViewModel.TextField(
         identifier = viewData.identifier,
-        viewModel = textField(viewData.initialValue.orEmpty(), viewData.placeholder) {
+        viewModel = textField(text = viewData.initialValue.orEmpty(), placeholder = viewData.label) {
             coroutineScope.launch {
                 flowForProperty(::text)
                     .drop(1)
