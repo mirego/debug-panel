@@ -24,14 +24,24 @@ kotlin {
     iosSimulatorArm64()
 
     cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
+        name = "TRIKOT_FRAMEWORK_NAME"
+        summary = "Sample app for the debug panel library"
+        homepage = "https://github.com/mirego/debug-panel"
+        license = "MIT license"
         version = "1.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../ios/Podfile")
+        ios.deploymentTarget = "15.0"
         framework {
-            baseName = "common"
+            baseName = "TRIKOT_FRAMEWORK_NAME"
+            transitiveExport = true
+            export(projects.debugPanel.common)
         }
+        extraSpecAttributes = mutableMapOf(
+            "prepare_command" to """
+                <<-CMD
+                    ../../gradlew :sample:common:generateDummyFramework
+                CMD
+            """.trimIndent()
+        )
     }
 
     sourceSets {
@@ -39,7 +49,7 @@ kotlin {
             dependencies {
                 api(projects.debugPanel.common)
                 implementation(projects.annotations)
-                api(libs.viewmodels.declarative.flow)
+                api(libs.trikot.viewmodels.declarative.flow)
                 api(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.datetime)
             }

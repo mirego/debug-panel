@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.viewmodels.declarative.compose.flow)
+    implementation(libs.trikot.viewmodels.declarative.compose.flow)
 }
 
 ktlint {

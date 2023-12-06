@@ -1,5 +1,26 @@
+source 'https://cdn.cocoapods.org/'
+require_relative 'podspec_versions.rb'
+
+use_frameworks!
+platformVersion = '15.0'
+platform :ios, platformVersion
+
+ENV['TRIKOT_FRAMEWORK_NAME']='TRIKOT_FRAMEWORK_NAME'
+
 target 'ios' do
-  use_frameworks!
-  platform :ios, '14.1'
-  pod 'common', :path => '../common'
+  $libs = load_properties('../../gradle/libs.versions.toml')
+
+  pod 'TRIKOT_FRAMEWORK_NAME', :path => '../common'
+  pod 'DebugPanel', :path => '../../'
+  pod 'Trikot/viewmodels.declarative.SwiftUI.flow', :git => 'git@github.com:mirego/trikot.git', :tag => $libs['trikot'], :inhibit_warnings => true
+
+  post_install do |installer|
+      installer.pods_project.targets.each do |target|
+          target.build_configurations.each do |config|
+              if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < platformVersion.to_f
+              config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = platformVersion
+              end
+          end
+      end
+  end
 end
