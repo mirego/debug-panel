@@ -20,7 +20,9 @@ public struct DebugPanelView: View {
                     if let label = item as? DebugPanelItemViewModelLabel {
                         HStack {
                             VMDText(label.label)
+                            Spacer()
                             VMDText(label.viewModel)
+                                .textSelection(.enabled)
                         }
                     } else if let toggle = item as? DebugPanelItemViewModelToggle {
                         VMDToggle(toggle.viewModel)
