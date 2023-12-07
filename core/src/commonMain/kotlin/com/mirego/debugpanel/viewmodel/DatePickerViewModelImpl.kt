@@ -5,6 +5,8 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.internal.VMDFlowProper
 import com.mirego.trikot.viewmodels.declarative.viewmodel.internal.emit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 open class DatePickerViewModelImpl(
     coroutineScope: CoroutineScope,
@@ -19,7 +21,15 @@ open class DatePickerViewModelImpl(
     override var showPicker: (() -> Unit)? = null
 
     fun bindText(flow: Flow<String>) {
-        updateProperty(this::text, flow)
+        val property = this::text
+
+        coroutineScope.launch {
+            flow
+                .catch {
+                    println("Error setting flow property")
+                }
+                .collect { property.setValue(this, property, it) }
+        }
     }
 
     override val propertyMapping: Map<String, VMDFlowProperty<*>> by lazy {
