@@ -21,7 +21,7 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifactId = "processor"
+            artifactId = "compiler"
             from(components["java"])
         }
     }
