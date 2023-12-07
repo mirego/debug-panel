@@ -1,5 +1,5 @@
 PODS:
-  - DebugPanel (1.0.3-SNAPSHOT):
+  - DebugPanel (1.0.2-SNAPSHOT):
     - Popovers
     - Trikot/viewmodels.declarative.SwiftUI.flow
     - TRIKOT_FRAMEWORK_NAME
@@ -41,7 +41,7 @@ CHECKOUT OPTIONS:
     :tag: 5.3.0-dev2693
 
 SPEC CHECKSUMS:
-  DebugPanel: 0d4a0a5bf71ca9a20a081a2cb24e9178d66e6096
+  DebugPanel: eb5860cc41e233bcfe37d822c353c33b79011915
   Kingfisher: 63f677311d36a3473f6b978584f8a3845d023dc5
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   SwiftUIIntrospect: db5290a3492424eb4afcab77cebcd4595de3bd71
