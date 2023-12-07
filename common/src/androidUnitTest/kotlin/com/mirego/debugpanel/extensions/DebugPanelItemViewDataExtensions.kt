@@ -15,7 +15,7 @@ val DebugPanelItemViewData.textField: DebugPanelItemViewData.TextField
 val DebugPanelItemViewData.picker: DebugPanelItemViewData.Picker
     get() = assertNotNull(this as? DebugPanelItemViewData.Picker)
 
-val DebugPanelItemViewData.label: DebugPanelItemViewData.Label
+val DebugPanelItemViewData.labelItem: DebugPanelItemViewData.Label
     get() = assertNotNull(this as? DebugPanelItemViewData.Label)
 
 val DebugPanelItemViewData.datePicker: DebugPanelItemViewData.DatePicker

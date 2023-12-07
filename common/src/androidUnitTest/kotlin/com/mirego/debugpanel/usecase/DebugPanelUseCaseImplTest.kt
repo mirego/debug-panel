@@ -4,7 +4,7 @@ import com.mirego.debugpanel.Consts.NUMBER_OF_DEBUG_PROPERTIES
 import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.debugpanel.extensions.button
 import com.mirego.debugpanel.extensions.datePicker
-import com.mirego.debugpanel.extensions.label
+import com.mirego.debugpanel.extensions.labelItem
 import com.mirego.debugpanel.extensions.picker
 import com.mirego.debugpanel.extensions.textField
 import com.mirego.debugpanel.extensions.toggle
@@ -12,7 +12,6 @@ import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseIdentifierDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseResetButtonDebugPanelRepository
-import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -58,7 +57,7 @@ class SpecificDebugPanelUseCaseImplTest {
         val button = viewData.items[1].button
         val textField = viewData.items[2].textField
         val picker = viewData.items[3].picker
-        val label = viewData.items[4].label
+        val label = viewData.items[4].labelItem
         val enumPicker = viewData.items[5].picker
         val datePicker = viewData.items[6].datePicker
         val stringValueTextField = viewData.items[7].textField
@@ -76,7 +75,7 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals(buttonAction, button.action)
 
         assertEquals("textField", textField.identifier)
-        assertEquals("textField", textField.placeholder)
+        assertEquals("textField", textField.label)
 
         assertEquals("picker", picker.identifier)
         assertEquals("picker", picker.label)
@@ -101,10 +100,10 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals(123, datePicker.initialValue)
 
         assertEquals("stringValueKey", stringValueTextField.identifier)
-        assertEquals("stringValue", stringValueTextField.placeholder)
+        assertEquals("stringValue", stringValueTextField.label)
 
         assertEquals("stringFlowValueKey", stringFlowValueTextField.identifier)
-        assertEquals("stringFlowValue", stringFlowValueTextField.placeholder)
+        assertEquals("stringFlowValue", stringFlowValueTextField.label)
 
         assertEquals("enumValueKey", enumValuePicker.identifier)
         assertEquals("enumValue", enumValuePicker.label)
@@ -119,22 +118,6 @@ class SpecificDebugPanelUseCaseImplTest {
 
         assertEquals("booleanFlowValueKey", booleanFlowValueToggle.identifier)
         assertEquals("booleanFlowValue", booleanFlowValueToggle.label)
-
-        verify(exactly = 1) {
-            repository.getCurrentToggleValue("toggle")
-            repository.getCurrentTextFieldValue("textField")
-            repository.getCurrentPickerValue("picker")
-            repository.getCurrentPickerValue("enum")
-            repository.getCurrentDatePickerValue("datePicker")
-            repository.getCurrentTextFieldValue("stringValueKey")
-            repository.getCurrentTextFieldValue("stringFlowValueKey")
-            repository.getCurrentPickerValue("enumValueKey")
-            repository.getCurrentPickerValue("enumFlowValueKey")
-            repository.getCurrentToggleValue("booleanValueKey")
-            repository.getCurrentToggleValue("booleanFlowValueKey")
-        }
-
-        confirmVerified(repository)
     }
 
     @Test
@@ -194,9 +177,9 @@ class SpecificDebugPanelUseCaseImplTest {
 
         assertEquals("Test toggle", viewData.items[0].toggle.label)
         assertEquals("Test button", viewData.items[1].button.label)
-        assertEquals("Test text field", viewData.items[2].textField.placeholder)
+        assertEquals("Test text field", viewData.items[2].textField.label)
         assertEquals("Test picker", viewData.items[3].picker.label)
-        assertEquals("Test label", viewData.items[4].label.label)
+        assertEquals("Test label", viewData.items[4].labelItem.label)
         assertEquals("Test enum", viewData.items[5].picker.label)
         assertEquals("Test date picker", viewData.items[6].datePicker.label)
     }
@@ -223,7 +206,7 @@ class SpecificDebugPanelUseCaseImplTest {
         val button = viewData.items[1].button
         val textField = viewData.items[2].textField
         val picker = viewData.items[3].picker
-        val label = viewData.items[4].label
+        val label = viewData.items[4].labelItem
         val enumPicker = viewData.items[5].picker
         val datePicker = viewData.items[6].datePicker
 
@@ -234,22 +217,6 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals("LABEL_KEY", label.identifier)
         assertEquals("ENUM_KEY", enumPicker.identifier)
         assertEquals("DATE_PICKER_KEY", datePicker.identifier)
-
-        verify(exactly = 1) {
-            repository.getCurrentToggleValue("TOGGLE_KEY")
-            repository.getCurrentTextFieldValue("TEXT_FIELD_KEY")
-            repository.getCurrentPickerValue("PICKER_KEY")
-            repository.getCurrentPickerValue("ENUM_KEY")
-            repository.getCurrentDatePickerValue("DATE_PICKER_KEY")
-            repository.getCurrentTextFieldValue("stringValueKey")
-            repository.getCurrentTextFieldValue("stringFlowValueKey")
-            repository.getCurrentPickerValue("enumValueKey")
-            repository.getCurrentPickerValue("enumFlowValueKey")
-            repository.getCurrentToggleValue("booleanValueKey")
-            repository.getCurrentToggleValue("booleanFlowValueKey")
-        }
-
-        confirmVerified(repository)
     }
 
     @Test

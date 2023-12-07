@@ -30,12 +30,14 @@ class DebugPanelViewModelImplTest {
         DebugPanelItemViewData.Toggle(
             identifier = "toggleId",
             label = "toggle",
-            initialValue = false
+            initialValue = false,
+            isDirty = flowOf(false)
         ),
         DebugPanelItemViewData.TextField(
             identifier = "textFieldId",
-            placeholder = "textField",
-            initialValue = "text"
+            label = "textField",
+            initialValue = "text",
+            isDirty = flowOf(false)
         ),
         DebugPanelItemViewData.Button(
             identifier = "actionId",
@@ -54,7 +56,8 @@ class DebugPanelViewModelImplTest {
             items = listOf(
                 DebugPanelPickerItem("item0", "Item 0"),
                 DebugPanelPickerItem("item1", "Item 1")
-            )
+            ),
+            isDirty = flowOf(false)
         ),
         DebugPanelItemViewData.Picker(
             identifier = "pickerId2",
@@ -63,12 +66,14 @@ class DebugPanelViewModelImplTest {
             items = listOf(
                 DebugPanelPickerItem("item0", "Item 0"),
                 DebugPanelPickerItem("item1", "Item 1")
-            )
+            ),
+            isDirty = flowOf(false)
         ),
         DebugPanelItemViewData.DatePicker(
             identifier = "datePickerId",
             label = "datePicker",
-            initialValue = 123
+            initialValue = 123,
+            isDirty = flowOf(false)
         )
     )
 
