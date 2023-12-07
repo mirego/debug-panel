@@ -37,12 +37,14 @@ kotlin {
                 implementation(libs.androidx.startup.runtime)
                 implementation(libs.androidx.preference.ktx)
 
+                implementation(project.dependencies.platform(libs.compose))
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.compose.material3)
                 implementation(libs.androidx.activity.compose)
-                implementation(libs.trikot.viewmodels.declarative.compose.flow)
                 implementation(libs.compose.utils)
+
+                implementation(libs.trikot.viewmodels.declarative.compose.flow)
             }
         }
         val commonMain by getting {
