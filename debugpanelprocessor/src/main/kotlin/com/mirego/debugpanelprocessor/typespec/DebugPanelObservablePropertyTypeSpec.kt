@@ -63,8 +63,8 @@ internal object DebugPanelObservablePropertyTypeSpec {
                 .build(),
             listOf(
                 Import(Consts.SERVICE_PACKAGE_NAME, "DebugPanelSettings"),
-                Import("kotlinx.coroutines.flow", "flatMapLatest"),
-                Import("kotlinx.coroutines.flow", "flowOf")
+                Import(Consts.FLOW_PACKAGE_NAME, "flatMapLatest"),
+                Import(Consts.FLOW_PACKAGE_NAME, "flowOf")
             )
         )
     }

@@ -37,8 +37,7 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
             DebugPanelItemViewData.Label(
                 identifier = "label",
                 label = "Label:",
-                value = flowOf("Value"),
-                isDirty = flowOf(false)
+                value = flowOf("Value")
             ),
             DebugPanelItemViewData.Picker(
                 identifier = "picker",
@@ -50,8 +49,7 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
             DebugPanelItemViewData.Button(
                 identifier = "button",
                 label = "Tap me",
-                action = {},
-                isDirty = flowOf(false)
+                action = {}
             )
         )
     )

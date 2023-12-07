@@ -29,9 +29,9 @@ class DebugPanelViewModelImpl(
     private val useCase: DebugPanelUseCase,
     viewData: DebugPanelViewData
 ) : VMDViewModelImpl(coroutineScope), DebugPanelViewModel {
-    private val DebugPanelItemViewData.labelWithDirtyIndicator: Flow<VMDTextContent>
+    private val DebugPanelItemViewData.labelWithDirtyIndicator: Flow<String>
         get() = isDirty.map { isDirty ->
-            VMDTextContent(label + "*".takeIf { isDirty }.orEmpty())
+            label + "*".takeIf { isDirty }.orEmpty()
         }
 
     override val items = list(
@@ -50,7 +50,7 @@ class DebugPanelViewModelImpl(
     private fun createToggle(viewData: DebugPanelItemViewData.Toggle) = DebugPanelItemViewModel.Toggle(
         identifier = viewData.identifier,
         viewModel = toggleWithText(viewData.label, viewData.initialValue ?: false) {
-            bindContent(viewData.labelWithDirtyIndicator)
+            bindContent(viewData.labelWithDirtyIndicator.map { VMDTextContent(it) })
 
             coroutineScope.launch {
                 flowForProperty(::isOn)
@@ -117,7 +117,9 @@ class DebugPanelViewModelImpl(
         }
         return DebugPanelItemViewModel.Picker(
             identifier = viewData.identifier,
-            label = text(viewData.label),
+            label = text(viewData.label) {
+                bindText(viewData.labelWithDirtyIndicator)
+            },
             selectedItem = text {
                 val initialValue = text
                 bindText(
@@ -132,7 +134,9 @@ class DebugPanelViewModelImpl(
 
     private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
         identifier = viewData.identifier,
-        label = text(viewData.label),
+        label = text(viewData.label) {
+            bindText(viewData.labelWithDirtyIndicator)
+        },
         viewModel = datePicker(initialDate = viewData.initialValue) {
             isEnabled = false
             bindText(

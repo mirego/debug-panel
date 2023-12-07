@@ -3,6 +3,7 @@ package com.mirego.debugpanel.usecase
 import com.mirego.debugpanel.config.DebugPanelPickerItem
 import com.mirego.trikot.viewmodels.declarative.content.VMDIdentifiableContent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     val label: String
@@ -25,9 +26,10 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class Label(
         override val identifier: String,
         override val label: String,
-        val value: Flow<String>,
-        override val isDirty: Flow<Boolean>
-    ) : DebugPanelItemViewData
+        val value: Flow<String>
+    ) : DebugPanelItemViewData {
+        override val isDirty = flowOf(false)
+    }
 
     data class Picker(
         override val identifier: String,
@@ -47,7 +49,8 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
     data class Button(
         override val identifier: String,
         override val label: String,
-        val action: () -> Unit,
-        override val isDirty: Flow<Boolean>
-    ) : DebugPanelItemViewData
+        val action: () -> Unit
+    ) : DebugPanelItemViewData {
+        override val isDirty = flowOf(false)
+    }
 }

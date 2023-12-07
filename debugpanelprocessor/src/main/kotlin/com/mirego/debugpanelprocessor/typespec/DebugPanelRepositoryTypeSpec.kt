@@ -27,7 +27,7 @@ internal object DebugPanelRepositoryTypeSpec {
             val baseRepositoryFunctionName = "get${component.componentTypeName}Value"
 
             InterfaceImplementation.Function(
-                name = "get${component.name.capitalize()}",
+                name = getComponentValueFunctionName(component),
                 returnType = FLOW.plusParameter(returnType.copy(nullable = true)),
                 code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")"
             )
@@ -61,4 +61,7 @@ internal object DebugPanelRepositoryTypeSpec {
 
         return (componentGettersFlow + componentGetters + resetSettings).asIterable()
     }
+
+    fun getComponentValueFunctionName(component: Component): String =
+        "get${component.name.capitalize()}"
 }
