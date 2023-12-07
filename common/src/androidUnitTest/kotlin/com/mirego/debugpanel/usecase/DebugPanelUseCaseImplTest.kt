@@ -16,6 +16,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -237,5 +239,93 @@ class SpecificDebugPanelUseCaseImplTest {
         verify(exactly = 1) {
             repository.resetSettings()
         }
+    }
+
+    @Test
+    fun `expect isDirty to be false when no values are returned`() = runTest {
+        val repository: TestUseCaseDebugPanelRepository = mockk()
+        val useCase = TestUseCaseDebugPanelUseCaseImpl(repository)
+
+        val pickerItems: List<DebugPanelPickerItem> = listOf(mockk(), mockk())
+        val buttonAction = {}
+
+        every { repository.getToggle() } returns flowOf(null)
+        every { repository.getTextField() } returns flowOf(null)
+        every { repository.getPicker() } returns flowOf(null)
+        every { repository.getEnum() } returns flowOf(null)
+        every { repository.getDatePicker() } returns flowOf(null)
+
+        val viewData = useCase.createViewData(
+            initialToggle = true,
+            initialTextField = "textField value",
+            initialPicker = "item1",
+            initialEnum = TestEnum.VALUE_1,
+            button = buttonAction,
+            picker = pickerItems,
+            label = flowOf("label value"),
+            initialDatePicker = 123L
+        )
+
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
+
+        val toggle = viewData.items[0].toggle
+        val button = viewData.items[1].button
+        val textField = viewData.items[2].textField
+        val picker = viewData.items[3].picker
+        val label = viewData.items[4].labelItem
+        val enumPicker = viewData.items[5].picker
+        val datePicker = viewData.items[6].datePicker
+
+        assertFalse(toggle.isDirty.first())
+        assertFalse(button.isDirty.first())
+        assertFalse(textField.isDirty.first())
+        assertFalse(picker.isDirty.first())
+        assertFalse(label.isDirty.first())
+        assertFalse(enumPicker.isDirty.first())
+        assertFalse(datePicker.isDirty.first())
+    }
+
+    @Test
+    fun `expect isDirty to be true when values are returned`() = runTest {
+        val repository: TestUseCaseDebugPanelRepository = mockk()
+        val useCase = TestUseCaseDebugPanelUseCaseImpl(repository)
+
+        val pickerItems: List<DebugPanelPickerItem> = listOf(mockk(), mockk())
+        val buttonAction = {}
+
+        every { repository.getToggle() } returns flowOf(false)
+        every { repository.getTextField() } returns flowOf("")
+        every { repository.getPicker() } returns flowOf("")
+        every { repository.getEnum() } returns flowOf("")
+        every { repository.getDatePicker() } returns flowOf(0)
+
+        val viewData = useCase.createViewData(
+            initialToggle = true,
+            initialTextField = "textField value",
+            initialPicker = "item1",
+            initialEnum = TestEnum.VALUE_1,
+            button = buttonAction,
+            picker = pickerItems,
+            label = flowOf("label value"),
+            initialDatePicker = 123L
+        )
+
+        assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
+
+        val toggle = viewData.items[0].toggle
+        val button = viewData.items[1].button
+        val textField = viewData.items[2].textField
+        val picker = viewData.items[3].picker
+        val label = viewData.items[4].labelItem
+        val enumPicker = viewData.items[5].picker
+        val datePicker = viewData.items[6].datePicker
+
+        assertTrue(toggle.isDirty.first())
+        assertFalse(button.isDirty.first())
+        assertTrue(textField.isDirty.first())
+        assertTrue(picker.isDirty.first())
+        assertFalse(label.isDirty.first())
+        assertTrue(enumPicker.isDirty.first())
+        assertTrue(datePicker.isDirty.first())
     }
 }
