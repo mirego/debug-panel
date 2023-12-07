@@ -25,7 +25,6 @@ struct DatePickerView: View {
 
     var body: some View {
         DatePicker(labelViewModel.text, selection: $selectedDate, displayedComponents: [.date])
-            .environment(\.timeZone, TimeZone(abbreviation: "GMT")!)
             .onAppear {
                 if let date = viewModel.date {
                     selectedDate = Date(timeIntervalSince1970: (Double(truncating: date) / 1000.0))
