@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor.typespec
+package com.mirego.debugpanel.processor.typespec
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec

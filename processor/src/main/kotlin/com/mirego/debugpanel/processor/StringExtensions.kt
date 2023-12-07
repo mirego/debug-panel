@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanel.processor
 
 import java.util.Locale
 

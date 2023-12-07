@@ -1,7 +1,7 @@
-package com.mirego.debugpanelprocessor.typespec
+package com.mirego.debugpanel.processor.typespec
 
-import com.mirego.debugpanelprocessor.Component
-import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanel.processor.Component
+import com.mirego.debugpanel.processor.capitalize
 
 internal object DebugPanelItemViewDataFactory {
     fun createToggle(component: Component.Toggle): String {

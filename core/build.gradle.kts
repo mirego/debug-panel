@@ -95,7 +95,7 @@ android {
 }
 
 dependencies {
-    add("kspAndroidTest", projects.debugpanelprocessor)
+    add("kspAndroidTest", projects.processor)
 }
 
 ktlint {

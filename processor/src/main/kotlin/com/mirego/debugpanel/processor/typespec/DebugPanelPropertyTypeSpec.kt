@@ -1,9 +1,9 @@
-package com.mirego.debugpanelprocessor.typespec
+package com.mirego.debugpanel.processor.typespec
 
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
-import com.mirego.debugpanelprocessor.Consts
+import com.mirego.debugpanel.processor.Consts
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy

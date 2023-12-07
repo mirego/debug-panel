@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanel.processor
 
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -9,16 +9,16 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.Identifier
-import com.mirego.debugpanelprocessor.Consts.FLOW
-import com.mirego.debugpanelprocessor.Consts.REPOSITORY_IMPL_NAME
-import com.mirego.debugpanelprocessor.Consts.REPOSITORY_NAME
-import com.mirego.debugpanelprocessor.Consts.USE_CASE_IMPL_NAME
-import com.mirego.debugpanelprocessor.Consts.USE_CASE_NAME
-import com.mirego.debugpanelprocessor.typespec.DebugPanelObservablePropertyTypeSpec
-import com.mirego.debugpanelprocessor.typespec.DebugPanelPropertyTypeSpec
-import com.mirego.debugpanelprocessor.typespec.DebugPanelRepositoryTypeSpec
-import com.mirego.debugpanelprocessor.typespec.DebugPanelUseCaseTypeSpec
-import com.mirego.debugpanelprocessor.typespec.TypeSpecWithImports
+import com.mirego.debugpanel.processor.Consts.FLOW
+import com.mirego.debugpanel.processor.Consts.REPOSITORY_IMPL_NAME
+import com.mirego.debugpanel.processor.Consts.REPOSITORY_NAME
+import com.mirego.debugpanel.processor.Consts.USE_CASE_IMPL_NAME
+import com.mirego.debugpanel.processor.Consts.USE_CASE_NAME
+import com.mirego.debugpanel.processor.typespec.DebugPanelObservablePropertyTypeSpec
+import com.mirego.debugpanel.processor.typespec.DebugPanelPropertyTypeSpec
+import com.mirego.debugpanel.processor.typespec.DebugPanelRepositoryTypeSpec
+import com.mirego.debugpanel.processor.typespec.DebugPanelUseCaseTypeSpec
+import com.mirego.debugpanel.processor.typespec.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ksp.writeTo

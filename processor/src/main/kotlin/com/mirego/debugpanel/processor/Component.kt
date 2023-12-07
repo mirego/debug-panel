@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanel.processor
 
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSDeclarationContainer

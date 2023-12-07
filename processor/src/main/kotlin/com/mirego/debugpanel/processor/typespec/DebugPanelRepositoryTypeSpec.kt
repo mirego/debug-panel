@@ -1,9 +1,9 @@
-package com.mirego.debugpanelprocessor.typespec
+package com.mirego.debugpanel.processor.typespec
 
-import com.mirego.debugpanelprocessor.Component
-import com.mirego.debugpanelprocessor.Consts
-import com.mirego.debugpanelprocessor.Consts.FLOW
-import com.mirego.debugpanelprocessor.capitalize
+import com.mirego.debugpanel.processor.Component
+import com.mirego.debugpanel.processor.Consts
+import com.mirego.debugpanel.processor.Consts.FLOW
+import com.mirego.debugpanel.processor.capitalize
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.plusParameter

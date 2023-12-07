@@ -21,7 +21,7 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifactId = "debugpanelprocessor"
+            artifactId = "processor"
             from(components["java"])
         }
     }

@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor.typespec
+package com.mirego.debugpanel.processor.typespec
 
 internal data class Import(
     val packageName: String,

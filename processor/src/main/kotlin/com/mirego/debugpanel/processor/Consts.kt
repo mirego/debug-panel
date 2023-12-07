@@ -1,4 +1,4 @@
-package com.mirego.debugpanelprocessor
+package com.mirego.debugpanel.processor
 
 import com.squareup.kotlinpoet.ANY
 import com.squareup.kotlinpoet.ClassName

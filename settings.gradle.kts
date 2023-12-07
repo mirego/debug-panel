@@ -25,6 +25,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "DebugPanel"
 include(":core")
-include(":debugpanelprocessor")
+include(":processor")
 include(":annotations")
 include(":sample", ":sample:android", ":sample:common")

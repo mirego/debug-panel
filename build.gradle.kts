@@ -19,7 +19,7 @@ allprojects {
 }
 
 release {
-    checkTasks = listOf(":annotations:check", ":core:check", ":debugpanelprocessor:check")
-    buildTasks = listOf(":annotations:publish", ":core:publish", ":debugpanelprocessor:publish")
+    checkTasks = listOf(":annotations:check", ":core:check", ":processor:check")
+    buildTasks = listOf(":annotations:publish", ":core:publish", ":processor:publish")
     updateVersionPart = 2
 }

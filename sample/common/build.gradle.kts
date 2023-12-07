@@ -72,7 +72,7 @@ android {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", projects.debugpanelprocessor)
+    add("kspCommonMainMetadata", projects.processor)
 }
 
 ktlint {
