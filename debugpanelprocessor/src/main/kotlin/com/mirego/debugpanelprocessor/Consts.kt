@@ -19,8 +19,10 @@ internal object Consts {
     const val USE_CASE_NAME = "DebugPanelUseCase"
     const val USE_CASE_IMPL_NAME = "DebugPanelUseCaseImpl"
 
-    val SERVICE_PACKAGE_NAME = "$BASE_PACKAGE_NAME.service"
+    const val SERVICE_PACKAGE_NAME = "$BASE_PACKAGE_NAME.service"
 
-    val FLOW = ClassName("kotlinx.coroutines.flow", "Flow")
+    const val FLOW_PACKAGE_NAME = "kotlinx.coroutines.flow"
+
+    val FLOW = ClassName(FLOW_PACKAGE_NAME, "Flow")
     val WILDCARD = WildcardTypeName.producerOf(ANY.copy(nullable = true))
 }

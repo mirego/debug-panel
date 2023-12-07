@@ -18,6 +18,8 @@ import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -26,16 +28,18 @@ import runTestWithPendingCoroutines
 class DebugPanelViewModelImplTest {
     private val useCase: DebugPanelUseCase = mockk()
 
-    private fun createEveryItems(buttonAction: () -> Unit = {}): List<DebugPanelItemViewData> = listOf(
+    private fun createEveryItems(isDirty: Flow<Boolean> = flowOf(false), buttonAction: () -> Unit = {}): List<DebugPanelItemViewData> = listOf(
         DebugPanelItemViewData.Toggle(
             identifier = "toggleId",
             label = "toggle",
-            initialValue = false
+            initialValue = false,
+            isDirty = isDirty
         ),
         DebugPanelItemViewData.TextField(
             identifier = "textFieldId",
-            placeholder = "textField",
-            initialValue = "text"
+            label = "textField",
+            initialValue = "text",
+            isDirty = isDirty
         ),
         DebugPanelItemViewData.Button(
             identifier = "actionId",
@@ -54,7 +58,8 @@ class DebugPanelViewModelImplTest {
             items = listOf(
                 DebugPanelPickerItem("item0", "Item 0"),
                 DebugPanelPickerItem("item1", "Item 1")
-            )
+            ),
+            isDirty = isDirty
         ),
         DebugPanelItemViewData.Picker(
             identifier = "pickerId2",
@@ -63,12 +68,14 @@ class DebugPanelViewModelImplTest {
             items = listOf(
                 DebugPanelPickerItem("item0", "Item 0"),
                 DebugPanelPickerItem("item1", "Item 1")
-            )
+            ),
+            isDirty = isDirty
         ),
         DebugPanelItemViewData.DatePicker(
             identifier = "datePickerId",
             label = "datePicker",
-            initialValue = 123
+            initialValue = 123,
+            isDirty = isDirty
         )
     )
 
@@ -186,6 +193,34 @@ class DebugPanelViewModelImplTest {
         }
 
         confirmVerified(useCase)
+    }
+
+    @Test
+    fun `when isDirty returns true expect the label to be updated`() = runTestWithPendingCoroutines {
+        val isDirty = MutableStateFlow(false)
+
+        val viewDataList = DebugPanelViewData(createEveryItems(isDirty))
+        val viewModel = createViewModel(viewDataList)
+
+        advanceUntilIdle()
+
+        assertEquals(7, viewModel.items.elements.size)
+
+        val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
+        val picker = viewModel.items.elements[4] as DebugPanelItemViewModel.Picker
+        val datePicker = viewModel.items.elements[6] as DebugPanelItemViewModel.DatePicker
+
+        assertEquals("toggle", toggle.viewModel.label.text)
+        assertEquals("picker", picker.label.text)
+        assertEquals("datePicker", datePicker.label.text)
+
+        isDirty.value = true
+
+        advanceUntilIdle()
+
+        assertEquals("toggle*", toggle.viewModel.label.text)
+        assertEquals("picker*", picker.label.text)
+        assertEquals("datePicker*", datePicker.label.text)
     }
 
     private fun TestScope.createViewModel(viewData: DebugPanelViewData) = DebugPanelViewModelImpl(

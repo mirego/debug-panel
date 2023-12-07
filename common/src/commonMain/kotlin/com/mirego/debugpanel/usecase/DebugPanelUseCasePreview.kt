@@ -25,12 +25,14 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
             DebugPanelItemViewData.Toggle(
                 identifier = "toggle",
                 label = "Toggle",
-                initialValue = true
+                initialValue = true,
+                isDirty = flowOf(false)
             ),
             DebugPanelItemViewData.TextField(
                 identifier = "textField",
-                placeholder = "Text field",
-                initialValue = null
+                label = "Text field",
+                initialValue = null,
+                isDirty = flowOf(false)
             ),
             DebugPanelItemViewData.Label(
                 identifier = "label",
@@ -41,7 +43,8 @@ open class DebugPanelUseCasePreview : DebugPanelUseCase {
                 identifier = "picker",
                 label = "Picker",
                 initialValue = "",
-                items = listOf(DebugPanelPickerItem("id", "Item"))
+                items = listOf(DebugPanelPickerItem("id", "Item")),
+                isDirty = flowOf(false)
             ),
             DebugPanelItemViewData.Button(
                 identifier = "button",

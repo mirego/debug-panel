@@ -8,11 +8,13 @@ internal object DebugPanelItemViewDataFactory {
         val identifier = component.safeIdentifier
         val label = component.safeDisplayName
         val initialValue = "repository.getCurrentToggleValue(\"$identifier\")${getFallbackValuePart(component)}"
+        val isDirty = component.isDirtyParam
 
         return """DebugPanelItemViewData.Toggle(⇥
             |"$identifier",
             |"$label",
-            |$initialValue
+            |$initialValue,
+            |$isDirty
             |⇤)"""
     }
 
@@ -20,11 +22,13 @@ internal object DebugPanelItemViewDataFactory {
         val identifier = component.safeIdentifier
         val placeholder = component.safeDisplayName
         val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\")${getFallbackValuePart(component)}"
+        val isDirty = component.isDirtyParam
 
         return """DebugPanelItemViewData.TextField(⇥
             |"$identifier",
             |"$placeholder",
-            |$initialValue
+            |$initialValue,
+            |$isDirty
             |⇤)"""
     }
 
@@ -45,12 +49,14 @@ internal object DebugPanelItemViewDataFactory {
         val label = component.safeDisplayName
         val initialValue = "repository.getCurrentPickerValue(\"$identifier\")${getFallbackValuePart(component)}"
         val items = component.name
+        val isDirty = component.isDirtyParam
 
         return """DebugPanelItemViewData.Picker(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
-            |$items
+            |$items,
+            |$isDirty
             |⇤)"""
     }
 
@@ -58,11 +64,13 @@ internal object DebugPanelItemViewDataFactory {
         val identifier = component.safeIdentifier
         val label = component.safeDisplayName
         val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\")${getFallbackValuePart(component)}"
+        val isDirty = component.isDirtyParam
 
         return """DebugPanelItemViewData.DatePicker(⇥
             |"$identifier",
             |"$label",
-            |$initialValue
+            |$initialValue,
+            |$isDirty
             |⇤)"""
     }
 
@@ -73,12 +81,14 @@ internal object DebugPanelItemViewDataFactory {
         val items = """listOf(⇥
             |${component.values.joinToString(",\n") { "DebugPanelPickerItem(\"$it\", \"${it.lowercase().capitalize()}\")" }}
             |⇤)"""
+        val isDirty = component.isDirtyParam
 
         return """DebugPanelItemViewData.Picker(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
-            |$items
+            |$items,
+            |$isDirty
             |⇤)"""
     }
 
@@ -109,4 +119,10 @@ internal object DebugPanelItemViewDataFactory {
 
     private val Component.initialValueParamName
         get() = "initial${name.capitalize()}"
+
+    private val Component.isDirtyParam: String
+        get() {
+            val componentValueFunctionName = DebugPanelRepositoryTypeSpec.getComponentValueFunctionName(this)
+            return "repository.$componentValueFunctionName().map { it != null }"
+        }
 }
