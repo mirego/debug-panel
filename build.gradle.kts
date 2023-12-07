@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.mirego.publish)
+    alias(libs.plugins.mirego.release)
 }
 
 allprojects {
@@ -15,4 +16,10 @@ allprojects {
         google()
         maven(url = "https://s3.amazonaws.com/mirego-maven/public")
     }
+}
+
+release {
+    checkTasks = listOf("check")
+    buildTasks = listOf("publish")
+    updateVersionPart = 2
 }
