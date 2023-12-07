@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation(projects.sample.common)
-    implementation(projects.common)
+    implementation(projects.core)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)

@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.license       = "MIT license"
   spec.author        = { "Mathieu Larue" => "mlarue@mirego.com" }
   spec.source        = { :git => 'https://github.com/mirego/debug-panel' }
-  spec.source_files = 'common/swiftui/**/*.swift'
+  spec.source_files = 'core/swiftui/**/*.swift'
   spec.ios.deployment_target = '15.0'
 
   spec.dependency 'Popovers'

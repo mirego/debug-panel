@@ -33,7 +33,7 @@ kotlin {
         framework {
             baseName = "TRIKOT_FRAMEWORK_NAME"
             transitiveExport = true
-            export(projects.debugPanel.common)
+            export(projects.debugPanel.core)
         }
         extraSpecAttributes = mutableMapOf(
             "prepare_command" to """
@@ -47,7 +47,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(projects.debugPanel.common)
+                api(projects.debugPanel.core)
                 implementation(projects.annotations)
                 api(libs.trikot.viewmodels.declarative.flow)
                 api(libs.kotlinx.coroutines.core)
