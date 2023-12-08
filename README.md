@@ -148,11 +148,17 @@ This type generates a `DebugPanelItemViewModel.Picker`. The picker is configured
 
 ### Annotations
 
-The components can be configured with the following annotations.
+#### @DebugPanel
+
+The debug panel is configured using the `@DebugPanel(val prefix: String, val packageName: String, val includeResetButton: Boolean)` annotation.<br><br>
+* The `prefix` is included in the generated use case and repository classes.<br><br>
+* The `packageName` is where the files will be output inside the `generated` folder.<br><br>
+* The `includeResetButton` indicates the library to include a "reset" button at the end of the component list. When tapping on that button all the overridden values will be cleared from the settings.
 
 #### @Identifier
 
-By default the values are saved in the settings using their field name as identifier. However this behaviour can be overridden using the `@Identifier(val value: String)` annotation.<br>For exemple, this is useful in the case where you would want to replace an old debug panel with this one and use the original keys.
+By default the values are saved in the settings using their field name as identifier. However this behaviour can be overridden using the `@Identifier(val value: String)` annotation.<br>
+For exemple, this is useful in the case where you would want to replace an old debug panel with this one and use the original keys.
 
 Example:
 ```kotlin
