@@ -114,10 +114,61 @@ data class DebugPanelConfig(
 )
 ```
 
+### Components
+
 There are several components available:
 
-### DebugPanelToggle
+#### DebugPanelToggle
 
+This type generates a `DebugPanelItemViewModel.Toggle`. The toggle is configured with an initial value and is stored in the form of a `Boolean`.
+
+#### DebugPanelLabel
+
+This type generates a `DebugPanelItemViewModel.Label`. The label is configured with a `Flow` of `String`.
+
+#### DebugPanelTextField
+
+This type generates a `DebugPanelItemViewModel.TextField`. The text field is configured with an initial value and is stored in the form of a `String`.
+
+#### DebugPanelButton
+
+This type generates a `DebugPanelItemViewModel.Button`. The button is configured with a lambda `() -> Unit`.
+
+#### DebugPanelPicker
+
+This type generates a `DebugPanelItemViewModel.Picker`. The picker is configured with an initial selected identifier and a list of `DebugPanelPickerItem` and is stored in the form of a `String`.
+
+#### DebugPanelDatePicker
+
+This type generates a `DebugPanelItemViewModel.DatePicker`. The picker is configured with an initial value representing the epoch in milliseconds and is stored in the form of a `Long`.
+
+#### Enum
+
+This type generates a `DebugPanelItemViewModel.Picker`. The picker is configured with an initial selected enum value and is stored in the form of a `String`. The items are generated using the enum values and their name is used as the identifier.
+
+### Annotations
+
+The components can be configured with the following annotations.
+
+#### @Identifier
+
+By default the values are saved in the settings using their field name as identifier. However this behaviour can be overridden using the `@Identifier(val value: String)` annotation.<br>For exemple, this is useful in the case where you would want to replace an old debug panel with this one and use the original keys.
+
+Example:
+```kotlin
+@Identifier("PREVIEW_MODE")
+val preview: DebugPanelToggle
+```
+
+#### @DisplayName
+
+By default the components are displayed beside a label with the field name as value. You can use the `@DisplayName(val value: String)` annotation to give the components a more meaningful label.
+
+Example:
+```kotlin
+@DisplayName("Preview Mode")
+val preview: DebugPanelToggle
+```
 
 ## License
 
