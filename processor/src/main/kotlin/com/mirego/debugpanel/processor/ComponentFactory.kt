@@ -26,9 +26,7 @@ internal object ComponentFactory {
 
         data object Button : Type
 
-        data class EnumPicker(
-            val enumType: KSType
-        ) : Type
+        data class EnumPicker(val enumType: KSType) : Type
     }
 
     fun createAllComponents(configDeclaration: KSClassDeclaration, debugPropertyDeclarations: Sequence<KSPropertyDeclaration>): Sequence<Component> {
