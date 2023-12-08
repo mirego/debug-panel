@@ -6,6 +6,16 @@
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/></a>
 </div>
 
+## How it works
+
+The main goal of this library is to have a class definition in your common code that specifies how the debug panel should be built. Using this definition, the library generates:
+* a repository with typed getters
+* a use case with a typed parameters function that creates a list of item view data
+* property delegates that can be used directly in existing code to reduce the friction from reading debug values
+
+The view data list created by the use case can be passed to a builtin view model that handles the user interactions. You have the choice to either use the default UI that comes with the library,<br>
+or the build your own based on the view models.
+
 ## Setup
 
 ### Common module
@@ -91,7 +101,7 @@ android {
 
 ### iOS
 
-In your Podfile include the library's pod:
+If you want to use the sample UI on iOS, include the pod in the application's Podfile:
 
 ```
 pod 'DebugPanel', :git => 'git@github.com:mirego/debug-panel.git', :tag => 'x.y.z', :inhibit_warnings => true
@@ -175,6 +185,48 @@ Example:
 @DisplayName("Preview Mode")
 val preview: DebugPanelToggle
 ```
+
+#### @DebugProperty
+
+You can use the `@DebugProperty(val name: String)` annotation to generate a component that is bound to a class property.<br>
+For example, you can have a repository with a `String` or `Flow<String>` property, and by putting the annotation on the field the library will generate a delegate property.<br>
+You can then expose this delegate field in the interface and the caller will either receive your internal value or the one from the debug panel (in the case where it is overridden).<br>
+Please note that this annotation can only be used with the types: `String`, `Boolean`, `Enum`, `Flow<String>`, `Flow<Boolean>` and `Flow<Enum>`.
+
+Example:
+
+`Repository.kt`
+```kotlin
+interface Repository {
+    val value: Flow<String>
+}
+```
+
+`RepositoryImpl.kt`
+```kotlin
+class Repository : RepositoryImpl {
+    @Identifier("custom_value_identifier")
+    @DebugProperty("value")
+    val internalValue = flowOf("String value")
+
+    override val value by RepositoryImplValueDelegate
+}
+```
+
+Caller:
+```kotlin
+val repository: Repository = RepositoryImpl()
+
+repository.value.map {
+    println("Repository value: $it")
+}
+```
+
+This will either print<br>
+`Repository value: String value`<br>
+or<br>
+`Repository value: Overridden value`<br><br>
+if `Overridden value` has been input inside the generated text field.
 
 ## License
 
