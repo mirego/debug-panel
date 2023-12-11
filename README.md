@@ -29,8 +29,7 @@ The main goal of this library is to have a class definition in your common code 
 * a use case with a typed parameters function that creates a list of item view data
 * property delegates that can be used directly in existing code to reduce the friction from reading debug values
 
-The view data list created by the use case can be passed to a builtin view model that handles the user interactions. You have the choice to either use the default UI that comes with the library,<br>
-or the build your own based on the view models.
+The view data list created by the use case can be passed to a builtin view model that handles the user interactions. You have the choice to either use the default UI that comes with the library or to build your own.
 
 <a name="setup"></a>
 ## Setup
@@ -66,7 +65,7 @@ plugins {
 }
 ```
 
-Also add the core and annotations dependencies with the KSP generated source directory:
+Also add the `core` and `annotations` dependencies along with the KSP generated source directory:
 ```kotlin
 val commonMain by getting {
     dependencies {
@@ -104,7 +103,7 @@ dependencies {
 
 The sample UI is resolved automatically from the common module since we include the library with the `api()` function.
 
-If you have som issues with a duplicated `META-INF/versions/9/previous-compilation-data.bin` file during compilation, you can add it to the excluded resources inside the Android app's build.gradle.kts file:
+If you have some issues with a duplicated `META-INF/versions/9/previous-compilation-data.bin` file during compilation, you can add it to the excluded resources inside the Android app's build.gradle.kts file:
 
 ```kotlin
 android {
@@ -148,35 +147,15 @@ data class DebugPanelConfig(
 <a name="components"></a>
 ### Components
 
-There are several components available:
-
-#### DebugPanelToggle
-
-This type generates a `DebugPanelItemViewModel.Toggle`. The toggle is configured with an initial value and is stored in the form of a `Boolean`.
-
-#### DebugPanelLabel
-
-This type generates a `DebugPanelItemViewModel.Label`. The label is configured with a `Flow` of `String`.
-
-#### DebugPanelTextField
-
-This type generates a `DebugPanelItemViewModel.TextField`. The text field is configured with an initial value and is stored in the form of a `String`.
-
-#### DebugPanelButton
-
-This type generates a `DebugPanelItemViewModel.Button`. The button is configured with a lambda `() -> Unit`.
-
-#### DebugPanelPicker
-
-This type generates a `DebugPanelItemViewModel.Picker`. The picker is configured with an initial selected identifier and a list of `DebugPanelPickerItem` and is stored in the form of a `String`.
-
-#### DebugPanelDatePicker
-
-This type generates a `DebugPanelItemViewModel.DatePicker`. The picker is configured with an initial value representing the epoch in milliseconds and is stored in the form of a `Long`.
-
-#### Enum
-
-This type generates a `DebugPanelItemViewModel.Picker`. The picker is configured with an initial selected enum value and is stored in the form of a `String`. The items are generated using the enum values and their name is used as the identifier.
+| Name                 | Persisted data type  | Configuration
+| -------------------- | -------------------- | -------------------------------------------------------- |
+| DebugPanelToggle     | `Boolean`            | Initial `Boolean` value
+| DebugPanelLabel      | -                    | `Flow<String>`
+| DebugPanelTextField  | `String`             | Initial `String` value
+| DebugPanelButton     | -                    | Initial `() -> Unit` value
+| DebugPanelPicker     | `String`             | Initial `String` value representing the selected item identifier
+| DebugPanelDatePicker | `Long`               | Initial `Long` value representing the epoch in milliseconds
+| Enum                 | `String`             | Initial enum value
 
 <a name="annotations"></a>
 ### Annotations
@@ -191,7 +170,7 @@ The debug panel is configured using the `@DebugPanel(val prefix: String, val pac
 #### @Identifier
 
 By default the values are saved in the settings using their field name as identifier. However this behaviour can be overridden using the `@Identifier(val value: String)` annotation.<br>
-For exemple, this is useful in the case where you would want to replace an old debug panel with this one and use the original keys.
+For exemple, this is useful in the case where you would want to replace an old debug panel with this one and keep the original keys.
 
 Example:
 ```kotlin
@@ -246,17 +225,14 @@ repository.value.map {
 ```
 
 This will either print<br>
-`Repository value: String value`<br>
-or<br>
-`Repository value: Overridden value`<br><br>
-if `Overridden value` has been input inside the generated text field.
+`Repository value: String value` or `Repository value: Overridden value` depending if `Overridden value` has been input inside the generated text field.
 
 <a name="architecture"></a>
 ## Architecture
 
 The generated use case and repository implementations have the `open` modifier, which means you can extend them to add more functionalities if you need.<br>
 If your project has a dependency injection library like [Koin](https://insert-koin.io/) and you have your own extended classes, you can annotate them with either `@Factory` or `@Single`.<br>
-If you don't need to override these classes, you can just put the generated ones manually in the dependencies injection modules.
+If you don't need to override these classes, you can just put them manually in the dependencies injection modules.
 
 <a name="license"></a>
 ## License
