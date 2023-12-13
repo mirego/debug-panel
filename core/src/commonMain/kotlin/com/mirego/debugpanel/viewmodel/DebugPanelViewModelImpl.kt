@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class DebugPanelViewModelImpl(
+open class DebugPanelViewModelImpl(
     coroutineScope: CoroutineScope,
     private val useCase: DebugPanelUseCase,
     viewData: DebugPanelViewData
