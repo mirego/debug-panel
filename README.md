@@ -2,12 +2,13 @@
   <h1>Debug Panel</h1>
   <p>A Kotlin Multiplatform library built by <a href="https://www.mirego.com">Mirego</a> that allows mobile developers to generate<br /> boilerplate code to display a debug panel with different component types.</p>
   <br />
-  <a href="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml"><img src="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml/badge.svg"/></a>
-  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/kotlin-1.9.21-blue.svg?logo=kotlin"/></a>
-  <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/></a>
+  <a href="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml"><img alt="" src="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml/badge.svg"/></a>
+  <a href="https://kotlinlang.org/"><img alt="" src="https://img.shields.io/badge/kotlin-1.9.21-blue.svg?logo=kotlin"/></a>
+  <a href="https://opensource.org/licenses/BSD-3-Clause"><img alt="" src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/></a>
 </div>
 
 # Table of contents
+
 1. [How it works](#how-it-works)
 2. [Setup](#setup)
     1. [Common module](#common-module)
@@ -20,11 +21,12 @@
 5. [License](#license)
 6. [About Mirego](#about-mirego)
 
-
 <a name="how-it-works"></a>
+
 ## How it works
 
 The main goal of this library is to have a class definition in your common code that specifies how the debug panel should be built. Using this definition, the library generates:
+
 * a repository with typed getters
 * a use case with a typed parameters function that creates a list of item view data
 * property delegates that can be used directly in existing code to reduce the friction from reading debug values
@@ -32,9 +34,11 @@ The main goal of this library is to have a class definition in your common code 
 The view data list created by the use case can be passed to a builtin view model that handles the user interactions. You have the choice to either use the default UI that comes with the library or to build your own.
 
 <a name="setup"></a>
+
 ## Setup
 
 <a name="common-module"></a>
+
 ### Common module
 
 The library is published to Mirego's public Maven repository, so make sure you have it included in your settings.gradle.kts `dependencyResolutionManagement` block.
@@ -58,6 +62,7 @@ plugins {
 ```
 
 In your common module's build.gradle.kts file add the reference to the KSP plugin:
+
 ```kotlin
 plugins {
     // ...
@@ -66,6 +71,7 @@ plugins {
 ```
 
 Also add the `core` and `annotations` dependencies along with the KSP generated source directory:
+
 ```kotlin
 val commonMain by getting {
     dependencies {
@@ -99,6 +105,7 @@ dependencies {
 ```
 
 <a name="android"></a>
+
 ### Android
 
 The sample UI is resolved automatically from the common module since we include the library with the `api()` function.
@@ -118,6 +125,7 @@ android {
 ```
 
 <a name="ios"></a>
+
 ### iOS
 
 If you want to use the sample UI on iOS, include the pod in the application's Podfile:
@@ -127,9 +135,10 @@ pod 'DebugPanel', :git => 'git@github.com:mirego/debug-panel.git', :tag => 'x.y.
 ```
 
 <a name="usage"></a>
+
 ## Usage
 
-In your common's module, create a class with the @DebugPanel annotation:
+In your common's module, create a class with the @DebugPanel annotation. You can find the different components that are available in the table below.
 
 ```kotlin
 @DebugPanel(prefix = "MyProject", packageName = "com.myproject.app.generated", includeResetButton = true)
@@ -144,25 +153,52 @@ data class DebugPanelConfig(
 )
 ```
 
+Once the configuration is done, you can run the `kspCommonMainMetadata` Gradle task to generate the specific files for your project.<br>
+You should now have `MyProjectDebugPanelUseCase.kt`, `MyProjectDebugPanelUseCaseImpl.kt`, `MyProjectDebugPanelRepository.kt` and `MyProjectDebugPanelRepositoryImpl.kt` available in your classpath.<br>
+
+All you need to do now is to instantiate the implementations:
+
+```kotlin
+
+private val repository: MyProjectDebugPanelRepository = MyProjectDebugPanelRepositoryImpl()
+private val useCase: MyProjectDebugPanelUseCase = MyProjectDebugPanelUseCaseImpl(repository)
+
+/* ... */
+
+class ParentViewModelImpl(
+    coroutineScope: CoroutineScope,
+    useCase: MyProjectDebugPanelUseCase
+) : ParentViewModel, VMDViewModelImpl(coroutineScope) {
+    override val debugPanel = DebugPanelViewModelImpl(
+        coroutineScope,
+        useCase,
+        useCase.createViewData( /* Configure the components here */)
+    )
+}
+```
+
 <a name="components"></a>
+
 ### Components
 
-| Name                 | Persisted data type  | Configuration
-| -------------------- | -------------------- | -------------------------------------------------------- |
-| DebugPanelToggle     | `Boolean`            | Initial `Boolean` value
-| DebugPanelLabel      | -                    | `Flow<String>`
-| DebugPanelTextField  | `String`             | Initial `String` value
-| DebugPanelButton     | -                    | Initial `() -> Unit` value
-| DebugPanelPicker     | `String`             | Initial `String` value representing the selected item identifier
-| DebugPanelDatePicker | `Long`               | Initial `Long` value representing the epoch in milliseconds
-| Enum                 | `String`             | Initial enum value
+| Name                 | Persisted data type | Configuration                                                    |
+|----------------------|---------------------|------------------------------------------------------------------|
+| DebugPanelToggle     | `Boolean`           | Initial `Boolean` value                                          |
+| DebugPanelLabel      | -                   | `Flow<String>`                                                   |
+| DebugPanelTextField  | `String`            | Initial `String` value                                           |
+| DebugPanelButton     | -                   | Initial `() -> Unit` value                                       |
+| DebugPanelPicker     | `String`            | Initial `String` value representing the selected item identifier |
+| DebugPanelDatePicker | `Long`              | Initial `Long` value representing the epoch in milliseconds      |
+| Enum                 | `String`            | Initial enum value                                               |
 
 <a name="annotations"></a>
+
 ### Annotations
 
 #### @DebugPanel
 
 The debug panel is configured using the `@DebugPanel(val prefix: String, val packageName: String, val includeResetButton: Boolean)` annotation.<br><br>
+
 * The `prefix` is included in the generated use case and repository classes.<br><br>
 * The `packageName` is where the files will be output inside the `generated` folder.<br><br>
 * The `includeResetButton` indicates the library to include a "reset" button at the end of the component list. When tapping on that button all the overridden values will be cleared from the settings.
@@ -173,6 +209,7 @@ By default the values are saved in the settings using their field name as identi
 For exemple, this is useful in the case where you would want to replace an old debug panel with this one and keep the original keys.
 
 Example:
+
 ```kotlin
 @Identifier("PREVIEW_MODE")
 val preview: DebugPanelToggle
@@ -183,6 +220,7 @@ val preview: DebugPanelToggle
 By default the components are displayed beside a label with the field name as value. You can use the `@DisplayName(val value: String)` annotation to give the components a more meaningful label.
 
 Example:
+
 ```kotlin
 @DisplayName("Preview Mode")
 val preview: DebugPanelToggle
@@ -198,6 +236,7 @@ Please note that this annotation can only be used with the types: `String`, `Boo
 Example:
 
 `Repository.kt`
+
 ```kotlin
 interface Repository {
     val value: Flow<String>
@@ -205,6 +244,7 @@ interface Repository {
 ```
 
 `RepositoryImpl.kt`
+
 ```kotlin
 class Repository : RepositoryImpl {
     @Identifier("custom_value_identifier")
@@ -216,6 +256,7 @@ class Repository : RepositoryImpl {
 ```
 
 Caller:
+
 ```kotlin
 val repository: Repository = RepositoryImpl()
 
@@ -228,6 +269,7 @@ This will either print<br>
 `Repository value: String value` or `Repository value: Overridden value` depending if `Overridden value` has been input inside the generated text field.
 
 <a name="architecture"></a>
+
 ## Architecture
 
 The generated use case and repository implementations have the `open` modifier, which means you can extend them to add more functionalities if you need.<br>
@@ -235,13 +277,16 @@ If your project has a dependency injection library like [Koin](https://insert-ko
 If you don't need to override these classes, you can just put them manually in the dependencies injection modules.
 
 <a name="license"></a>
+
 ## License
 
 Debug Panel is © 2013-2023 [Mirego](https://www.mirego.com) and may be freely distributed under the [New BSD license](http://opensource.org/licenses/BSD-3-Clause). See the [`LICENSE.md`](./LICENSE.md) file.
 
 <a name="about-mirego"></a>
+
 ## About Mirego
 
-[Mirego](https://www.mirego.com) is a team of passionate people who believe that work is a place where you can innovate and have fun. We’re a team of [talented people](https://life.mirego.com) who imagine and build beautiful Web and mobile applications. We come together to share ideas and [change the world](http://www.mirego.org).
+[Mirego](https://www.mirego.com) is a team of passionate people who believe that work is a place where you can innovate and have fun. We’re a team of [talented people](https://life.mirego.com) who imagine and build beautiful Web and mobile applications. We come together to share ideas
+and [change the world](http://www.mirego.org).
 
 We also [love open-source software](https://open.mirego.com) and we try to give back to the community as much as we can.
