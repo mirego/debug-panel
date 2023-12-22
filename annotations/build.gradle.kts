@@ -37,7 +37,7 @@ android {
     namespace = "com.mirego.debugpanel.annotations"
     compileSdk = 34
     defaultConfig {
-        minSdk = 24
+        minSdk = 21
     }
 
     compileOptions {

@@ -62,7 +62,7 @@ android {
     namespace = "com.mirego.debugpanel.sample"
     compileSdk = 34
     defaultConfig {
-        minSdk = 24
+        minSdk = 21
     }
 
     compileOptions {
