@@ -76,6 +76,7 @@ Also add the `core` and `annotations` dependencies along with the KSP generated 
 val commonMain by getting {
     dependencies {
         // ...
+        api("com.mirego.trikot:viewmodels-declarative-flow:x.y.z")
         api("com.mirego.debugpanel:core:x.y.z")
         implementation("com.mirego.debugpanel:annotations:x.y.z")
     }
@@ -90,6 +91,7 @@ kotlin {
     cocoapods {
         framework {
             // ...
+            export("com.mirego.trikot:viewmodels-declarative-flow:x.y.z")
             export("com.mirego.debugpanel:core:x.y.z")
         }
     }
@@ -131,6 +133,7 @@ android {
 If you want to use the sample UI on iOS, include the pod in the application's Podfile:
 
 ```
+pod 'Trikot/viewmodels.declarative.SwiftUI.flow', :git => 'git@github.com:mirego/trikot.git', :tag => 'x.y.z', :inhibit_warnings => true
 pod 'DebugPanel', :git => 'git@github.com:mirego/debug-panel.git', :tag => 'x.y.z', :inhibit_warnings => true
 ```
 
