@@ -26,9 +26,7 @@ internal object ComponentFactory {
 
         data object Button : Type
 
-        data class EnumPicker(
-            val enumType: KSType
-        ) : Type
+        data class EnumPicker(val enumType: KSType) : Type
     }
 
     fun createAllComponents(configDeclaration: KSClassDeclaration, debugPropertyDeclarations: Sequence<KSPropertyDeclaration>): Sequence<Component> {
@@ -51,7 +49,7 @@ internal object ComponentFactory {
                 it.toComponent(type = propertyType, name = propertyName, isDebugProperty = false)
             }
 
-        val debugProperties = debugPropertyDeclarations.mapNotNull {
+        val debugProperties = debugPropertyDeclarations.map {
             val propertyName = it.findAnnotation(DebugProperty::class)!!.findArgument("name") as String
             val type = it.type.resolve().let { type ->
                 if (type.declaration.simpleName.getShortName() == Consts.FLOW.simpleName) {
@@ -64,7 +62,7 @@ internal object ComponentFactory {
                 type.toClassName() == STRING -> Type.TextField
                 type.toClassName() == BOOLEAN -> Type.Toggle
                 (type.declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS -> Type.EnumPicker(type)
-                else -> return@mapNotNull null
+                else -> throw IllegalArgumentException("Debug properties can only be used on String, Boolean and Enum types")
             }
 
             it.toComponent(type = propertyType, name = propertyName, isDebugProperty = true)
