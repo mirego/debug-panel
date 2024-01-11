@@ -17,7 +17,7 @@ data class DebugPanelConfig(
     @DisplayName("First name:") val firstName: DebugPanelLabel,
     @DisplayName("Last name input") var lastNameInput: DebugPanelTextField,
     @DisplayName("Environment") val environments: DebugPanelPicker,
-    @DisplayName("Reset onboarding") val resetOnboarding: DebugPanelButton,
     @DisplayName("Language") val language: Language,
-    @DisplayName("Date picker") val date: DebugPanelDatePicker
+    @DisplayName("Date picker") val date: DebugPanelDatePicker,
+    @DisplayName("Reset and kill app") val reset: DebugPanelButton
 )
