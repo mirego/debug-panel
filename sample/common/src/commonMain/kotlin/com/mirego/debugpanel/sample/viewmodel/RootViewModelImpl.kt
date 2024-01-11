@@ -43,7 +43,7 @@ class RootViewModelImpl(
         ) {
             coroutineScope.launch {
                 useCase.resetSettings()
-                delay(500.milliseconds)
+                delay(500.milliseconds) // The shared preferences are async on Android so we make sure to wait enough time before killing the app
                 killApp()
             }
         }
