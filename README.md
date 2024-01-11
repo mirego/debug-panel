@@ -144,7 +144,7 @@ pod 'DebugPanel', :git => 'git@github.com:mirego/debug-panel.git', :tag => 'x.y.
 In your common's module, create a class with the @DebugPanel annotation. You can find the different components that are available in the table below.
 
 ```kotlin
-@DebugPanel(prefix = "MyProject", packageName = "com.myproject.app.generated", includeResetButton = true)
+@DebugPanel(prefix = "MyProject", packageName = "com.myproject.app.generated")
 data class DebugPanelConfig(
     val toggle: DebugPanelToggle,
     val label: DebugPanelLabel,
@@ -200,11 +200,10 @@ class ParentViewModelImpl(
 
 #### @DebugPanel
 
-The debug panel is configured using the `@DebugPanel(val prefix: String, val packageName: String, val includeResetButton: Boolean)` annotation.<br><br>
+The debug panel is configured using the `@DebugPanel(val prefix: String, val packageName: String)` annotation.<br><br>
 
 * The `prefix` is included in the generated use case and repository classes.<br><br>
 * The `packageName` is where the files will be output inside the `generated` folder.<br><br>
-* The `includeResetButton` indicates the library to include a "reset" button at the end of the component list. When tapping on that button all the overridden values will be cleared from the settings.
 
 #### @Identifier
 
@@ -272,6 +271,12 @@ This will either print<br>
 `Repository value: String value` or `Repository value: Overridden value` depending if `Overridden value` has been input inside the generated text field.
 
 <a name="architecture"></a>
+
+### Clearing the component values
+
+The generated repository comes with a `resetSettings()` method that you can call in order to clear the persisted component values.
+Please be aware that the debug panel view models are not bound to these values, so you will need to either exit the debug panel screen or kill the application to make sure the values are reset properly
+(see `RootViewModelImpl.kt` in the sample application folder).
 
 ## Architecture
 
