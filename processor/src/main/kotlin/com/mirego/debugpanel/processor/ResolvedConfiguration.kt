@@ -8,6 +8,5 @@ internal data class ResolvedConfiguration(
     val annotation: KSAnnotation,
     val components: Sequence<Component>,
     val prefix: String,
-    val packageName: String,
-    val includeResetButton: Boolean
+    val packageName: String
 )
