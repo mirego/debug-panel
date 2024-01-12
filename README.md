@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>Debug Panel</h1>
-  <p>A Kotlin Multiplatform library built by <a href="https://www.mirego.com">Mirego</a> that allows mobile developers to generate<br /> boilerplate code to display a debug panel with different component types.</p>
+  <img src="logo.png" width="563" />
+  <p><strong>Debug Panel</strong> is a Kotlin Multiplatform library built by <a href="https://www.mirego.com">Mirego</a> that allows mobile developers to generate<br /> boilerplate code to display a debug panel with different component types.</p>
   <br />
   <a href="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml"><img alt="" src="https://github.com/mirego/debug-panel/actions/workflows/ci.yaml/badge.svg"/></a>
   <a href="https://kotlinlang.org/"><img alt="" src="https://img.shields.io/badge/kotlin-1.9.21-blue.svg?logo=kotlin"/></a>
