@@ -3,6 +3,7 @@
 
     <application
         android:allowBackup="false"
+        android:label="Debug Panel Sample"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

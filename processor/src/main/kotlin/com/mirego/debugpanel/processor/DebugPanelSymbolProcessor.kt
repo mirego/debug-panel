@@ -32,15 +32,13 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                 val annotation = declaration.findAnnotation(DebugPanel::class)!!
                 val prefix = (annotation.findArgument("prefix") as String).capitalize()
                 val packageName = annotation.findArgument("packageName") as String
-                val includeResetButton = annotation.findArgument("includeResetButton") as Boolean
 
                 ResolvedConfiguration(
                     declaration = declaration,
                     annotation = annotation,
                     components = ComponentFactory.createAllComponents(declaration, debugProperties),
                     prefix = prefix,
-                    packageName = packageName,
-                    includeResetButton = includeResetButton
+                    packageName = packageName
                 )
             }
 

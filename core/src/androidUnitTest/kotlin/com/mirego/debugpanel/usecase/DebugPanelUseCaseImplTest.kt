@@ -11,7 +11,6 @@ import com.mirego.debugpanel.extensions.toggle
 import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseIdentifierDebugPanelRepository
-import com.mirego.debugpanel.repository.TestUseCaseResetButtonDebugPanelRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -219,26 +218,6 @@ class SpecificDebugPanelUseCaseImplTest {
         assertEquals("LABEL_KEY", label.identifier)
         assertEquals("ENUM_KEY", enumPicker.identifier)
         assertEquals("DATE_PICKER_KEY", datePicker.identifier)
-    }
-
-    @Test
-    fun `expect reset button to be created correctly`() = runTest {
-        val repository: TestUseCaseResetButtonDebugPanelRepository = mockk()
-        val useCase = TestUseCaseResetButtonDebugPanelUseCaseImpl(repository)
-
-        val viewData = useCase.createViewData(initialToggle = false)
-
-        assertEquals(2 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
-
-        val resetButton = viewData.items.last().button
-
-        assertEquals("_reset", resetButton.identifier)
-
-        resetButton.action()
-
-        verify(exactly = 1) {
-            repository.resetSettings()
-        }
     }
 
     @Test

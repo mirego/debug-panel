@@ -11,13 +11,13 @@ import com.mirego.debugpanel.config.DebugPanelTextField
 import com.mirego.debugpanel.config.DebugPanelToggle
 
 @Suppress("unused")
-@DebugPanel("Sample", "com.mirego.debugpanel", includeResetButton = true)
+@DebugPanel("Sample", "com.mirego.debugpanel")
 data class DebugPanelConfig(
     @Identifier("PREVIEW_MODE") val previewMode: DebugPanelToggle,
     @DisplayName("First name:") val firstName: DebugPanelLabel,
     @DisplayName("Last name input") var lastNameInput: DebugPanelTextField,
     @DisplayName("Environment") val environments: DebugPanelPicker,
-    @DisplayName("Reset onboarding") val resetOnboarding: DebugPanelButton,
     @DisplayName("Language") val language: Language,
-    @DisplayName("Date picker") val date: DebugPanelDatePicker
+    @DisplayName("Date picker") val date: DebugPanelDatePicker,
+    @DisplayName("Reset and kill app") val reset: DebugPanelButton
 )

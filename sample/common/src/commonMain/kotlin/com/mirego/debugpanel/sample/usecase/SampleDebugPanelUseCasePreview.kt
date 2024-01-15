@@ -17,7 +17,7 @@ class SampleDebugPanelUseCasePreview : SampleDebugPanelUseCase, DebugPanelUseCas
         initialDate: Long?,
         firstName: Flow<String>,
         environments: List<DebugPanelPickerItem>,
-        resetOnboarding: () -> Unit
+        reset: () -> Unit
     ): DebugPanelViewData = createViewData()
 
     override fun getPreviewMode(): Flow<Boolean?> = flowOf(null)

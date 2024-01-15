@@ -12,7 +12,7 @@ import com.mirego.debugpanel.config.DebugPanelToggle
 import com.mirego.debugpanel.usecase.TestEnum
 
 @Suppress("unused")
-@DebugPanel("TestRepository", "com.mirego.debugpanel", includeResetButton = false)
+@DebugPanel("TestRepository", "com.mirego.debugpanel")
 data class TestRepositoryConfig(
     val toggle: DebugPanelToggle,
     val action: DebugPanelButton,
@@ -22,25 +22,13 @@ data class TestRepositoryConfig(
 )
 
 @Suppress("unused")
-@DebugPanel("TestRepositoryIdentifier", "com.mirego.debugpanel", includeResetButton = false)
+@DebugPanel("TestRepositoryIdentifier", "com.mirego.debugpanel")
 data class TestRepositoryIdentifierConfig(
     @Identifier("TOGGLE_IDENTIFIER") val toggle: DebugPanelToggle
 )
 
 @Suppress("unused")
-@DebugPanel("TestRepositoryResetButton", "com.mirego.debugpanel", includeResetButton = true)
-data class TestRepositoryResetButtonConfig(
-    @Identifier("TOGGLE_IDENTIFIER") val toggle: DebugPanelToggle,
-    val button: DebugPanelButton,
-    var textField: DebugPanelTextField,
-    val picker: DebugPanelPicker,
-    val label: DebugPanelLabel,
-    val enum: TestEnum,
-    val datePicker: DebugPanelDatePicker
-)
-
-@Suppress("unused")
-@DebugPanel("TestUseCase", "com.mirego.debugpanel", includeResetButton = false)
+@DebugPanel("TestUseCase", "com.mirego.debugpanel")
 data class TestUseCaseConfig(
     val toggle: DebugPanelToggle,
     val button: DebugPanelButton,
@@ -52,7 +40,7 @@ data class TestUseCaseConfig(
 )
 
 @Suppress("unused")
-@DebugPanel("TestUseCaseDisplayName", "com.mirego.debugpanel", includeResetButton = false)
+@DebugPanel("TestUseCaseDisplayName", "com.mirego.debugpanel")
 data class TestUseCaseDisplayNameConfig(
     @DisplayName("Test toggle") val toggle: DebugPanelToggle,
     @DisplayName("Test button") val button: DebugPanelButton,
@@ -64,7 +52,7 @@ data class TestUseCaseDisplayNameConfig(
 )
 
 @Suppress("unused")
-@DebugPanel("TestUseCaseIdentifier", "com.mirego.debugpanel", includeResetButton = false)
+@DebugPanel("TestUseCaseIdentifier", "com.mirego.debugpanel")
 data class TestUseCaseIdentifierConfig(
     @Identifier("TOGGLE_KEY") val toggle: DebugPanelToggle,
     @Identifier("BUTTON_KEY") val button: DebugPanelButton,
@@ -73,10 +61,4 @@ data class TestUseCaseIdentifierConfig(
     @Identifier("LABEL_KEY") val label: DebugPanelLabel,
     @Identifier("ENUM_KEY") val enum: TestEnum,
     @Identifier("DATE_PICKER_KEY") val datePicker: DebugPanelDatePicker
-)
-
-@Suppress("unused")
-@DebugPanel("TestUseCaseResetButton", "com.mirego.debugpanel", includeResetButton = true)
-data class TestUseCaseResetButtonConfig(
-    @Identifier("TOGGLE_KEY") val toggle: DebugPanelToggle
 )

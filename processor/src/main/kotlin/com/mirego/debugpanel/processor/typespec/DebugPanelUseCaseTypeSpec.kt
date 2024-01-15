@@ -34,7 +34,7 @@ internal object DebugPanelUseCaseTypeSpec {
     )
 
     private fun createFunctions(configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(
-        (createComponentItemViewDataList(configuration.components) + createExtraItemViewDataList(configuration)).let { itemViewDataList ->
+        createComponentItemViewDataList(configuration.components).let { itemViewDataList ->
             val viewDataName = "DebugPanelViewData"
 
             InterfaceImplementation.Function(
@@ -85,14 +85,6 @@ internal object DebugPanelUseCaseTypeSpec {
             is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
             is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
         }
-    }
-
-    private fun createExtraItemViewDataList(configuration: ResolvedConfiguration): Sequence<String> = if (configuration.includeResetButton) {
-        sequenceOf(
-            DebugPanelItemViewDataFactory.createButton("_reset", "Reset", "::resetSettings")
-        )
-    } else {
-        emptySequence()
     }
 
     private fun createParams(components: Sequence<Component>): Sequence<ParameterSpec> {

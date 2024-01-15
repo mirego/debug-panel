@@ -153,15 +153,15 @@ class DebugPanelRepositoryImplTest {
     }
 
     @Test
-    fun `given a config with reset button expect it to be created correctly`() = runTest {
+    fun `given a repository expect the resetSettings method to remove the correct keys`() = runTest {
         val (settings, _) = mockSettings()
 
-        val repository = TestRepositoryResetButtonDebugPanelRepositoryImpl()
+        val repository = TestUseCaseDebugPanelRepositoryImpl()
 
         repository.resetSettings()
 
         verify(exactly = 1) {
-            settings.remove("TOGGLE_IDENTIFIER")
+            settings.remove("toggle")
             settings.remove("textField")
             settings.remove("picker")
             settings.remove("enum")
