@@ -17,7 +17,7 @@ PODS:
 
 DEPENDENCIES:
   - DebugPanel (from `../../`)
-  - "Trikot/viewmodels.declarative.SwiftUI.flow (from `git@github.com:mirego/trikot.git`, tag `5.3.0-dev2697`)"
+  - "Trikot/viewmodels.declarative.SwiftUI.flow (from `git@github.com:mirego/trikot.git`, tag `5.3.0`)"
   - TRIKOT_FRAMEWORK_NAME (from `../common`)
 
 SPEC REPOS:
@@ -31,14 +31,14 @@ EXTERNAL SOURCES:
     :path: "../../"
   Trikot:
     :git: "git@github.com:mirego/trikot.git"
-    :tag: 5.3.0-dev2697
+    :tag: 5.3.0
   TRIKOT_FRAMEWORK_NAME:
     :path: "../common"
 
 CHECKOUT OPTIONS:
   Trikot:
     :git: "git@github.com:mirego/trikot.git"
-    :tag: 5.3.0-dev2697
+    :tag: 5.3.0
 
 SPEC CHECKSUMS:
   DebugPanel: eb5860cc41e233bcfe37d822c353c33b79011915
