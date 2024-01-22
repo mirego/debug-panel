@@ -52,7 +52,7 @@ kotlin {
                 implementation(libs.trikot.viewmodels.declarative.flow)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.multiplatform.settings)
-                implementation(libs.multiplatform.settings.coroutines)
+                api(libs.multiplatform.settings.coroutines)
                 implementation(libs.kotlinx.datetime)
             }
         }
