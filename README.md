@@ -248,7 +248,7 @@ interface Repository {
 `RepositoryImpl.kt`
 
 ```kotlin
-class Repository : RepositoryImpl {
+class RepositoryImpl : Repository {
     @Identifier("custom_value_identifier")
     @DebugProperty("value")
     val internalValue = flowOf("String value")
