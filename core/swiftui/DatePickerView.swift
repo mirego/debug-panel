@@ -1,7 +1,6 @@
 import SwiftUI
 import TRIKOT_FRAMEWORK_NAME
 import Trikot
-import Popovers
 
 struct DatePickerView: View {
 

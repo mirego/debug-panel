@@ -13,7 +13,6 @@ Pod::Spec.new do |spec|
   spec.source_files = 'core/swiftui/**/*.swift'
   spec.ios.deployment_target = '15.0'
 
-  spec.dependency 'Popovers'
   spec.dependency 'Trikot/viewmodels.declarative.SwiftUI.flow'
   spec.dependency ENV['TRIKOT_FRAMEWORK_NAME']
 
