@@ -21,6 +21,11 @@ import com.squareup.kotlinpoet.asTypeName
 import com.squareup.kotlinpoet.ksp.toTypeName
 
 internal object DebugPanelUseCaseTypeSpec {
+    private data class ComponentItemViewData(
+        val componentName: String,
+        val viewData: String
+    )
+
     fun create(className: ClassName, specificRepositoryClassName: ClassName, componentsVisibilityClassName: ClassName, configuration: ResolvedConfiguration) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = createFunctions(componentsVisibilityClassName, configuration),
@@ -44,10 +49,10 @@ internal object DebugPanelUseCaseTypeSpec {
                 name = "createViewData",
                 returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
                 code = """
-                    |return componentsVisibility.map {
+                    |return componentsVisibility.map { visibility ->
                     |$viewDataName(
-                    |⇥listOf(
-                    |⇥${itemViewDataList.joinToString(",\n")}
+                    |⇥listOfNotNull(
+                    |⇥${itemViewDataList.joinToString(",\n") { (componentName, viewData) -> "$viewData.takeIf { visibility.$componentName }" }}
                     |⇤)
                     |⇤)
                     |}
@@ -80,16 +85,19 @@ internal object DebugPanelUseCaseTypeSpec {
             .addSuperinterface(specificRepositoryClassName, CodeBlock.of(repositoryParamName))
     }
 
-    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<String> = components.map {
-        when (it) {
-            is Component.Button -> DebugPanelItemViewDataFactory.createButton(it)
-            is Component.Label -> DebugPanelItemViewDataFactory.createLabel(it)
-            is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
-            is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(it)
-            is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
-            is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
-            is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
-        }
+    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<ComponentItemViewData> = components.map {
+        ComponentItemViewData(
+            componentName = it.name,
+            viewData = when (it) {
+                is Component.Button -> DebugPanelItemViewDataFactory.createButton(it)
+                is Component.Label -> DebugPanelItemViewDataFactory.createLabel(it)
+                is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
+                is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(it)
+                is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
+                is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
+                is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
+            }
+        )
     }
 
     private fun createParams(componentsVisibilityClassName: ClassName, components: Sequence<Component>): Sequence<ParameterSpec> {
