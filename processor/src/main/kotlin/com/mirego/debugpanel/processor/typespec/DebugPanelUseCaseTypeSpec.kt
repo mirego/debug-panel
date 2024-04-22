@@ -26,10 +26,13 @@ internal object DebugPanelUseCaseTypeSpec {
         functions = createFunctions(componentsVisibilityClassName, configuration),
         configureInterface = { configureInterface(specificRepositoryClassName) },
         configureImplementation = { configureImplementation(specificRepositoryClassName) },
+        interfaceImports = listOf(
+            Import(Consts.FLOW_PACKAGE_NAME, "flowOf"),
+        ),
         implementationImports = listOf(
             Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
             Import(Consts.USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData"),
-            Import(Consts.FLOW_PACKAGE_NAME, "map")
+            Import(Consts.FLOW_PACKAGE_NAME, "map"),
         )
     )
 
@@ -121,11 +124,16 @@ internal object DebugPanelUseCaseTypeSpec {
                 ParameterSpec(paramName, paramType)
             }
 
-        val visibilityParam = ParameterSpec.builder(
-            "componentsVisibility",
-            FLOW.plusParameter(componentsVisibilityClassName)
-        )
-            .defaultValue("flowOf()")
+        val visibilityParam = ParameterSpec.builder("componentsVisibility", FLOW.plusParameter(componentsVisibilityClassName))
+            .defaultValue(
+                """
+                flowOf(
+                ${componentsVisibilityClassName.simpleName}(
+                
+                )
+                )
+            """.trimIndent()
+            )
             .build()
 
         return initialValueParams + valueParams + sequenceOf(visibilityParam)
