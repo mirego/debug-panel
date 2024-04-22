@@ -125,15 +125,7 @@ internal object DebugPanelUseCaseTypeSpec {
             }
 
         val visibilityParam = ParameterSpec.builder("componentsVisibility", FLOW.plusParameter(componentsVisibilityClassName))
-            .defaultValue(
-                """
-                flowOf(
-                ${componentsVisibilityClassName.simpleName}(
-                
-                )
-                )
-            """.trimIndent()
-            )
+            .defaultValue("flowOf(${componentsVisibilityClassName.simpleName}())")
             .build()
 
         return initialValueParams + valueParams + sequenceOf(visibilityParam)

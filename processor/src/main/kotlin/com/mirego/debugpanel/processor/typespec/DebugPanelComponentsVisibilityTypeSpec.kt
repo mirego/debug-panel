@@ -3,6 +3,7 @@ package com.mirego.debugpanel.processor.typespec
 import com.mirego.debugpanel.processor.Component
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 
@@ -13,7 +14,11 @@ internal object DebugPanelComponentsVisibilityTypeSpec {
             FunSpec.constructorBuilder()
                 .apply {
                     components.forEach {
-                        addParameter(it.name, Boolean::class)
+                        addParameter(
+                            ParameterSpec.builder(it.name, Boolean::class)
+                                .defaultValue("true")
+                                .build()
+                        )
                     }
                 }
                 .build()
