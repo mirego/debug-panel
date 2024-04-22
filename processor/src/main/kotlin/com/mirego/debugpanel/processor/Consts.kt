@@ -15,7 +15,7 @@ internal object Consts {
     const val REPOSITORY_NAME = "DebugPanelRepository"
     const val REPOSITORY_IMPL_NAME = "DebugPanelRepositoryImpl"
 
-    const val COMPONENTS_VISIBILITY_NAME = "ComponentsVisibility"
+    const val COMPONENTS_VISIBILITY_NAME = "DebugPanelComponentsVisibility"
 
     val USE_CASE_PACKAGE_NAME = getUseCasePackageName(BASE_PACKAGE_NAME)
     const val USE_CASE_NAME = "DebugPanelUseCase"

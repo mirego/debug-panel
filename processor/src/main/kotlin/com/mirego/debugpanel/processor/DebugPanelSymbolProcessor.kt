@@ -82,16 +82,18 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificRepositoryClassName = ClassName(repositoryPackageName, specificRepositoryName)
             val specificRepositoryImplName = "${configuration.prefix}$REPOSITORY_IMPL_NAME"
 
-            val componentsVisibilityName = "${configuration.prefix}$COMPONENTS_VISIBILITY_NAME"
-
             val useCasePackageName = Consts.getUseCasePackageName(configuration.packageName)
+
+            val componentsVisibilityName = "${configuration.prefix}$COMPONENTS_VISIBILITY_NAME"
+            val componentsVisibilityClassName = ClassName(useCasePackageName, componentsVisibilityName)
+
             val specificUseCaseName = "${configuration.prefix}$USE_CASE_NAME"
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
             val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.components)
             val componentsVisibility = DebugPanelComponentsVisibilityTypeSpec.create(componentsVisibilityName, configuration.components)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, componentsVisibilityClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)

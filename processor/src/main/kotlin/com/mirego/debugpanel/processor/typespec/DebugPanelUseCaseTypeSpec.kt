@@ -21,9 +21,9 @@ import com.squareup.kotlinpoet.asTypeName
 import com.squareup.kotlinpoet.ksp.toTypeName
 
 internal object DebugPanelUseCaseTypeSpec {
-    fun create(className: ClassName, specificRepositoryClassName: ClassName, configuration: ResolvedConfiguration) = InterfaceImplementation.create(
+    fun create(className: ClassName, specificRepositoryClassName: ClassName, componentsVisibilityClassName: ClassName, configuration: ResolvedConfiguration) = InterfaceImplementation.create(
         interfaceClassName = className,
-        functions = createFunctions(configuration),
+        functions = createFunctions(componentsVisibilityClassName, configuration),
         configureInterface = { configureInterface(specificRepositoryClassName) },
         configureImplementation = { configureImplementation(specificRepositoryClassName) },
         implementationImports = listOf(
@@ -33,7 +33,7 @@ internal object DebugPanelUseCaseTypeSpec {
         )
     )
 
-    private fun createFunctions(configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(
+    private fun createFunctions(componentsVisibilityClassName: ClassName, configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(
         createComponentItemViewDataList(configuration.components).let { itemViewDataList ->
             val viewDataName = "DebugPanelViewData"
 
@@ -47,7 +47,7 @@ internal object DebugPanelUseCaseTypeSpec {
                     |⇤)
                     |⇤)
                 """.trimMargin(),
-                params = createParams(configuration.components).asIterable()
+                params = createParams(componentsVisibilityClassName, configuration.components).asIterable()
             )
         }
     )
@@ -87,7 +87,7 @@ internal object DebugPanelUseCaseTypeSpec {
         }
     }
 
-    private fun createParams(components: Sequence<Component>): Sequence<ParameterSpec> {
+    private fun createParams(componentsVisibilityClassName: ClassName, components: Sequence<Component>): Sequence<ParameterSpec> {
         val initialValueParams = components
             .filter { it.requiresInitialValue }
             .mapNotNull { component ->
@@ -121,11 +121,13 @@ internal object DebugPanelUseCaseTypeSpec {
                 ParameterSpec(paramName, paramType)
             }
 
-        /*val visibilityParam = ParameterSpec(
-            "componentsVisiblity",
+        val visibilityParam = ParameterSpec.builder(
+            "componentsVisibility",
+            FLOW.plusParameter(componentsVisibilityClassName)
+        )
+            .defaultValue("flowOf()")
+            .build()
 
-        )*/
-
-        return initialValueParams + valueParams //+ sequenceOf(visibilityParam)
+        return initialValueParams + valueParams + sequenceOf(visibilityParam)
     }
 }
