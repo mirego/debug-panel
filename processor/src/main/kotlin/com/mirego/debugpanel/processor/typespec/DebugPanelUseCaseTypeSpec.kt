@@ -27,12 +27,12 @@ internal object DebugPanelUseCaseTypeSpec {
         configureInterface = { configureInterface(specificRepositoryClassName) },
         configureImplementation = { configureImplementation(specificRepositoryClassName) },
         interfaceImports = listOf(
-            Import(Consts.FLOW_PACKAGE_NAME, "flowOf"),
+            Import(Consts.FLOW_PACKAGE_NAME, "flowOf")
         ),
         implementationImports = listOf(
             Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
             Import(Consts.USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData"),
-            Import(Consts.FLOW_PACKAGE_NAME, "map"),
+            Import(Consts.FLOW_PACKAGE_NAME, "map")
         )
     )
 
