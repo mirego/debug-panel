@@ -44,11 +44,13 @@ internal object DebugPanelUseCaseTypeSpec {
                 name = "createViewData",
                 returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
                 code = """
-                    |return $viewDataName(
+                    |return componentsVisibility.map {
+                    |$viewDataName(
                     |⇥listOf(
                     |⇥${itemViewDataList.joinToString(",\n")}
                     |⇤)
                     |⇤)
+                    |}
                 """.trimMargin(),
                 params = createParams(componentsVisibilityClassName, configuration.components).asIterable()
             )
