@@ -39,7 +39,7 @@ internal object DebugPanelUseCaseTypeSpec {
 
             InterfaceImplementation.Function(
                 name = "createViewData",
-                returnType = ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName),
+                returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
                 code = """
                     |return $viewDataName(
                     |⇥listOf(
@@ -121,6 +121,11 @@ internal object DebugPanelUseCaseTypeSpec {
                 ParameterSpec(paramName, paramType)
             }
 
-        return initialValueParams + valueParams
+        /*val visibilityParam = ParameterSpec(
+            "componentsVisiblity",
+
+        )*/
+
+        return initialValueParams + valueParams //+ sequenceOf(visibilityParam)
     }
 }

@@ -21,6 +21,9 @@ import com.mirego.debugpanel.processor.typespec.DebugPanelUseCaseTypeSpec
 import com.mirego.debugpanel.processor.typespec.TypeSpecWithImports
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.writeTo
 
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
@@ -84,6 +87,17 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificUseCaseName = "${configuration.prefix}$USE_CASE_NAME"
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
+
+            TypeSpec.interfaceBuilder(interfaceClassName.simpleName)
+                .addFunctions(
+                    functions.map { function ->
+                        FunSpec.builder(function.name)
+                            .addModifiers(KModifier.ABSTRACT)
+                            .addParameters(function.params)
+                            .returns(function.returnType)
+                            .build()
+                    }
+                )
 
             val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.components)
             val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
