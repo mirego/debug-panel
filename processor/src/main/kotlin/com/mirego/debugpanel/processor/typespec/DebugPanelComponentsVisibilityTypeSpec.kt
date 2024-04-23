@@ -13,9 +13,9 @@ internal object DebugPanelComponentsVisibilityTypeSpec {
         .primaryConstructor(
             FunSpec.constructorBuilder()
                 .apply {
-                    components.forEach {
+                    components.forEach { component ->
                         addParameter(
-                            ParameterSpec.builder(it.name, Boolean::class)
+                            ParameterSpec.builder(component.name, Boolean::class)
                                 .defaultValue("true")
                                 .build()
                         )
@@ -24,10 +24,10 @@ internal object DebugPanelComponentsVisibilityTypeSpec {
                 .build()
         )
         .apply {
-            components.forEach {
+            components.forEach { component ->
                 addProperty(
-                    PropertySpec.builder(it.name, Boolean::class)
-                        .initializer(it.name)
+                    PropertySpec.builder(component.name, Boolean::class)
+                        .initializer(component.name)
                         .build()
                 )
             }

@@ -88,17 +88,17 @@ internal object DebugPanelUseCaseTypeSpec {
             .addSuperinterface(specificRepositoryClassName, CodeBlock.of(repositoryParamName))
     }
 
-    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<ComponentItemViewData> = components.map {
+    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<ComponentItemViewData> = components.map { component ->
         ComponentItemViewData(
-            componentName = it.name,
-            viewData = when (it) {
-                is Component.Button -> DebugPanelItemViewDataFactory.createButton(it)
-                is Component.Label -> DebugPanelItemViewDataFactory.createLabel(it)
-                is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(it)
-                is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(it)
-                is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(it)
-                is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(it)
-                is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(it)
+            componentName = component.name,
+            viewData = when (component) {
+                is Component.Button -> DebugPanelItemViewDataFactory.createButton(component)
+                is Component.Label -> DebugPanelItemViewDataFactory.createLabel(component)
+                is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(component)
+                is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(component)
+                is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(component)
+                is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(component)
+                is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(component)
             }
         )
     }
