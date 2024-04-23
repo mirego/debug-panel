@@ -180,6 +180,24 @@ class ParentViewModelImpl(
 }
 ```
 
+You can control the visibility of each components in the `componentsVisibility` parameter of the `createViewData()` function.
+
+Example:
+
+```kotlin
+useCase.createViewData(
+    /* ... */
+    componentsVisibility = flowOf(
+        MyProjectDebugPanelComponentsVisibility(
+            button1 = false,
+            button2 = true,
+        )
+    )
+)
+```
+
+In this case `button1` will be hidden and `button2` will be visible.
+
 <a name="components"></a>
 
 ### Components
