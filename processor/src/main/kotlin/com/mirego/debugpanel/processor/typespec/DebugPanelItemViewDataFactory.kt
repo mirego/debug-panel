@@ -4,13 +4,15 @@ import com.mirego.debugpanel.processor.Component
 import com.mirego.debugpanel.processor.capitalize
 
 internal object DebugPanelItemViewDataFactory {
+    private const val ITEM_VIEW_DATA_CLASS_NAME = "DebugPanelItemViewData"
+
     fun createToggle(component: Component.Toggle): String {
         val identifier = component.safeIdentifier
         val label = component.safeDisplayName
         val initialValue = "repository.getCurrentToggleValue(\"$identifier\")${getFallbackValuePart(component)}"
         val isDirty = component.isDirtyParam
 
-        return """DebugPanelItemViewData.Toggle(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.Toggle(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
@@ -24,7 +26,7 @@ internal object DebugPanelItemViewDataFactory {
         val initialValue = "repository.getCurrentTextFieldValue(\"$identifier\")${getFallbackValuePart(component)}"
         val isDirty = component.isDirtyParam
 
-        return """DebugPanelItemViewData.TextField(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.TextField(⇥
             |"$identifier",
             |"$placeholder",
             |$initialValue,
@@ -37,7 +39,7 @@ internal object DebugPanelItemViewDataFactory {
         val label = component.safeDisplayName
         val value = component.name
 
-        return """DebugPanelItemViewData.Label(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.Label(⇥
             |"$identifier",
             |"$label",
             |$value
@@ -51,7 +53,7 @@ internal object DebugPanelItemViewDataFactory {
         val items = component.name
         val isDirty = component.isDirtyParam
 
-        return """DebugPanelItemViewData.Picker(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.Picker(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
@@ -66,7 +68,7 @@ internal object DebugPanelItemViewDataFactory {
         val initialValue = "repository.getCurrentDatePickerValue(\"$identifier\")${getFallbackValuePart(component)}"
         val isDirty = component.isDirtyParam
 
-        return """DebugPanelItemViewData.DatePicker(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.DatePicker(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
@@ -83,7 +85,7 @@ internal object DebugPanelItemViewDataFactory {
             |⇤)"""
         val isDirty = component.isDirtyParam
 
-        return """DebugPanelItemViewData.Picker(⇥
+        return """$ITEM_VIEW_DATA_CLASS_NAME.Picker(⇥
             |"$identifier",
             |"$label",
             |$initialValue,
@@ -101,7 +103,7 @@ internal object DebugPanelItemViewDataFactory {
     }
 
     private fun createButton(identifier: String, label: String, action: String): String =
-        """DebugPanelItemViewData.Button(⇥
+        """$ITEM_VIEW_DATA_CLASS_NAME.Button(⇥
             |"$identifier",
             |"$label",
             |$action

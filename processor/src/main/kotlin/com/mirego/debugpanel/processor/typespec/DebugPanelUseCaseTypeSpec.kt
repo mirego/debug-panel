@@ -36,7 +36,6 @@ internal object DebugPanelUseCaseTypeSpec {
         ),
         implementationImports = listOf(
             Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
-            Import(Consts.USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData"),
             Import(Consts.FLOW_PACKAGE_NAME, "map")
         )
     )
@@ -45,6 +44,10 @@ internal object DebugPanelUseCaseTypeSpec {
         createComponentItemViewDataList(configuration.components).let { itemViewDataList ->
             val viewDataName = "DebugPanelViewData"
 
+            val itemViewDataListWithVisibility = itemViewDataList.joinToString(",\n") { (componentName, viewData) ->
+                "$viewData.takeIf { visibility.$componentName }"
+            }
+
             InterfaceImplementation.Function(
                 name = "createViewData",
                 returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
@@ -52,7 +55,7 @@ internal object DebugPanelUseCaseTypeSpec {
                     |return componentsVisibility.map { visibility ->
                     |$viewDataName(
                     |⇥listOfNotNull(
-                    |⇥${itemViewDataList.joinToString(",\n") { (componentName, viewData) -> "$viewData.takeIf { visibility.$componentName }" }}
+                    |⇥$itemViewDataListWithVisibility
                     |⇤)
                     |⇤)
                     |}
@@ -134,10 +137,10 @@ internal object DebugPanelUseCaseTypeSpec {
                 ParameterSpec(paramName, paramType)
             }
 
-        val visibilityParam = ParameterSpec.builder("componentsVisibility", FLOW.plusParameter(componentsVisibilityClassName))
+        val componentsVisibilityParam = ParameterSpec.builder("componentsVisibility", FLOW.plusParameter(componentsVisibilityClassName))
             .defaultValue("flowOf(${componentsVisibilityClassName.simpleName}())")
             .build()
 
-        return initialValueParams + valueParams + sequenceOf(visibilityParam)
+        return initialValueParams + valueParams + sequenceOf(componentsVisibilityParam)
     }
 }
