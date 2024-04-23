@@ -8,7 +8,10 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 
 internal object DebugPanelComponentsVisibilityTypeSpec {
-    fun create(name: String, components: Sequence<Component>) = TypeSpec.classBuilder(name)
+    fun create(
+        name: String,
+        components: Sequence<Component>,
+    ) = TypeSpec.classBuilder(name)
         .addModifiers(KModifier.DATA)
         .primaryConstructor(
             FunSpec.constructorBuilder()
@@ -17,18 +20,18 @@ internal object DebugPanelComponentsVisibilityTypeSpec {
                         addParameter(
                             ParameterSpec.builder(component.name, Boolean::class)
                                 .defaultValue("true")
-                                .build()
+                                .build(),
                         )
                     }
                 }
-                .build()
+                .build(),
         )
         .apply {
             components.forEach { component ->
                 addProperty(
                     PropertySpec.builder(component.name, Boolean::class)
                         .initializer(component.name)
-                        .build()
+                        .build(),
                 )
             }
         }

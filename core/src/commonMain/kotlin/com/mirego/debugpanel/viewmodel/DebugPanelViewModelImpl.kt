@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 open class DebugPanelViewModelImpl(
     coroutineScope: CoroutineScope,
     private val useCase: DebugPanelUseCase,
-    viewDataFlow: Flow<DebugPanelViewData>
+    viewDataFlow: Flow<DebugPanelViewData>,
 ) : VMDViewModelImpl(coroutineScope), DebugPanelViewModel {
     private val DebugPanelItemViewData.labelWithDirtyIndicator: Flow<String>
         get() = isDirty.map { isDirty ->
@@ -46,54 +46,58 @@ open class DebugPanelViewModelImpl(
                     is DebugPanelItemViewData.DatePicker -> createDatePicker(item)
                 }
             }
-        }
+        },
     )
 
-    private fun createToggle(viewData: DebugPanelItemViewData.Toggle) = DebugPanelItemViewModel.Toggle(
-        identifier = viewData.identifier,
-        viewModel = toggleWithText(viewData.label, viewData.initialValue ?: false) {
-            bindContent(viewData.labelWithDirtyIndicator.map { VMDTextContent(it) })
+    private fun createToggle(viewData: DebugPanelItemViewData.Toggle) =
+        DebugPanelItemViewModel.Toggle(
+            identifier = viewData.identifier,
+            viewModel = toggleWithText(viewData.label, viewData.initialValue ?: false) {
+                bindContent(viewData.labelWithDirtyIndicator.map { VMDTextContent(it) })
 
-            coroutineScope.launch {
-                flowForProperty(::isOn)
-                    .drop(1)
-                    .distinctUntilChanged()
-                    .collect {
-                        useCase.onToggleUpdated(viewData, it)
-                    }
-            }
-        }
-    )
+                coroutineScope.launch {
+                    flowForProperty(::isOn)
+                        .drop(1)
+                        .distinctUntilChanged()
+                        .collect {
+                            useCase.onToggleUpdated(viewData, it)
+                        }
+                }
+            },
+        )
 
-    private fun createTextField(viewData: DebugPanelItemViewData.TextField) = DebugPanelItemViewModel.TextField(
-        identifier = viewData.identifier,
-        viewModel = textField(text = viewData.initialValue.orEmpty(), placeholder = viewData.label) {
-            coroutineScope.launch {
-                flowForProperty(::text)
-                    .drop(1)
-                    .distinctUntilChanged()
-                    .debounce(500.milliseconds)
-                    .collect {
-                        useCase.onTextFieldUpdated(viewData, it)
-                    }
-            }
-        }
-    )
+    private fun createTextField(viewData: DebugPanelItemViewData.TextField) =
+        DebugPanelItemViewModel.TextField(
+            identifier = viewData.identifier,
+            viewModel = textField(text = viewData.initialValue.orEmpty(), placeholder = viewData.label) {
+                coroutineScope.launch {
+                    flowForProperty(::text)
+                        .drop(1)
+                        .distinctUntilChanged()
+                        .debounce(500.milliseconds)
+                        .collect {
+                            useCase.onTextFieldUpdated(viewData, it)
+                        }
+                }
+            },
+        )
 
-    private fun createButton(viewData: DebugPanelItemViewData.Button) = DebugPanelItemViewModel.Button(
-        identifier = viewData.identifier,
-        viewModel = buttonWithText(viewData.label) {
-            setAction(viewData.action)
-        }
-    )
+    private fun createButton(viewData: DebugPanelItemViewData.Button) =
+        DebugPanelItemViewModel.Button(
+            identifier = viewData.identifier,
+            viewModel = buttonWithText(viewData.label) {
+                setAction(viewData.action)
+            },
+        )
 
-    private fun createLabel(viewData: DebugPanelItemViewData.Label) = DebugPanelItemViewModel.Label(
-        identifier = viewData.identifier,
-        label = text(viewData.label),
-        viewModel = text(viewData.identifier) {
-            bindText(viewData.value)
-        }
-    )
+    private fun createLabel(viewData: DebugPanelItemViewData.Label) =
+        DebugPanelItemViewModel.Label(
+            identifier = viewData.identifier,
+            label = text(viewData.label),
+            viewModel = text(viewData.identifier) {
+                bindText(viewData.value)
+            },
+        )
 
     private fun createPicker(viewData: DebugPanelItemViewData.Picker): DebugPanelItemViewModel.Picker {
         val picker = picker(
@@ -101,10 +105,10 @@ open class DebugPanelViewModelImpl(
                 VMDContentPickerItemViewModelImpl(
                     coroutineScope,
                     VMDTextContent(it.text),
-                    it.identifier
+                    it.identifier,
                 )
             },
-            initialSelectedId = viewData.initialValue
+            initialSelectedId = viewData.initialValue,
         ) {
             coroutineScope.launch {
                 flowForProperty(::selectedIndex)
@@ -127,35 +131,36 @@ open class DebugPanelViewModelImpl(
                 bindText(
                     picker.flowForProperty(picker::selectedIndex).map { index ->
                         picker.elements.getOrNull(index)?.content?.text ?: initialValue
-                    }
+                    },
                 )
             },
-            viewModel = picker
+            viewModel = picker,
         )
     }
 
-    private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) = DebugPanelItemViewModel.DatePicker(
-        identifier = viewData.identifier,
-        label = text(viewData.label) {
-            bindText(viewData.labelWithDirtyIndicator)
-        },
-        viewModel = datePicker(initialDate = viewData.initialValue) {
-            isEnabled = false
-            bindText(
-                flowForProperty(::date).map { date ->
-                    date?.let { dateFormatter.format(it) }.orEmpty()
-                }
-            )
+    private fun createDatePicker(viewData: DebugPanelItemViewData.DatePicker) =
+        DebugPanelItemViewModel.DatePicker(
+            identifier = viewData.identifier,
+            label = text(viewData.label) {
+                bindText(viewData.labelWithDirtyIndicator)
+            },
+            viewModel = datePicker(initialDate = viewData.initialValue) {
+                isEnabled = false
+                bindText(
+                    flowForProperty(::date).map { date ->
+                        date?.let { dateFormatter.format(it) }.orEmpty()
+                    },
+                )
 
-            coroutineScope.launch {
-                flowForProperty(::date)
-                    .drop(1)
-                    .distinctUntilChanged()
-                    .filterNotNull()
-                    .collect { date ->
-                        useCase.onDatePickerUpdated(viewData, date)
-                    }
-            }
-        }
-    )
+                coroutineScope.launch {
+                    flowForProperty(::date)
+                        .drop(1)
+                        .distinctUntilChanged()
+                        .filterNotNull()
+                        .collect { date ->
+                            useCase.onDatePickerUpdated(viewData, date)
+                        }
+                }
+            },
+        )
 }

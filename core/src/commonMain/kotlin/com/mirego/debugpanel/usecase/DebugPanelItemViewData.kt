@@ -13,20 +13,20 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
         override val identifier: String,
         override val label: String,
         val initialValue: Boolean?,
-        override val isDirty: Flow<Boolean>
+        override val isDirty: Flow<Boolean>,
     ) : DebugPanelItemViewData
 
     data class TextField(
         override val identifier: String,
         override val label: String,
         val initialValue: String?,
-        override val isDirty: Flow<Boolean>
+        override val isDirty: Flow<Boolean>,
     ) : DebugPanelItemViewData
 
     data class Label(
         override val identifier: String,
         override val label: String,
-        val value: Flow<String>
+        val value: Flow<String>,
     ) : DebugPanelItemViewData {
         override val isDirty = flowOf(false)
     }
@@ -36,20 +36,20 @@ sealed interface DebugPanelItemViewData : VMDIdentifiableContent {
         override val label: String,
         val initialValue: String?,
         val items: List<DebugPanelPickerItem>,
-        override val isDirty: Flow<Boolean>
+        override val isDirty: Flow<Boolean>,
     ) : DebugPanelItemViewData
 
     data class DatePicker(
         override val identifier: String,
         override val label: String,
         val initialValue: Long?,
-        override val isDirty: Flow<Boolean>
+        override val isDirty: Flow<Boolean>,
     ) : DebugPanelItemViewData
 
     data class Button(
         override val identifier: String,
         override val label: String,
-        val action: () -> Unit
+        val action: () -> Unit,
     ) : DebugPanelItemViewData {
         override val isDirty = flowOf(false)
     }

@@ -16,7 +16,13 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 import kotlin.reflect.KProperty
 
 internal object DebugPanelObservablePropertyTypeSpec {
-    fun create(typeSpecName: String, parent: KSClassDeclaration, returnType: KSType, identifier: String, name: String): TypeSpecWithImports {
+    fun create(
+        typeSpecName: String,
+        parent: KSClassDeclaration,
+        returnType: KSType,
+        identifier: String,
+        name: String,
+    ): TypeSpecWithImports {
         val argument = returnType.arguments.first()
         val argumentName = argument.toTypeName() as ClassName
 
@@ -58,14 +64,14 @@ internal object DebugPanelObservablePropertyTypeSpec {
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
                         .addCode(code)
                         .returns(returnType.toTypeName())
-                        .build()
+                        .build(),
                 )
                 .build(),
             listOf(
                 Import(Consts.SERVICE_PACKAGE_NAME, "DebugPanelSettings"),
                 Import(Consts.FLOW_PACKAGE_NAME, "flatMapLatest"),
-                Import(Consts.FLOW_PACKAGE_NAME, "flowOf")
-            )
+                Import(Consts.FLOW_PACKAGE_NAME, "flowOf"),
+            ),
         )
     }
 }

@@ -18,7 +18,7 @@ import kotlinx.datetime.todayIn
 
 class RootViewModelImpl(
     coroutineScope: CoroutineScope,
-    useCase: SampleDebugPanelUseCase
+    useCase: SampleDebugPanelUseCase,
 ) : RootViewModel, VMDViewModelImpl(coroutineScope) {
     override val title = "Sample Debug Panel"
 
@@ -38,7 +38,7 @@ class RootViewModelImpl(
             environments = listOf(
                 DebugPanelPickerItem("dev", "Dev"),
                 DebugPanelPickerItem("qa", "QA"),
-                DebugPanelPickerItem("prod", "Production")
+                DebugPanelPickerItem("prod", "Production"),
             ),
             reset = {
                 coroutineScope.launch {
@@ -46,7 +46,7 @@ class RootViewModelImpl(
                     delay(500.milliseconds) // The shared preferences are async on Android so we make sure to wait enough time before killing the app
                     killApp()
                 }
-            }
-        )
+            },
+        ),
     )
 }

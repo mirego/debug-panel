@@ -5,10 +5,10 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelDSL
 
 fun VMDViewModelDSL.datePicker(
     initialDate: Long?,
-    closure: DatePickerViewModelImpl.() -> Unit = {}
+    closure: DatePickerViewModelImpl.() -> Unit = {},
 ) = DatePickerViewModelImpl(
     coroutineScope,
-    initialDate
+    initialDate,
 ).apply {
     action = { showPicker?.invoke() }
     closure()

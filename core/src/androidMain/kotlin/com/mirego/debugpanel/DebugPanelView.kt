@@ -47,11 +47,14 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun DebugPanelView(viewModel: DebugPanelViewModel, modifier: Modifier = Modifier) {
+fun DebugPanelView(
+    viewModel: DebugPanelViewModel,
+    modifier: Modifier = Modifier,
+) {
     VMDLazyColumn(
         viewModel = viewModel.items,
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) { item ->
         when (item) {
             is DebugPanelItemViewModel.TextField -> TextFieldItem(item)
@@ -85,9 +88,9 @@ private fun ButtonItem(item: DebugPanelItemViewModel.Button) {
             Text(
                 content.text,
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
             )
-        }
+        },
     )
 }
 
@@ -95,7 +98,7 @@ private fun ButtonItem(item: DebugPanelItemViewModel.Button) {
 private fun LabelItem(item: DebugPanelItemViewModel.Label) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         VMDText(viewModel = item.label)
         SpacerHorizontal(32.dp)
@@ -114,7 +117,7 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
     Box {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             VMDText(viewModel = item.label)
 
@@ -124,12 +127,12 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
                     .height(48.dp)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable { isExpanded = true },
-                contentAlignment = Alignment.CenterStart
+                contentAlignment = Alignment.CenterStart,
             ) {
                 VMDText(
                     viewModel = item.selectedItem,
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -139,7 +142,7 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
             expanded = isExpanded,
             onDismissRequest = {
                 isExpanded = false
-            }
+            },
         ) { dropdownItem, index ->
             VMDDropDownMenuItem(
                 pickerViewModel = item.viewModel,
@@ -148,7 +151,7 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
                 onClick = { isExpanded = false },
                 text = {
                     Text(text = dropdownItem.content.text)
-                }
+                },
             )
         }
     }
@@ -158,7 +161,7 @@ private fun PickerItem(item: DebugPanelItemViewModel.Picker) {
 private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         VMDText(viewModel = item.label)
 
@@ -174,7 +177,7 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(datePickerViewModel.action),
-            textFieldColors = TextFieldDefaults.colors(disabledTextColor = MaterialTheme.colorScheme.onSurface)
+            textFieldColors = TextFieldDefaults.colors(disabledTextColor = MaterialTheme.colorScheme.onSurface),
         )
         DatePickerView(dialogVisible.value, datePickerViewModel.date) { date ->
             date?.let { datePickerViewModel.date = it }
@@ -184,7 +187,11 @@ private fun DatePickerItem(item: DebugPanelItemViewModel.DatePicker) {
 }
 
 @Composable
-private fun DatePickerView(visible: Boolean, initialSelectedDate: Long?, onDismissed: (Long?) -> Unit) {
+private fun DatePickerView(
+    visible: Boolean,
+    initialSelectedDate: Long?,
+    onDismissed: (Long?) -> Unit,
+) {
     val datePickerState = rememberDatePickerState(initialSelectedDate)
 
     if (!visible) return
@@ -200,7 +207,7 @@ private fun DatePickerView(visible: Boolean, initialSelectedDate: Long?, onDismi
             TextButton(onClick = { onDismissed(null) }) {
                 Text("Cancel")
             }
-        }
+        },
     ) {
         DatePicker(state = datePickerState)
     }
@@ -217,11 +224,11 @@ private fun Preview() {
                 CoroutineScopeProvider.provideMainWithSuperviserJob(
                     CoroutineExceptionHandler { _, exception ->
                         println("CoroutineExceptionHandler got $exception")
-                    }
+                    },
                 ),
                 useCase,
-                flowOf(useCase.createViewData())
-            )
+                flowOf(useCase.createViewData()),
+            ),
         )
     }
 }

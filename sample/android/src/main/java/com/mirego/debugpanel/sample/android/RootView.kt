@@ -25,12 +25,12 @@ fun RootView(viewModel: RootViewModel) {
         Modifier
             .padding(16.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
             viewModel.title,
             fontSize = 24.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
 
         DebugPanelView(viewModel.debugPanel)
@@ -46,10 +46,10 @@ private fun Preview() {
                 CoroutineScopeProvider.provideMainWithSuperviserJob(
                     CoroutineExceptionHandler { _, exception ->
                         println("CoroutineExceptionHandler got $exception")
-                    }
+                    },
                 ),
-                SampleDebugPanelUseCasePreview()
-            )
+                SampleDebugPanelUseCasePreview(),
+            ),
         )
     }
 }

@@ -29,7 +29,10 @@ internal object ComponentFactory {
         data class EnumPicker(val enumType: KSType) : Type
     }
 
-    fun createAllComponents(configDeclaration: KSClassDeclaration, debugPropertyDeclarations: Sequence<KSPropertyDeclaration>): Sequence<Component> {
+    fun createAllComponents(
+        configDeclaration: KSClassDeclaration,
+        debugPropertyDeclarations: Sequence<KSPropertyDeclaration>,
+    ): Sequence<Component> {
         val configProperties = configDeclaration.getAllProperties()
             .mapNotNull {
                 val propertyName = it.simpleName.getShortName()
@@ -71,7 +74,11 @@ internal object ComponentFactory {
         return configProperties + debugProperties
     }
 
-    private fun KSPropertyDeclaration.toComponent(type: Type, name: String, isDebugProperty: Boolean): Component {
+    private fun KSPropertyDeclaration.toComponent(
+        type: Type,
+        name: String,
+        isDebugProperty: Boolean,
+    ): Component {
         val identifier = findAnnotation(Identifier::class)?.arguments?.first()?.value as String?
         val displayName = findAnnotation(DisplayName::class)?.arguments?.first()?.value as String?
         val requiresInitialValue = !isDebugProperty

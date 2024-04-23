@@ -19,5 +19,5 @@ data class DebugPanelConfig(
     @DisplayName("Environment") val environments: DebugPanelPicker,
     @DisplayName("Language") val language: Language,
     @DisplayName("Date picker") val date: DebugPanelDatePicker,
-    @DisplayName("Reset and kill app") val reset: DebugPanelButton
+    @DisplayName("Reset and kill app") val reset: DebugPanelButton,
 )

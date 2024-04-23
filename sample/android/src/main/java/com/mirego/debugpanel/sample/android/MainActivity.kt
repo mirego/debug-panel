@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             DebugPanelTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     RootView(applicationViewModel.rootViewModel)
                 }

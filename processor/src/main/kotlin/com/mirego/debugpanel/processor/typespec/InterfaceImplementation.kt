@@ -9,13 +9,13 @@ import com.squareup.kotlinpoet.TypeSpec
 
 internal data class InterfaceImplementation(
     val int: TypeSpecWithImports,
-    val impl: TypeSpecWithImports
+    val impl: TypeSpecWithImports,
 ) {
     data class Function(
         val name: String,
         val returnType: TypeName,
         val code: String,
-        val params: Iterable<ParameterSpec> = emptyList()
+        val params: Iterable<ParameterSpec> = emptyList(),
     )
 
     companion object {
@@ -25,7 +25,7 @@ internal data class InterfaceImplementation(
             configureInterface: TypeSpec.Builder.() -> TypeSpec.Builder = { this },
             configureImplementation: TypeSpec.Builder.() -> TypeSpec.Builder = { this },
             interfaceImports: List<Import> = emptyList(),
-            implementationImports: List<Import> = emptyList()
+            implementationImports: List<Import> = emptyList(),
         ): InterfaceImplementation {
             val int = configureInterface(
                 TypeSpec.interfaceBuilder(interfaceClassName.simpleName)
@@ -36,8 +36,8 @@ internal data class InterfaceImplementation(
                                 .addParameters(function.params)
                                 .returns(function.returnType)
                                 .build()
-                        }
-                    )
+                        },
+                    ),
             ).build()
 
             val impl = configureImplementation(
@@ -53,13 +53,13 @@ internal data class InterfaceImplementation(
                                         param.toBuilder()
                                             .defaultValue(null)
                                             .build()
-                                    }
+                                    },
                                 )
                                 .returns(function.returnType)
                                 .addCode(function.code)
                                 .build()
-                        }
-                    )
+                        },
+                    ),
             ).build()
 
             return InterfaceImplementation(TypeSpecWithImports(int, interfaceImports), TypeSpecWithImports(impl, implementationImports))
