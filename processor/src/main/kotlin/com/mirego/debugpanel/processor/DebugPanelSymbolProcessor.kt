@@ -9,11 +9,13 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.mirego.debugpanel.annotations.DebugPanel
 import com.mirego.debugpanel.annotations.DebugProperty
 import com.mirego.debugpanel.annotations.Identifier
+import com.mirego.debugpanel.processor.Consts.COMPONENTS_VISIBILITY_NAME
 import com.mirego.debugpanel.processor.Consts.FLOW
 import com.mirego.debugpanel.processor.Consts.REPOSITORY_IMPL_NAME
 import com.mirego.debugpanel.processor.Consts.REPOSITORY_NAME
 import com.mirego.debugpanel.processor.Consts.USE_CASE_IMPL_NAME
 import com.mirego.debugpanel.processor.Consts.USE_CASE_NAME
+import com.mirego.debugpanel.processor.typespec.DebugPanelComponentsVisibilityTypeSpec
 import com.mirego.debugpanel.processor.typespec.DebugPanelObservablePropertyTypeSpec
 import com.mirego.debugpanel.processor.typespec.DebugPanelPropertyTypeSpec
 import com.mirego.debugpanel.processor.typespec.DebugPanelRepositoryTypeSpec
@@ -81,15 +83,21 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             val specificRepositoryImplName = "${configuration.prefix}$REPOSITORY_IMPL_NAME"
 
             val useCasePackageName = Consts.getUseCasePackageName(configuration.packageName)
+
+            val componentsVisibilityName = "${configuration.prefix}$COMPONENTS_VISIBILITY_NAME"
+            val componentsVisibilityClassName = ClassName(useCasePackageName, componentsVisibilityName)
+
             val specificUseCaseName = "${configuration.prefix}$USE_CASE_NAME"
             val specificUseCaseClassName = ClassName(useCasePackageName, specificUseCaseName)
             val specificUseCaseImplName = "${configuration.prefix}$USE_CASE_IMPL_NAME"
 
             val (repositoryInterface, repositoryImplementation) = DebugPanelRepositoryTypeSpec.create(specificRepositoryClassName, configuration.components)
-            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, configuration)
+            val componentsVisibility = DebugPanelComponentsVisibilityTypeSpec.create(componentsVisibilityName, configuration.components)
+            val (useCaseInterface, useCaseImplementation) = DebugPanelUseCaseTypeSpec.create(specificUseCaseClassName, specificRepositoryClassName, componentsVisibilityClassName, configuration)
 
             writeFile(repositoryPackageName, specificRepositoryName, repositoryInterface)
             writeFile(repositoryPackageName, specificRepositoryImplName, repositoryImplementation)
+            writeFile(useCasePackageName, componentsVisibilityName, TypeSpecWithImports(componentsVisibility))
             writeFile(useCasePackageName, specificUseCaseName, useCaseInterface)
             writeFile(useCasePackageName, specificUseCaseImplName, useCaseImplementation)
         }

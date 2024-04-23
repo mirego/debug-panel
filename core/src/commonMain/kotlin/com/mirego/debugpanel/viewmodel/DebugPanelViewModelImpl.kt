@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 open class DebugPanelViewModelImpl(
     coroutineScope: CoroutineScope,
     private val useCase: DebugPanelUseCase,
-    viewData: DebugPanelViewData
+    viewDataFlow: Flow<DebugPanelViewData>
 ) : VMDViewModelImpl(coroutineScope), DebugPanelViewModel {
     private val DebugPanelItemViewData.labelWithDirtyIndicator: Flow<String>
         get() = isDirty.map { isDirty ->
@@ -35,14 +35,16 @@ open class DebugPanelViewModelImpl(
         }
 
     override val items = list(
-        viewData.items.map { item ->
-            when (item) {
-                is DebugPanelItemViewData.Toggle -> createToggle(item)
-                is DebugPanelItemViewData.TextField -> createTextField(item)
-                is DebugPanelItemViewData.Button -> createButton(item)
-                is DebugPanelItemViewData.Label -> createLabel(item)
-                is DebugPanelItemViewData.Picker -> createPicker(item)
-                is DebugPanelItemViewData.DatePicker -> createDatePicker(item)
+        viewDataFlow.map { viewData ->
+            viewData.items.map { item ->
+                when (item) {
+                    is DebugPanelItemViewData.Toggle -> createToggle(item)
+                    is DebugPanelItemViewData.TextField -> createTextField(item)
+                    is DebugPanelItemViewData.Button -> createButton(item)
+                    is DebugPanelItemViewData.Label -> createLabel(item)
+                    is DebugPanelItemViewData.Picker -> createPicker(item)
+                    is DebugPanelItemViewData.DatePicker -> createDatePicker(item)
+                }
             }
         }
     )

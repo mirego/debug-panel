@@ -47,7 +47,14 @@ internal data class InterfaceImplementation(
                         functions.map { function ->
                             FunSpec.builder(function.name)
                                 .addModifiers(KModifier.OVERRIDE)
-                                .addParameters(function.params)
+                                .addParameters(
+                                    // Since we define the same function for both interface and implementation we must remove the default value for impl
+                                    function.params.map { param ->
+                                        param.toBuilder()
+                                            .defaultValue(null)
+                                            .build()
+                                    }
+                                )
                                 .returns(function.returnType)
                                 .addCode(function.code)
                                 .build()

@@ -39,13 +39,14 @@ class RootViewModelImpl(
                 DebugPanelPickerItem("dev", "Dev"),
                 DebugPanelPickerItem("qa", "QA"),
                 DebugPanelPickerItem("prod", "Production")
-            )
-        ) {
-            coroutineScope.launch {
-                useCase.resetSettings()
-                delay(500.milliseconds) // The shared preferences are async on Android so we make sure to wait enough time before killing the app
-                killApp()
+            ),
+            reset = {
+                coroutineScope.launch {
+                    useCase.resetSettings()
+                    delay(500.milliseconds) // The shared preferences are async on Android so we make sure to wait enough time before killing the app
+                    killApp()
+                }
             }
-        }
+        )
     )
 }

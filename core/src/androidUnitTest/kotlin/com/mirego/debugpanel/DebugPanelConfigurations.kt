@@ -62,3 +62,10 @@ data class TestUseCaseIdentifierConfig(
     @Identifier("ENUM_KEY") val enum: TestEnum,
     @Identifier("DATE_PICKER_KEY") val datePicker: DebugPanelDatePicker
 )
+
+@Suppress("unused")
+@DebugPanel("TestUseCaseVisibility", "com.mirego.debugpanel")
+data class TestUseCaseVisibilityConfig(
+    val button1: DebugPanelButton,
+    val button2: DebugPanelButton
+)

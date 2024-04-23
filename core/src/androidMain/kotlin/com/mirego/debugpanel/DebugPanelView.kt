@@ -44,6 +44,7 @@ import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDT
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDTextField
 import com.mirego.trikot.viewmodels.declarative.util.CoroutineScopeProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun DebugPanelView(viewModel: DebugPanelViewModel, modifier: Modifier = Modifier) {
@@ -219,7 +220,7 @@ private fun Preview() {
                     }
                 ),
                 useCase,
-                useCase.createViewData()
+                flowOf(useCase.createViewData())
             )
         )
     }
