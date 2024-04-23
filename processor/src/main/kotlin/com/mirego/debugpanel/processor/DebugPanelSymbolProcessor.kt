@@ -28,7 +28,10 @@ import com.squareup.kotlinpoet.ksp.writeTo
 class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
 
-    private fun getConfigurations(declarations: Sequence<KSClassDeclaration>, debugProperties: Sequence<KSPropertyDeclaration>): Sequence<ResolvedConfiguration> =
+    private fun getConfigurations(
+        declarations: Sequence<KSClassDeclaration>,
+        debugProperties: Sequence<KSPropertyDeclaration>,
+    ): Sequence<ResolvedConfiguration> =
         declarations
             .map { declaration ->
                 val annotation = declaration.findAnnotation(DebugPanel::class)!!
@@ -40,11 +43,15 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
                     annotation = annotation,
                     components = ComponentFactory.createAllComponents(declaration, debugProperties),
                     prefix = prefix,
-                    packageName = packageName
+                    packageName = packageName,
                 )
             }
 
-    private fun writeFile(packageName: String, name: String, type: TypeSpecWithImports) {
+    private fun writeFile(
+        packageName: String,
+        name: String,
+        type: TypeSpecWithImports,
+    ) {
         FileSpec.builder(packageName, name)
             .addType(type.typeSpec)
             .run {
@@ -75,7 +82,10 @@ class DebugPanelSymbolProcessor(private val environment: SymbolProcessorEnvironm
             }
     }
 
-    private fun writeClasses(declarations: Sequence<KSClassDeclaration>, debugProperties: Sequence<KSPropertyDeclaration>) {
+    private fun writeClasses(
+        declarations: Sequence<KSClassDeclaration>,
+        debugProperties: Sequence<KSPropertyDeclaration>,
+    ) {
         getConfigurations(declarations, debugProperties).forEach { configuration ->
             val repositoryPackageName = Consts.getRepositoryPackageName(configuration.packageName)
             val specificRepositoryName = "${configuration.prefix}$REPOSITORY_NAME"

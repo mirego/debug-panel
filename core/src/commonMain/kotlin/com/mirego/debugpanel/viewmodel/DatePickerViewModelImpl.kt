@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 open class DatePickerViewModelImpl(
     coroutineScope: CoroutineScope,
-    initialDate: Long?
+    initialDate: Long?,
 ) : VMDTextFieldViewModelImpl(coroutineScope), DatePickerViewModel {
     private val actionDelegate = emit({}, this, coroutineScope)
     override var action: () -> Unit by actionDelegate

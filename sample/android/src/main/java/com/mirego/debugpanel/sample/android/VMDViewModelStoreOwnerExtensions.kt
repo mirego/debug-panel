@@ -12,7 +12,7 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModel
 fun <VMD : VMDViewModel> ViewModelStoreOwner.getInitialViewModel(factory: () -> VMD): VMD =
     ViewModelProvider(
         viewModelStore,
-        ViewModelProviderFactory(factory)
+        ViewModelProviderFactory(factory),
     )[ViewModelWrapper::class.java].wrappedViewModel as VMD
 
 @Suppress("UNCHECKED_CAST")

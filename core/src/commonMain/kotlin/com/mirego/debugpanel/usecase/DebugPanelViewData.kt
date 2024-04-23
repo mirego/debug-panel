@@ -1,5 +1,5 @@
 package com.mirego.debugpanel.usecase
 
 data class DebugPanelViewData(
-    val items: List<DebugPanelItemViewData>
+    val items: List<DebugPanelItemViewData>,
 )

@@ -23,35 +23,44 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 internal object DebugPanelUseCaseTypeSpec {
     private data class ComponentItemViewData(
         val componentName: String,
-        val viewData: String
+        val viewData: String,
     )
 
-    fun create(className: ClassName, specificRepositoryClassName: ClassName, componentsVisibilityClassName: ClassName, configuration: ResolvedConfiguration) = InterfaceImplementation.create(
+    fun create(
+        className: ClassName,
+        specificRepositoryClassName: ClassName,
+        componentsVisibilityClassName: ClassName,
+        configuration: ResolvedConfiguration,
+    ) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = createFunctions(componentsVisibilityClassName, configuration),
         configureInterface = { configureInterface(specificRepositoryClassName) },
         configureImplementation = { configureImplementation(specificRepositoryClassName) },
         interfaceImports = listOf(
-            Import(Consts.FLOW_PACKAGE_NAME, "flowOf")
+            Import(Consts.FLOW_PACKAGE_NAME, "flowOf"),
         ),
         implementationImports = listOf(
             Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
-            Import(Consts.FLOW_PACKAGE_NAME, "map")
-        )
+            Import(Consts.FLOW_PACKAGE_NAME, "map"),
+        ),
     )
 
-    private fun createFunctions(componentsVisibilityClassName: ClassName, configuration: ResolvedConfiguration): Iterable<InterfaceImplementation.Function> = listOf(
-        createComponentItemViewDataList(configuration.components).let { itemViewDataList ->
-            val viewDataName = "DebugPanelViewData"
+    private fun createFunctions(
+        componentsVisibilityClassName: ClassName,
+        configuration: ResolvedConfiguration,
+    ): Iterable<InterfaceImplementation.Function> =
+        listOf(
+            createComponentItemViewDataList(configuration.components).let { itemViewDataList ->
+                val viewDataName = "DebugPanelViewData"
 
-            val itemViewDataListWithVisibility = itemViewDataList.joinToString(",\n") { (componentName, viewData) ->
-                "$viewData.takeIf { visibility.$componentName }"
-            }
+                val itemViewDataListWithVisibility = itemViewDataList.joinToString(",\n") { (componentName, viewData) ->
+                    "$viewData.takeIf { visibility.$componentName }"
+                }
 
-            InterfaceImplementation.Function(
-                name = "createViewData",
-                returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
-                code = """
+                InterfaceImplementation.Function(
+                    name = "createViewData",
+                    returnType = FLOW.plusParameter(ClassName(Consts.USE_CASE_PACKAGE_NAME, viewDataName)),
+                    code = """
                     |return componentsVisibility.map { visibility ->
                     |$viewDataName(
                     |⇥listOfNotNull(
@@ -59,11 +68,11 @@ internal object DebugPanelUseCaseTypeSpec {
                     |⇤)
                     |⇤)
                     |}
-                """.trimMargin(),
-                params = createParams(componentsVisibilityClassName, configuration.components).asIterable()
-            )
-        }
-    )
+                    """.trimMargin(),
+                    params = createParams(componentsVisibilityClassName, configuration.components).asIterable(),
+                )
+            },
+        )
 
     private fun TypeSpec.Builder.configureInterface(specificRepositoryClassName: ClassName): TypeSpec.Builder =
         addSuperinterface(ClassName(Consts.USE_CASE_PACKAGE_NAME, Consts.USE_CASE_NAME))
@@ -77,33 +86,37 @@ internal object DebugPanelUseCaseTypeSpec {
             .primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter(repositoryParamName, specificRepositoryClassName)
-                    .build()
+                    .build(),
             )
             .addProperty(
                 PropertySpec.builder(repositoryParamName, specificRepositoryClassName)
                     .initializer(repositoryParamName)
                     .addModifiers(KModifier.PRIVATE)
-                    .build()
+                    .build(),
             )
             .addSuperinterface(specificRepositoryClassName, CodeBlock.of(repositoryParamName))
     }
 
-    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<ComponentItemViewData> = components.map { component ->
-        ComponentItemViewData(
-            componentName = component.name,
-            viewData = when (component) {
-                is Component.Button -> DebugPanelItemViewDataFactory.createButton(component)
-                is Component.Label -> DebugPanelItemViewDataFactory.createLabel(component)
-                is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(component)
-                is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(component)
-                is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(component)
-                is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(component)
-                is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(component)
-            }
-        )
-    }
+    private fun createComponentItemViewDataList(components: Sequence<Component>): Sequence<ComponentItemViewData> =
+        components.map { component ->
+            ComponentItemViewData(
+                componentName = component.name,
+                viewData = when (component) {
+                    is Component.Button -> DebugPanelItemViewDataFactory.createButton(component)
+                    is Component.Label -> DebugPanelItemViewDataFactory.createLabel(component)
+                    is Component.Picker -> DebugPanelItemViewDataFactory.createPicker(component)
+                    is Component.DatePicker -> DebugPanelItemViewDataFactory.createDatePicker(component)
+                    is Component.TextField -> DebugPanelItemViewDataFactory.createTextField(component)
+                    is Component.Toggle -> DebugPanelItemViewDataFactory.createToggle(component)
+                    is Component.EnumPicker -> DebugPanelItemViewDataFactory.createPicker(component)
+                },
+            )
+        }
 
-    private fun createParams(componentsVisibilityClassName: ClassName, components: Sequence<Component>): Sequence<ParameterSpec> {
+    private fun createParams(
+        componentsVisibilityClassName: ClassName,
+        components: Sequence<Component>,
+    ): Sequence<ParameterSpec> {
         val initialValueParams = components
             .filter { it.requiresInitialValue }
             .mapNotNull { component ->

@@ -15,7 +15,13 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 import kotlin.reflect.KProperty
 
 internal object DebugPanelPropertyTypeSpec {
-    fun create(typeSpecName: String, parentDeclaration: KSClassDeclaration, returnType: KSType, identifier: String, name: String): TypeSpecWithImports {
+    fun create(
+        typeSpecName: String,
+        parentDeclaration: KSClassDeclaration,
+        returnType: KSType,
+        identifier: String,
+        name: String,
+    ): TypeSpecWithImports {
         val code = when {
             returnType.toTypeName() == STRING -> """
                 |return DebugPanelSettings.observableSettings.getString(
@@ -49,10 +55,10 @@ internal object DebugPanelPropertyTypeSpec {
                         .addParameter("property", KProperty::class.asClassName().parameterizedBy(Consts.WILDCARD))
                         .addCode(code)
                         .returns(returnType.toTypeName())
-                        .build()
+                        .build(),
                 )
                 .build(),
-            listOf(Import(Consts.SERVICE_PACKAGE_NAME, "DebugPanelSettings"))
+            listOf(Import(Consts.SERVICE_PACKAGE_NAME, "DebugPanelSettings")),
         )
     }
 }

@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.WildcardTypeName
 
 internal object Consts {
     fun getRepositoryPackageName(packageName: String) = "$packageName.repository"
+
     fun getUseCasePackageName(packageName: String) = "$packageName.usecase"
 
     private const val BASE_PACKAGE_NAME = "com.mirego.debugpanel"

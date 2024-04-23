@@ -102,7 +102,11 @@ internal object DebugPanelItemViewDataFactory {
         return createButton(identifier, label, action)
     }
 
-    private fun createButton(identifier: String, label: String, action: String): String =
+    private fun createButton(
+        identifier: String,
+        label: String,
+        action: String,
+    ): String =
         """$ITEM_VIEW_DATA_CLASS_NAME.Button(⇥
             |"$identifier",
             |"$label",

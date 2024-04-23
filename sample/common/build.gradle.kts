@@ -40,7 +40,7 @@ kotlin {
                 <<-CMD
                     ../../gradlew :sample:common:generateDummyFramework
                 CMD
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 

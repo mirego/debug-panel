@@ -11,14 +11,17 @@ import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.asTypeName
 
 internal object DebugPanelRepositoryTypeSpec {
-    fun create(className: ClassName, components: Sequence<Component>) = InterfaceImplementation.create(
+    fun create(
+        className: ClassName,
+        components: Sequence<Component>,
+    ) = InterfaceImplementation.create(
         interfaceClassName = className,
         functions = createFunctions(components),
         configureInterface = { addSuperinterface(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_NAME)) },
         configureImplementation = {
             addModifiers(KModifier.OPEN)
                 .superclass(ClassName(Consts.REPOSITORY_PACKAGE_NAME, Consts.REPOSITORY_IMPL_NAME))
-        }
+        },
     )
 
     private fun createFunctions(components: Sequence<Component>): Iterable<InterfaceImplementation.Function> {
@@ -29,7 +32,7 @@ internal object DebugPanelRepositoryTypeSpec {
             InterfaceImplementation.Function(
                 name = getComponentValueFunctionName(component),
                 returnType = FLOW.plusParameter(returnType.copy(nullable = true)),
-                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")"
+                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")",
             )
         }
 
@@ -40,7 +43,7 @@ internal object DebugPanelRepositoryTypeSpec {
             InterfaceImplementation.Function(
                 name = "getCurrent${component.name.capitalize()}",
                 returnType = returnType.copy(nullable = true),
-                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")"
+                code = "return $baseRepositoryFunctionName(\"${component.safeIdentifier}\")",
             )
         }
 
@@ -56,12 +59,11 @@ internal object DebugPanelRepositoryTypeSpec {
                     |$keys
                     |⇤)
                     """.trimMargin()
-                }
+                },
         )
 
         return (componentGettersFlow + componentGetters + resetSettings).asIterable()
     }
 
-    fun getComponentValueFunctionName(component: Component): String =
-        "get${component.name.capitalize()}"
+    fun getComponentValueFunctionName(component: Component): String = "get${component.name.capitalize()}"
 }

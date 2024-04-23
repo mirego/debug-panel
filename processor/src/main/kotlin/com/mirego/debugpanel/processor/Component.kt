@@ -23,7 +23,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = null
         override val componentTypeName = "Label"
@@ -33,7 +33,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = String::class
         override val componentTypeName = "TextField"
@@ -43,7 +43,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = String::class
         override val componentTypeName = "Picker"
@@ -53,7 +53,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = Long::class
         override val componentTypeName = "DatePicker"
@@ -64,7 +64,7 @@ internal sealed interface Component {
         override val displayName: String?,
         override val name: String,
         override val requiresInitialValue: Boolean,
-        val type: KSType
+        val type: KSType,
     ) : Component {
         val values: Sequence<String> = (type.declaration as KSDeclarationContainer)
             .declarations
@@ -78,7 +78,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = Boolean::class
         override val componentTypeName = "Toggle"
@@ -88,7 +88,7 @@ internal sealed interface Component {
         override val identifier: String?,
         override val displayName: String?,
         override val name: String,
-        override val requiresInitialValue: Boolean
+        override val requiresInitialValue: Boolean,
     ) : Component {
         override val persistedType = null
         override val componentTypeName = "Button"

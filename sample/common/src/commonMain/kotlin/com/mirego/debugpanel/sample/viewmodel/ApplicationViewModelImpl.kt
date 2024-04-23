@@ -8,7 +8,7 @@ import com.mirego.trikot.viewmodels.declarative.viewmodel.VMDViewModelImpl
 import kotlinx.coroutines.CoroutineScope
 
 class ApplicationViewModelImpl(
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) : ApplicationViewModel, VMDViewModelImpl(coroutineScope) {
     private val repository: SampleDebugPanelRepository = SampleDebugPanelRepositoryImpl()
     private val useCase: SampleDebugPanelUseCase = SampleDebugPanelUseCaseImpl(repository)

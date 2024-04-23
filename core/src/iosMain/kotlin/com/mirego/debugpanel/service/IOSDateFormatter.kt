@@ -6,7 +6,6 @@ import platform.Foundation.NSLocale
 import platform.Foundation.currentLocale
 
 class IOSDateFormatter : DateFormatter {
-
     private val dateFormatter = NSDateFormatter().apply {
         locale = NSLocale.currentLocale
         dateFormat = DateFormatter.DEFAULT_DATE_FORMAT

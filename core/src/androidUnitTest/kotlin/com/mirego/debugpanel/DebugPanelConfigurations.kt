@@ -18,13 +18,13 @@ data class TestRepositoryConfig(
     val action: DebugPanelButton,
     var textField: DebugPanelTextField,
     val picker: DebugPanelPicker,
-    val datePicker: DebugPanelDatePicker
+    val datePicker: DebugPanelDatePicker,
 )
 
 @Suppress("unused")
 @DebugPanel("TestRepositoryIdentifier", "com.mirego.debugpanel")
 data class TestRepositoryIdentifierConfig(
-    @Identifier("TOGGLE_IDENTIFIER") val toggle: DebugPanelToggle
+    @Identifier("TOGGLE_IDENTIFIER") val toggle: DebugPanelToggle,
 )
 
 @Suppress("unused")
@@ -36,7 +36,7 @@ data class TestUseCaseConfig(
     val picker: DebugPanelPicker,
     val label: DebugPanelLabel,
     val enum: TestEnum,
-    val datePicker: DebugPanelDatePicker
+    val datePicker: DebugPanelDatePicker,
 )
 
 @Suppress("unused")
@@ -48,7 +48,7 @@ data class TestUseCaseDisplayNameConfig(
     @DisplayName("Test picker") val picker: DebugPanelPicker,
     @DisplayName("Test label") val label: DebugPanelLabel,
     @DisplayName("Test enum") val enum: TestEnum,
-    @DisplayName("Test date picker") val datePicker: DebugPanelDatePicker
+    @DisplayName("Test date picker") val datePicker: DebugPanelDatePicker,
 )
 
 @Suppress("unused")
@@ -60,12 +60,12 @@ data class TestUseCaseIdentifierConfig(
     @Identifier("PICKER_KEY") val picker: DebugPanelPicker,
     @Identifier("LABEL_KEY") val label: DebugPanelLabel,
     @Identifier("ENUM_KEY") val enum: TestEnum,
-    @Identifier("DATE_PICKER_KEY") val datePicker: DebugPanelDatePicker
+    @Identifier("DATE_PICKER_KEY") val datePicker: DebugPanelDatePicker,
 )
 
 @Suppress("unused")
 @DebugPanel("TestUseCaseVisibility", "com.mirego.debugpanel")
 data class TestUseCaseVisibilityConfig(
     val button1: DebugPanelButton,
-    val button2: DebugPanelButton
+    val button2: DebugPanelButton,
 )
