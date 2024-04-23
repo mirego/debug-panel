@@ -67,5 +67,5 @@ data class TestUseCaseIdentifierConfig(
 @DebugPanel("TestUseCaseVisibility", "com.mirego.debugpanel")
 data class TestUseCaseVisibilityConfig(
     val button1: DebugPanelButton,
-    val button2: DebugPanelButton,
+    val button2: DebugPanelButton
 )
