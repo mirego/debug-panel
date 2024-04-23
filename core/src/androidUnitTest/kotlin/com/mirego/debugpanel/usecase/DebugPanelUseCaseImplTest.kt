@@ -11,6 +11,7 @@ import com.mirego.debugpanel.extensions.toggle
 import com.mirego.debugpanel.repository.TestUseCaseDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseDisplayNameDebugPanelRepository
 import com.mirego.debugpanel.repository.TestUseCaseIdentifierDebugPanelRepository
+import com.mirego.debugpanel.repository.TestUseCaseVisibilityDebugPanelRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -306,5 +307,27 @@ class SpecificDebugPanelUseCaseImplTest {
         assertFalse(label.isDirty.first())
         assertTrue(enumPicker.isDirty.first())
         assertTrue(datePicker.isDirty.first())
+    }
+
+    @Test
+    fun `expect component to be excluded from list if visibility is set to false`() = runTest {
+        val repository: TestUseCaseVisibilityDebugPanelRepository = mockk()
+        val useCase = TestUseCaseVisibilityDebugPanelUseCaseImpl(repository)
+
+        val viewData = useCase.createViewData(
+            button1 = {},
+            button2 = {},
+            componentsVisibility = flowOf(
+                TestUseCaseVisibilityDebugPanelComponentsVisibility(
+                    button1 = false
+                )
+            )
+        ).first()
+
+        assertEquals(1 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
+
+        val button = viewData.items[0].button
+
+        assertEquals("button2", button.identifier)
     }
 }
