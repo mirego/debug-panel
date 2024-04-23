@@ -50,7 +50,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = pickerItems,
             label = flowOf("label value"),
             initialDatePicker = 123L
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
@@ -139,7 +139,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = emptyList(),
             label = flowOf(),
             initialDatePicker = 123
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
@@ -172,7 +172,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = emptyList(),
             label = flowOf(),
             initialDatePicker = 123
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
@@ -199,7 +199,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = emptyList(),
             label = flowOf("label value"),
             initialDatePicker = 123
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
@@ -243,7 +243,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = pickerItems,
             label = flowOf("label value"),
             initialDatePicker = 123L
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 
@@ -287,7 +287,7 @@ class SpecificDebugPanelUseCaseImplTest {
             picker = pickerItems,
             label = flowOf("label value"),
             initialDatePicker = 123L
-        )
+        ).first()
 
         assertEquals(7 + NUMBER_OF_DEBUG_PROPERTIES, viewData.items.size)
 

@@ -171,12 +171,12 @@ class DebugPanelViewModelImplTest {
 
         val viewModel = createViewModel(viewData)
 
+        advanceUntilIdle()
+
         val toggle = viewModel.items.elements[0] as DebugPanelItemViewModel.Toggle
         val textField = viewModel.items.elements[1] as DebugPanelItemViewModel.TextField
         val picker = viewModel.items.elements[4] as DebugPanelItemViewModel.Picker
         val datePicker = viewModel.items.elements[6] as DebugPanelItemViewModel.DatePicker
-
-        advanceUntilIdle()
 
         toggle.viewModel.onValueChange(true)
         textField.viewModel.onValueChange("newValue")
@@ -226,7 +226,7 @@ class DebugPanelViewModelImplTest {
     private fun TestScope.createViewModel(viewData: DebugPanelViewData) = DebugPanelViewModelImpl(
         coroutineScope = this,
         useCase = useCase,
-        viewData = viewData
+        viewDataFlow = flowOf(viewData)
     )
 
     private fun mockDateFormatter(): DateFormatter {
