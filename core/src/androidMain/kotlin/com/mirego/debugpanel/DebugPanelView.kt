@@ -30,10 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mirego.compose.utils.SpacerHorizontal
 import com.mirego.compose.utils.extensions.clickable
-import com.mirego.debugpanel.usecase.DebugPanelUseCasePreview
 import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModel
-import com.mirego.debugpanel.viewmodel.DebugPanelViewModelImpl
+import com.mirego.debugpanel.viewmodel.preview.PreviewsFactory
 import com.mirego.trikot.viewmodels.declarative.compose.extensions.observeAsState
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.VMDLazyColumn
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDButton
@@ -42,9 +41,6 @@ import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDD
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDSwitch
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDText
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDTextField
-import com.mirego.trikot.viewmodels.declarative.util.CoroutineScopeProvider
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun DebugPanelView(
@@ -217,18 +213,8 @@ private fun DatePickerView(
 @Composable
 private fun Preview() {
     DebugPanelTheme {
-        val useCase = DebugPanelUseCasePreview()
+        val previewFactory = PreviewsFactory()
 
-        DebugPanelView(
-            DebugPanelViewModelImpl(
-                CoroutineScopeProvider.provideMainWithSuperviserJob(
-                    CoroutineExceptionHandler { _, exception ->
-                        println("CoroutineExceptionHandler got $exception")
-                    },
-                ),
-                useCase,
-                flowOf(useCase.createViewData()),
-            ),
-        )
+        DebugPanelView(previewFactory.debugPanel())
     }
 }
