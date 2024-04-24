@@ -50,9 +50,7 @@ public struct DebugPanelView: View {
 
 struct DebugPanelView_Previews: PreviewProvider {
     static var previews: some View {
-        let useCase = DebugPanelUseCasePreview()
-        let viewModel = DebugPanelViewModelImpl(coroutineScope: CoroutineScopeProvider().provideMainWithSuperviserJob(), useCase: useCase, viewData: useCase.createViewData()
-        )
-        DebugPanelView(viewModel)
+        let previewsFactory = PreviewsFactory()
+        DebugPanelView(previewsFactory.debugPanel())
     }
 }

@@ -1,5 +1,5 @@
 PODS:
-  - DebugPanel (1.0.5-SNAPSHOT):
+  - DebugPanel (1.0.7-SNAPSHOT):
     - Trikot/viewmodels.declarative.SwiftUI.flow
     - TRIKOT_FRAMEWORK_NAME
   - Kingfisher (7.8.1)
@@ -38,7 +38,7 @@ CHECKOUT OPTIONS:
     :tag: 5.3.0
 
 SPEC CHECKSUMS:
-  DebugPanel: ddab66ee282688e5c1918b70a05cec8b2e15fd72
+  DebugPanel: 70a9d2667e24f78adcb32f5c8749ac0263cd36fe
   Kingfisher: 63f677311d36a3473f6b978584f8a3845d023dc5
   SwiftUIIntrospect: db5290a3492424eb4afcab77cebcd4595de3bd71
   Trikot: 3f21d54bfbd1000f054a8e3f037d4048a91d1c82
@@ -46,4 +46,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a4b2796bc2fb6bf2dd205c4224d091281bda6907
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.15.0
