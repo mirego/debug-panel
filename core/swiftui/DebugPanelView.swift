@@ -50,7 +50,7 @@ public struct DebugPanelView: View {
 
 struct DebugPanelView_Previews: PreviewProvider {
     static var previews: some View {
-        let previewsFactory = PreviewsFactory()
+        let previewsFactory = DebugPanelPreviewsFactory()
         DebugPanelView(previewsFactory.debugPanel())
     }
 }

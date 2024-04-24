@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.flowOf
 
-class PreviewsFactory {
+class DebugPanelPreviewsFactory {
     private fun createCoroutineScope() = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
     private val useCase = DebugPanelUseCasePreview()

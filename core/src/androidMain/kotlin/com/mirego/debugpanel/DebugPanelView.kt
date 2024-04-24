@@ -32,7 +32,7 @@ import com.mirego.compose.utils.SpacerHorizontal
 import com.mirego.compose.utils.extensions.clickable
 import com.mirego.debugpanel.viewmodel.DebugPanelItemViewModel
 import com.mirego.debugpanel.viewmodel.DebugPanelViewModel
-import com.mirego.debugpanel.viewmodel.preview.PreviewsFactory
+import com.mirego.debugpanel.viewmodel.preview.DebugPanelPreviewsFactory
 import com.mirego.trikot.viewmodels.declarative.compose.extensions.observeAsState
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.VMDLazyColumn
 import com.mirego.trikot.viewmodels.declarative.compose.viewmodel.material3.VMDButton
@@ -213,7 +213,7 @@ private fun DatePickerView(
 @Composable
 private fun Preview() {
     DebugPanelTheme {
-        val previewFactory = PreviewsFactory()
+        val previewFactory = DebugPanelPreviewsFactory()
 
         DebugPanelView(previewFactory.debugPanel())
     }
