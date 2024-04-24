@@ -41,6 +41,7 @@ internal object DebugPanelUseCaseTypeSpec {
         ),
         implementationImports = listOf(
             Import(Consts.CONFIG_PACKAGE_NAME, "DebugPanelPickerItem"),
+            Import(Consts.USE_CASE_PACKAGE_NAME, "DebugPanelItemViewData"),
             Import(Consts.FLOW_PACKAGE_NAME, "map"),
         ),
     )
