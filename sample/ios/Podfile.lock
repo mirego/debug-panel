@@ -2,12 +2,12 @@ PODS:
   - DebugPanel (1.0.7-SNAPSHOT):
     - Trikot/viewmodels.declarative.SwiftUI.flow
     - TRIKOT_FRAMEWORK_NAME
-  - Kingfisher (7.8.1)
+  - Kingfisher (7.10.1)
   - SwiftUIIntrospect (1.1.1)
-  - Trikot/viewmodels.declarative.flow (5.3.0):
+  - Trikot/viewmodels.declarative.flow (5.4.0):
     - TRIKOT_FRAMEWORK_NAME
-  - Trikot/viewmodels.declarative.SwiftUI.flow (5.3.0):
-    - Kingfisher (~> 7.8.1)
+  - Trikot/viewmodels.declarative.SwiftUI.flow (5.4.0):
+    - Kingfisher (~> 7.10.1)
     - SwiftUIIntrospect (~> 1.0)
     - Trikot/viewmodels.declarative.flow
     - TRIKOT_FRAMEWORK_NAME
@@ -15,7 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - DebugPanel (from `../../`)
-  - "Trikot/viewmodels.declarative.SwiftUI.flow (from `git@github.com:mirego/trikot.git`, tag `5.3.0`)"
+  - "Trikot/viewmodels.declarative.SwiftUI.flow (from `git@github.com:mirego/trikot.git`, tag `5.4.0`)"
   - TRIKOT_FRAMEWORK_NAME (from `../common`)
 
 SPEC REPOS:
@@ -28,14 +28,14 @@ EXTERNAL SOURCES:
     :path: "../../"
   Trikot:
     :git: "git@github.com:mirego/trikot.git"
-    :tag: 5.3.0
+    :tag: 5.4.0
   TRIKOT_FRAMEWORK_NAME:
     :path: "../common"
 
 CHECKOUT OPTIONS:
   Trikot:
     :git: "git@github.com:mirego/trikot.git"
-    :tag: 5.3.0
+    :tag: 5.4.0
 
 SPEC CHECKSUMS:
   DebugPanel: 70a9d2667e24f78adcb32f5c8749ac0263cd36fe
