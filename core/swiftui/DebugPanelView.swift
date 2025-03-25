@@ -12,6 +12,7 @@ public struct DebugPanelView: View {
     var viewModel: DebugPanelViewModel {
         observableViewModel.viewModel
     }
+    // Some comment to make sure I have the right version
 
     public var body: some View {
         List {
