@@ -1,5 +1,5 @@
 PODS:
-  - DebugPanel (1.0.7-SNAPSHOT):
+  - DebugPanel (1.0.8):
     - Trikot/viewmodels.declarative.SwiftUI.flow
     - TRIKOT_FRAMEWORK_NAME
   - Kingfisher (7.10.1)
