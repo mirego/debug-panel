@@ -1,20 +1,19 @@
 [versions]
-agp = "8.2.2"
-kotlin = "1.9.23"
-compose = "2024.04.01"
-compose-compiler = "1.5.11"
-compose-material3 = "1.2.1"
+agp = "8.5.2"
+kotlin = "2.1.10"
+compose = "2025.03.01"
+compose-material3 = "1.3.1"
 androidx-activityCompose = "1.9.0"
 kotlinpoet = "1.16.0"
-kotlinxCoroutines = "1.8.0"
-kotlinxDatetime = "0.5.0"
-ksp = "1.9.23-1.0.20"
+kotlinxCoroutines = "1.8.1"
+kotlinxDatetime = "0.6.0"
+ksp = "2.1.10-1.0.29"
 ktlint = "12.1.0"
 mockk = "1.13.8"
 multiplatformSettings = "1.1.1"
 preferenceKtx = "1.2.1"
-startupRuntime = "1.1.1"
-trikot = "5.3.0"
+startupRuntime = "1.2.0"
+trikot = "5.4.0"
 miregoPublish = "1.0"
 miregoRelease = "2.0"
 composeUtils = "1.0.1-dev48"
@@ -45,6 +44,7 @@ trikot-viewmodels-declarative-flow = { module = "com.mirego.trikot:viewmodels-de
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

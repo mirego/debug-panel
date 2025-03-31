@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.mirego.publish)
+    alias(libs.plugins.compose.compiler)
 }
 
 group = "com.mirego.debugpanel"
@@ -73,15 +74,12 @@ dependencies {
 
 android {
     namespace = "com.mirego.debugpanel"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 21
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
