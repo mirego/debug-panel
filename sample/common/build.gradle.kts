@@ -60,7 +60,7 @@ kotlin {
 
 android {
     namespace = "com.mirego.debugpanel.sample"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 21
     }
