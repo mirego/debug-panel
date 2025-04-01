@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.mirego.publish)
+    alias(libs.plugins.compose.compiler)
 }
 
 group = "com.mirego.debugpanel"
