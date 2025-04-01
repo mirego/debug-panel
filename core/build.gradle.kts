@@ -46,6 +46,7 @@ kotlin {
                 implementation(libs.compose.utils)
 
                 implementation(libs.trikot.viewmodels.declarative.compose.flow)
+                implementation(libs.androidx.runtime)
             }
         }
         val commonMain by getting {

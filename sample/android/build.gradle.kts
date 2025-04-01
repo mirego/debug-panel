@@ -52,6 +52,8 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.trikot.viewmodels.declarative.compose.flow)
+
+    implementation(libs.androidx.runtime)
 }
 
 ktlint {
